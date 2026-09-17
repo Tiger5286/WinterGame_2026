@@ -1,42 +1,24 @@
-#include "DxLib.h"
-#include "Game.h"
-#include <memory>
+ï»¿#include "DxLib.h"
+#include "Application.h"
 
-#include "SceneMain.h"
-
-// ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚é
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ WinMain ã‹ã‚‰å§‹ã¾ã‚‹
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	ChangeWindowMode(true); // ƒEƒCƒ“ƒhƒEƒ‚[ƒh‚Å‹N“®
-	SetMainWindowText("ƒQ[ƒ€–¼"); // ƒEƒCƒ“ƒhƒE‚Ìƒ^ƒCƒgƒ‹‚ğİ’è
-	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum); // ‰æ–ÊƒTƒCƒY‚ÆF”‚ğİ’è
-	if (DxLib_Init() == -1)		// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
+	// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
+	auto& app = Application::GetInstance();
+
+	// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆæœŸåŒ–
+	if (!app.Init())
 	{
-		return -1;			// ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
-	}
-	// •`‰æ‘ÎÛ‚ğƒoƒbƒNƒoƒbƒtƒ@‚É•ÏX
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	auto pScene = std::make_shared<SceneMain>();
-	pScene->Init();
-
-	while (ProcessMessage() != -1)
-	{
-		LONGLONG start = GetNowHiPerformanceCount(); // ƒtƒŒ[ƒ€ŠJnŠÔ‚ğæ“¾
-		ClearDrawScreen(); // ‰æ–Ê‚ğƒNƒŠƒA
-
-		pScene->Update();
-		pScene->Draw();
-
-		// escƒL[‚ÅI—¹
-		if (CheckHitKey(KEY_INPUT_ESCAPE))
-		{
-			break;
-		}
-		ScreenFlip(); // •`‰æ‚µ‚½“à—e‚ğ‰æ–Ê‚É”½‰f‚·‚é
-		while (GetNowHiPerformanceCount() - start < 16667) {} // –ñ16.667ƒ~ƒŠ•b(1/60•b)‘Ò‚Â‚±‚Æ‚Å60FPS‚ÉŒÅ’è
+		// åˆæœŸåŒ–ã«å¤±æ•—ã—ãŸã‚‰çµ‚äº†
+		return -1;
 	}
 
-	DxLib_End();				// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
-	return 0;				// ƒ\ƒtƒg‚ÌI—¹ 
+	// å®Ÿè¡Œ
+	app.Run();
+
+	// çµ‚äº†
+	app.Terminate();
+
+	return 0;
 }
