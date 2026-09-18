@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Scenes/SceneManager.h"
 #include "Scenes/SceneMain.h"
+#include "System/PadInput.h"
 
 #include <memory>
 #include <string>
@@ -74,8 +75,11 @@ void Application::Run()
 		auto start = GetNowHiPerformanceCount(); // フレーム開始時間を取得
 		ClearDrawScreen(); // 画面をクリア
 
+		// 更新
+		PadInput::GetInstance().Update();	// 入力の更新
+		sceneManager.Update();	// シーンの更新
 
-		sceneManager.Update();
+		// 描画
 		sceneManager.Draw();
 
 		// escキーで終了

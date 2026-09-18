@@ -26,20 +26,22 @@ bool PadInput::IsPressed(int xInput)
 	return m_nowInput.Buttons[xInput];
 }
 
-bool PadInput::IsTriggerd(int xInput)
+bool PadInput::IsTriggerd(int xInput, bool isMargeStickAndDPad)
 {
+	if (isMargeStickAndDPad)
+	{
+		// 左スティック入力を十字キー入力に変換する
+		if (GetStickInput(LR::Left).y > 0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_UP] = true;
+		if (GetStickInput(LR::Left).y < -0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_DOWN] = true;
+		if (GetStickInput(LR::Left).x > 0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_RIGHT] = true;
+		if (GetStickInput(LR::Left).x < -0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_LEFT] = true;
+	}
 	return m_nowInput.Buttons[xInput] && !m_prevInput.Buttons[xInput];
 }
 
 bool PadInput::IsReleased(int xInput)
 {
 	return !m_nowInput.Buttons[xInput] && m_prevInput.Buttons[xInput];
-}
-
-bool PadInput::GetSelectInput(DPad input)
-{
-	constexpr unsigned char dpads[4] = { XINPUT_BUTTON_DPAD_LEFT,XINPUT_BUTTON_DPAD_RIGHT,XINPUT_BUTTON_DPAD_UP,XINPUT_BUTTON_DPAD_DOWN };
-	
 }
 
 Vector2 PadInput::GetStickInput(LR lr)

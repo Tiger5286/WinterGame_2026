@@ -31,10 +31,9 @@ public:
 	void Update();
 
 	bool IsPressed(int xInput);
-	bool IsTriggerd(int xInput);
+	bool IsTriggerd(int xInput, bool isMargeStickAndDPad);
 	bool IsReleased(int xInput);
 
-	bool GetSelectInput(DPad input);
 	Vector2 GetStickInput(LR lr);
 
 	bool IsPressedTrigger(LR lr);
