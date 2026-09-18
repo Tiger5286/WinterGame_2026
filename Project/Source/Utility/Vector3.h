@@ -16,6 +16,7 @@ public:
 
 // ----- ユーティリティ関数 -----
 	static inline Vector3 Zero()  { return Vector3(0.0f, 0.0f, 0.0f); }
+	static inline Vector3 One()   { return Vector3(1.0f, 1.0f, 1.0f); }
 	static inline Vector3 Up()    { return Vector3(0.0f, 1.0f, 0.0f); }
 	static inline Vector3 Down()  { return Vector3(0.0f, -1.0f, 0.0f); }
 	static inline Vector3 Right() { return Vector3(1.0f, 0.0f, 0.0f); }
