@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Camera\Camera.cpp" />
     <ClCompile Include="Source\System\PadInput.cpp" />
     <ClCompile Include="Source\Game\GameObject.cpp" />
     <ClCompile Include="Source\Scenes\SceneMain.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Camera\Camera.h" />
     <ClInclude Include="Source\System\PadInput.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Game\GameObject.h" />
