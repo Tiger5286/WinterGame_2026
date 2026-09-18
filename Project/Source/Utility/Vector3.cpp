@@ -41,7 +41,7 @@ Vector3 Vector3::GetRandVec()
 	for (auto& value : rand)
 	{
 		// 0~200 - 100 -> -100~100 / 100 -> -1 ~ 1
-		value = GetRand(200);
+		value = static_cast<float>(GetRand(200));
 		value -= 100.0f;
 		value /= 100.0f;
 	}
