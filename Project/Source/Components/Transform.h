@@ -6,6 +6,6 @@ class Transform :
 {
 public:
     Vector3 pos = Vector3::Zero();
-    Vector3 rot = Vector3::Zero();
+    Vector3 rot = Vector3::Zero();  // ƒ‰ƒWƒAƒ“
     Vector3 scale = Vector3::One();
 };

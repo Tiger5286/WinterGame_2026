@@ -1,5 +1,5 @@
 #pragma once
-#include "Game/GameObject.h"
+#include "../GameObject.h"
 class Camera :
     public GameObject
 {
@@ -12,6 +12,6 @@ public:
     void Draw() const override;
 
 private:
-
+    Vector3 m_targetPos = Vector3::Zero();
 };
 

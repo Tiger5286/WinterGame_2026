@@ -16,6 +16,6 @@ public:
 	// •`‰æˆ—
 	virtual void Draw() const abstract;
 
-private:
+protected:
 	Transform m_transform;
 };

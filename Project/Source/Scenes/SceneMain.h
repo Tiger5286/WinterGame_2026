@@ -1,5 +1,8 @@
 #pragma once
 #include "SceneBase.h"
+
+class GameObjectManager;
+
 class SceneMain :
     public SceneBase
 {
@@ -12,6 +15,6 @@ public:
     void Draw() const override;
 
 private:
-
+    std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
 };
 
