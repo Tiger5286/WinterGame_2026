@@ -1,7 +1,11 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <memory>
 #include "Handle.h"
+#include "Model.h"
+
+class Resource;
 
 /// <summary>
 /// リソースを管理するシングルトンクラス
@@ -18,28 +22,11 @@ private:
 	ResourceManager() = default;
 public:
 
-	// リソースデータの種類
-	enum class Type
-	{
-		None,
-		Model,
-		Graph
-	};
-
-	// リソース一つのデータ
-	struct Data
-	{
-		Handle handle;
-		Type type = Type::None;
-	};
-
-	/// <summary>
-	/// リソースを読み込む
-	/// </summary>
-	/// <param name="filePath">ファイルパス</param>
-	/// <param name="key">登録名</param>
-	/// <param name="type">ロードするデータの種類</param>
-	void Load(std::wstring& filePath, std::wstring& key, Type type);
+	// モデルをロードする
+	void LoadModel(const std::wstring& filePath, const std::wstring key);
+	// 画像をロードする
+	void LoadGraph(const std::wstring& filePath, const std::wstring key);
+	//void LoadSound(const std::wstring& filePath, const std::wstring key);
 
 	/// <summary>
 	/// リソースを解放する
@@ -53,18 +40,12 @@ public:
 	void DeleteAll();
 
 	/// <summary>
-	/// モデルの複製を作成し、ハンドルを返す(※複製されたモデルはこちら側で管理しないため、解放などは各自で行うこと)
+	/// モデルの複製を作成する
 	/// </summary>
 	/// <param name="key">登録名</param>
 	/// <returns>複製されたモデルのハンドル</returns>
-	Handle DuplicateModel(std::wstring& key);
+	Model DuplicateModel(std::wstring& key);
 
 private:
-	// モデルを読み込む
-	void LoadModel(std::wstring& filePath, std::wstring& key);
-	// 画像を読み込む
-	void LoadGraph(std::wstring& filePath, std::wstring& key);
-
-private:
-	std::unordered_map<Data, std::wstring> m_handles;
+	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_Resources;
 };
