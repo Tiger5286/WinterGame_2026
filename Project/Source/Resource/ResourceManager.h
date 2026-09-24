@@ -32,7 +32,7 @@ public:
 	/// リソースを解放する
 	/// </summary>
 	/// <param name="key">登録名</param>
-	void Delete(std::wstring& key);
+	void Delete(const std::wstring& key);
 
 	/// <summary>
 	/// 全てのリソースを解放する
@@ -44,7 +44,7 @@ public:
 	/// </summary>
 	/// <param name="key">登録名</param>
 	/// <returns>複製されたモデルのハンドル</returns>
-	Model DuplicateModel(std::wstring& key);
+	std::unique_ptr<Model> DuplicateModel(const std::wstring& key);
 
 private:
 	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_Resources;
