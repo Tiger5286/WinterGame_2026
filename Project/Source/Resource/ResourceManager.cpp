@@ -4,6 +4,12 @@
 #include "Model.h"
 #include "Graph.h"
 
+ResourceManager& ResourceManager::GetInstance()
+{
+	static ResourceManager instance;
+	return instance;
+}
+
 ResourceManager::~ResourceManager()
 {
 	DeleteAll();
@@ -56,6 +62,17 @@ void ResourceManager::DeleteAll()
 	m_Resources.clear();
 }
 
+Handle ResourceManager::GetModel(const std::wstring& key)
+{
+	if (m_Resources.find(key) == m_Resources.end())
+	{
+		assert(false && "ResourceManager::GetModel() : キーに対応したリソースが見つかりませんでした");
+		return Handle(-1);
+	}
+
+	return Handle(m_Resources[key]->GetHandle());
+}
+
 std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 {
 	if (m_Resources.find(key) == m_Resources.end())
@@ -73,4 +90,15 @@ std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 	}
 
 	return std::make_unique<Model>(handle);
+}
+
+Handle ResourceManager::GetGraph(const std::wstring& key)
+{
+	if (m_Resources.find(key) == m_Resources.end())
+	{
+		assert(false && "ResourceManager::GetGraph() : キーに対応したリソースが見つかりませんでした");
+		return Handle(-1);
+	}
+
+	return Handle(m_Resources[key]->GetHandle());
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Game/GameObjects/GameObject.h"
 
+class Model;
+
 class Player :
     public GameObject
 {
@@ -13,5 +15,5 @@ public:
     void Draw() const override;
 
 private:
-
+    std::unique_ptr<Model> m_pModel;
 };

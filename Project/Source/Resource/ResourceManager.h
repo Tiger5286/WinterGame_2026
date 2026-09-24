@@ -40,11 +40,25 @@ public:
 	void DeleteAll();
 
 	/// <summary>
+	/// モデルのハンドルを取得する
+	/// </summary>
+	/// <param name="key">登録名</param>
+	/// <returns>モデルのハンドル</returns>
+	Handle GetModel(const std::wstring& key);
+
+	/// <summary>
 	/// モデルの複製を作成する
 	/// </summary>
 	/// <param name="key">登録名</param>
 	/// <returns>複製されたモデルのハンドル</returns>
 	std::unique_ptr<Model> DuplicateModel(const std::wstring& key);
+
+	/// <summary>
+	/// 画像のハンドルを取得する
+	/// </summary>
+	/// <param name="key">登録名</param>
+	/// <returns>画像のハンドル</returns>
+	Handle GetGraph(const std::wstring& key);
 
 private:
 	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_Resources;

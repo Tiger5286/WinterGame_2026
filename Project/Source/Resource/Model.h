@@ -13,4 +13,9 @@ public:
 	{
 		MV1DeleteModel(m_handle.Get());
 	}
+
+	void Draw() const
+	{
+		MV1DrawModel(m_handle.Get());
+	}
 };

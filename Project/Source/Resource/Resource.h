@@ -12,7 +12,7 @@ public:
 
 	const int GetHandle() const
 	{
-		m_handle.Get();
+		return m_handle.Get();
 	}
 
 protected:

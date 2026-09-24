@@ -35,6 +35,7 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Resource\Graph.h" />
     <ClInclude Include="Source\Resource\Resource.h" />
     <ClInclude Include="Source\Resource\Model.h" />
     <ClInclude Include="Source\Resource\Handle.h" />
