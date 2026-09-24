@@ -39,9 +39,14 @@ void SceneMain::Init()
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// カメラを生成
-	m_pGameObjectManager->Add(std::make_shared<Camera>());
+	auto pCamera = std::make_shared<Camera>();
+	m_pGameObjectManager->Add(pCamera);
 	// プレイヤーを生成
-	m_pGameObjectManager->Add(std::make_shared<Player>());
+	auto pPlayer = std::make_shared<Player>();
+	m_pGameObjectManager->Add(pPlayer);
+	// カメラとプレイヤーにお互いの弱参照を渡す
+	pPlayer->SetCamera(pCamera);
+	pCamera->SetPlayer(pPlayer);
 }
 
 void SceneMain::Update()

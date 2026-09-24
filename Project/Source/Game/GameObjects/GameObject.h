@@ -16,6 +16,8 @@ public:
 	// •`‰æˆ—
 	virtual void Draw() const abstract;
 
+	const Transform& GetTransform() const { return m_transform; }
+
 protected:
 	Transform m_transform;
 };
