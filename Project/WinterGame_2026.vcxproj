@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\Animator\AnimationLayer.cpp" />
+    <ClCompile Include="Source\Components\Animator\Animation.cpp" />
+    <ClCompile Include="Source\Components\Animator\Animator.cpp" />
     <ClCompile Include="Source\Resource\ResourceManager.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\Player.cpp" />
     <ClCompile Include="Source\Game\GameObjectManager.cpp" />
@@ -35,6 +38,9 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Components\Animator\AnimationLayer.h" />
+    <ClInclude Include="Source\Components\Animator\Animation.h" />
+    <ClInclude Include="Source\Components\Animator\Animator.h" />
     <ClInclude Include="Source\Resource\Graph.h" />
     <ClInclude Include="Source\Resource\Resource.h" />
     <ClInclude Include="Source\Resource\Model.h" />
