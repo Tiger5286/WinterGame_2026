@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Player\Player.cpp" />
     <ClCompile Include="Source\Game\GameObjectManager.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Camera\Camera.cpp" />
     <ClCompile Include="Source\System\PadInput.cpp" />
@@ -33,6 +35,9 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Resource\Handle.h" />
+    <ClInclude Include="Source\Resource\ResourceManager.h" />
+    <ClInclude Include="Source\Game\GameObjects\Player\Player.h" />
     <ClInclude Include="Source\Game\GameObjectManager.h" />
     <ClInclude Include="Source\Game\GameObjects\Camera\Camera.h" />
     <ClInclude Include="Source\System\PadInput.h" />
