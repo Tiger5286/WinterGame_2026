@@ -18,6 +18,9 @@ public:
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
 private:
+    void Control();
+
+private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
 };
