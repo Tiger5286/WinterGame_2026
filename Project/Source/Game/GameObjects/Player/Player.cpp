@@ -19,7 +19,7 @@ Player::Player() :
 void Player::Init()
 {
 	// physicsを初期化
-	m_physics.Init(&m_transform, m_physics.kDefaultDrag, 0.0f);
+	m_physics.Init(GetComponent<Transform>(), m_physics.kDefaultDrag, 0.0f);
 
 	// モデルを取得してアニメーションを初期化
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");
@@ -35,6 +35,8 @@ void Player::Init()
 
 void Player::Update()
 {
+	Transform& transform = *GetComponent<Transform>();
+
 	//Control();
 
 	// ステートを更新
@@ -51,11 +53,11 @@ void Player::Update()
 	m_physics.m_vel.z = velXZ.z;
 
 	// 向きを更新
-	float diff = MyLib::GetAngleDiff(m_angle, m_transform.rot.y);
-	m_transform.rot.y += diff * 0.1f;
+	float diff = MyLib::GetAngleDiff(m_angle, transform.rot.y);
+	transform.rot.y += diff * 0.1f;
 
 	// モデルの行列を更新
-	m_pModel->SetTransform(m_transform);
+	m_pModel->SetTransform(transform);
 
 	// アニメーションを更新
 	m_animator.Update();

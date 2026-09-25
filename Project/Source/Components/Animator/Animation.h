@@ -28,6 +28,6 @@ private:
 	int m_animIndex = -1;
 	float m_animSpeed = 0.5f;
 	bool m_isLoop = true;
-	const int m_totalTime;
+	float m_totalTime;
 };
 

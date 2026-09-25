@@ -1,12 +1,14 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Components/Transform.h"
+#include <cassert>
+
+class Component;
 
 class GameObject
 {
 public:
-	GameObject() = default;
+	GameObject();
 	virtual ~GameObject() = default;
 
 	// 初期化処理
@@ -16,8 +18,26 @@ public:
 	// 描画処理
 	virtual void Draw() const abstract;
 
-	const Transform& GetTransform() const { return m_transform; }
+	template<class T>
+	void AddComponent()
+	{
+		m_components.push_back(std::make_unique<T>());
+	}
+
+	template<class T>
+	T* GetComponent()
+	{
+		for (const auto& component : m_components)
+		{
+			if (auto result = dynamic_cast<T*>(component.get()))
+			{
+				return result;
+			}
+		}
+		assert(false && "GameObject::GetComponent() : 指定のコンポーネントが取得できませんでした");
+		return nullptr;
+	}
 
 protected:
-	Transform m_transform;
+	std::vector<std::unique_ptr<Component>> m_components;
 };

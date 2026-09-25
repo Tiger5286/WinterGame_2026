@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameObject.h"
+#include "Utility/Vector3.h"
 
 class Player;
 
