@@ -8,7 +8,10 @@ class Physics :
     public Component
 {
 public:
-    void Init(Transform* pTransform);
+    static constexpr float kDefaultDrag = 0.9f;
+    static constexpr float kDefaultGravity = -1.0f;
+
+    void Init(Transform* pTransform,float drag = kDefaultDrag,float gravity = kDefaultGravity);
     void Update();
 
     // 速度の減衰率を設定する。0.0~1.0の範囲外の数値を入れるとクランプされる。
@@ -24,6 +27,6 @@ public:
 private:
     Transform* m_pTransform = nullptr;  // Transformの参照
 
-    float m_drag = 0.9f;    // velに毎フレーム掛ける速度の減衰率(0.0~1.0)(1.0にすると減衰しない)
-    float m_gravity = -1.0f;    // vel.yに毎フレーム足す重力加速度(0にすると重力なし)
+    float m_drag = kDefaultDrag;    // velに毎フレーム掛ける速度の減衰率(0.0~1.0)(1.0にすると減衰しない)
+    float m_gravity = -kDefaultGravity;    // vel.yに毎フレーム足す重力加速度(0にすると重力なし)
 };

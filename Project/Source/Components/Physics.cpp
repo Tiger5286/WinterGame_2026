@@ -3,8 +3,11 @@
 #include <cassert>
 #include "Transform.h"
 
-void Physics::Init(Transform* pTransform)
+void Physics::Init(Transform* pTransform, float drag, float gravity)
 {
+	SetDrag(drag);
+	m_gravity = gravity;
+
 	if (pTransform == nullptr)
 	{
 		assert(false && "Physics::Init() : pTransform‚ªnullptr‚Å‚·");

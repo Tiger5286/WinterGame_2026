@@ -5,7 +5,8 @@
 
 namespace
 {
-	constexpr float kMoveSpeed = 5.0f;
+	constexpr float kMaxMoveSpeed = 5.0f;
+	constexpr float kMoveAccel = 0.5f;
 
 	enum class AnimationID
 	{
@@ -51,6 +52,8 @@ Player::Player()
 
 void Player::Init()
 {
+	m_physics.Init(&m_transform, m_physics.kDefaultDrag, 0.0f);
+
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");
 	m_animator.Init(m_pModel.get());
 
@@ -65,6 +68,15 @@ void Player::Init()
 void Player::Update()
 {
 	Control();
+
+	m_physics.Update();
+	Vector3 velXZ = Vector3(m_physics.m_vel.x, 0.0f, m_physics.m_vel.z);
+	if (velXZ.SquaredLength() > kMaxMoveSpeed * kMaxMoveSpeed)
+	{
+		velXZ = velXZ.Normalized() * kMaxMoveSpeed;
+	}
+	m_physics.m_vel.x = velXZ.x;
+	m_physics.m_vel.z = velXZ.z;
 
 	m_pModel->SetTransform(m_transform);
 
@@ -88,18 +100,20 @@ void Player::Control()
 	stickVec3 *= rot;
 
 	// 入力方向に移動
-	m_transform.pos.x += stickVec3.x * kMoveSpeed;
-	m_transform.pos.z += stickVec3.z * kMoveSpeed;
+	m_physics.m_accel.x = stickVec3.x * kMoveAccel;
+	m_physics.m_accel.z = stickVec3.z * kMoveAccel;
 
 	// 入力があるときだけプレイヤーの向きを変える
 	if (stickVec3.SquaredLength() > 0.0f)
 	{
 		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;
 		m_transform.rot.y = rot;
+		// 入力があるときだけ歩くアニメーション
 		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
 	}
 	else
 	{
+		// 入力がなければ待機アニメーション
 		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 	}
 }

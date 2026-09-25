@@ -1,6 +1,7 @@
 #pragma once
 #include "Game/GameObjects/GameObject.h"
 #include "Components/Animator/Animator.h"
+#include "Components/Physics.h"
 
 class Model;
 class Camera;
@@ -25,5 +26,7 @@ private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
 
+    // コンポーネント
+    Physics m_physics;
     Animator m_animator;
 };
