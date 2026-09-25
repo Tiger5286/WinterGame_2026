@@ -19,6 +19,6 @@ public:
 	virtual void Update() abstract;
 	virtual void Exit() abstract;
 	virtual void Draw() {}
-private:
+protected:
 	Owner& m_owner;
 };
