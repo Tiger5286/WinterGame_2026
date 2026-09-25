@@ -65,6 +65,8 @@
     <ClInclude Include="Source\Utility\Vector2.h" />
     <ClInclude Include="Source\Utility\Vector3.h" />
     <ClInclude Include="Source\Components\Transform.h" />
+    <ClInclude Include="Source\Components\State\State.h" />
+    <ClInclude Include="Source\Components\State\StateMachine.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
