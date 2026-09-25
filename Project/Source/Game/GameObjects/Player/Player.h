@@ -1,8 +1,5 @@
 #pragma once
 #include "Game/GameObjects/GameObject.h"
-#include "Components/Animator/Animator.h"
-#include "Components/Physics.h"
-#include "Components/State/StateMachine.h"
 
 class Model;
 class Camera;
@@ -54,17 +51,11 @@ public:
 
     void Init() override;
     void Update() override;
-    void Draw() const override;
+    void Draw() override;
 
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
     bool IsAim() const { return m_isAim; }
-
-    StateMachine<Player>& GetStateMachine() { return m_stateMachine; }
-    Animator& GetAnimator() { return m_animator; }
-
-//private:
-//    void Control();
 
 private:
     std::unique_ptr<Model> m_pModel;
@@ -74,7 +65,7 @@ private:
     bool m_isAim = false;
 
     // コンポーネント
-    Physics m_physics;
-    Animator m_animator;
-    StateMachine<Player> m_stateMachine;
+    //Physics m_physics;
+    //Animator m_animator;
+    //StateMachine<Player> m_stateMachine;
 };

@@ -4,33 +4,39 @@
 #include "Game/GameObjects/Camera/Camera.h"
 #include "Utility/MyLib.h"
 #include "State/PlayerStateIdle.h"
-
+#include "Components/Animator/Animator.h"
+#include "Components/Physics.h"
+#include "Components/State/StateMachine.h"
 namespace
 {
 	constexpr float kMaxMoveSpeed = 5.0f;
 	constexpr float kMoveAccel = 0.5f;
 }
 
-Player::Player() :
-	m_stateMachine(*this)
+Player::Player()
 {
+	AddComponent<Animator>();
+	AddComponent<Physics>();
+	AddComponent<StateMachine<Player>>(*this);
 }
 
 void Player::Init()
 {
 	// physicsを初期化
-	m_physics.Init(GetComponent<Transform>(), m_physics.kDefaultDrag, 0.0f);
+	GetComponent<Physics>()->Init(GetComponent<Transform>(), Physics::kDefaultDrag, 0.0f);
 
 	// モデルを取得してアニメーションを初期化
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");
-	m_animator.Init(m_pModel.get());
+	auto animator = GetComponent<Animator>();
+	animator->Init(m_pModel.get());
 	for (const auto& name : kAnimNames)	// アニメーションを追加
 	{
-		m_animator.AddAnimation(name);
+		animator->AddAnimation(name);
 	}
 
 	// ステートを初期化
-	m_stateMachine.ChangeState(std::make_unique<PlayerStateIdle>(*this));
+	auto stateMachine = GetComponent<StateMachine<Player>>();
+	stateMachine->ChangeState(std::make_unique<PlayerStateIdle>(*this));
 }
 
 void Player::Update()
@@ -40,17 +46,18 @@ void Player::Update()
 	//Control();
 
 	// ステートを更新
-	m_stateMachine.Update();
+	GetComponent<StateMachine<Player>>()->Update();
 
 	// physicsの更新
-	m_physics.Update();
-	Vector3 velXZ = Vector3(m_physics.m_vel.x, 0.0f, m_physics.m_vel.z);
+	auto physics = GetComponent<Physics>();
+	physics->Update();
+	Vector3 velXZ = Vector3(physics->m_vel.x, 0.0f, physics->m_vel.z);
 	if (velXZ.SquaredLength() > kMaxMoveSpeed * kMaxMoveSpeed)
 	{
 		velXZ = velXZ.Normalized() * kMaxMoveSpeed;
 	}
-	m_physics.m_vel.x = velXZ.x;
-	m_physics.m_vel.z = velXZ.z;
+	physics->m_vel.x = velXZ.x;
+	physics->m_vel.z = velXZ.z;
 
 	// 向きを更新
 	float diff = MyLib::GetAngleDiff(m_angle, transform.rot.y);
@@ -60,14 +67,14 @@ void Player::Update()
 	m_pModel->SetTransform(transform);
 
 	// アニメーションを更新
-	m_animator.Update();
+	GetComponent<Animator>()->Update();
 }
 
-void Player::Draw() const
+void Player::Draw()
 {
 	// モデルを描画
 	m_pModel->Draw();
-	m_stateMachine.Draw();	// ステートに描画したい内容があったら描画
+	GetComponent<StateMachine<Player>>()->Draw();	// ステートに描画したい内容があったら描画
 }
 
 //void Player::Control()

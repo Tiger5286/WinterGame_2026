@@ -15,7 +15,7 @@ public:
 
     void Init() override;
     void Update() override;
-    void Draw() const override;
+    void Draw() override;
 
     void SetPlayer(std::weak_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 

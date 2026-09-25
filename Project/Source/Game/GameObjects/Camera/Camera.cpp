@@ -4,6 +4,7 @@
 #include "System/PadInput.h"
 #include <algorithm>
 #include "Components/Transform.h"
+#include <cmath>
 
 namespace
 {
@@ -76,7 +77,7 @@ void Camera::Update()
 	SetCameraPositionAndTarget_UpVecY(transform.pos, m_targetPos);
 }
 
-void Camera::Draw() const
+void Camera::Draw()
 {
 	// ˆ—‚È‚µ
 }

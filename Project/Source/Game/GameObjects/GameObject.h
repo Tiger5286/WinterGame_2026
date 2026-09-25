@@ -16,12 +16,12 @@ public:
 	// XVˆ—
 	virtual void Update() abstract;
 	// •`‰æˆ—
-	virtual void Draw() const abstract;
+	virtual void Draw() abstract;
 
-	template<class T>
-	void AddComponent()
+	template<class T, class... Args>
+	void AddComponent(Args&&... args)
 	{
-		m_components.push_back(std::make_unique<T>());
+		m_components.push_back(std::make_unique<T>(std::forward<Args>(args)...));
 	}
 
 	template<class T>
