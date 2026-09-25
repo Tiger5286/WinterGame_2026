@@ -24,7 +24,7 @@ public:
 		}
 	}
 
-	void Draw()
+	void Draw() const
 	{
 		if (m_pCurrentState)
 		{

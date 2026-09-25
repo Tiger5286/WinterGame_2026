@@ -18,7 +18,7 @@ public:
 	virtual void Enter() abstract;
 	virtual void Update() abstract;
 	virtual void Exit() abstract;
-	virtual void Draw() {}
+	virtual void Draw() const {}
 protected:
 	Owner& m_owner;
 };
