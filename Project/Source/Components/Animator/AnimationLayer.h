@@ -6,9 +6,9 @@ class Model;
 class AnimationLayer
 {
 public:
-	void Play(Animation* pAnimation, Model* pModel);
-	void Apply(Model* pModel);
-	void Update(Model* pModel);
+	void Play(Animation* pAnimation);
+	void Apply();
+	void Update();
 
 	Animation* GetCurrentAnimation() const { return m_pCurrentAnimation; }
 	Animation* GetNextAnimation() const { return m_pNextAnimation; }
@@ -25,5 +25,5 @@ private:
 
 	int m_blendFrameCount = 0;	// アニメーション切り替え時のブレンドフレーム数
 
-	float m_blendWeight = 0.0f;	// アニメーション切り替え時のブレンドウェイト
+	float m_blendWeight = 0.0f;	// アニメーション切り替え時のブレンドウェイト(0.0 : 現在のアニメーション100% / 1.0 : 次のアニメーション100%)
 };
