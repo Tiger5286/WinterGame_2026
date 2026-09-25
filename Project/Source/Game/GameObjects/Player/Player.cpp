@@ -2,6 +2,7 @@
 #include "Resource/ResourceManager.h"
 #include "System/PadInput.h"
 #include "Game/GameObjects/Camera/Camera.h"
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -78,6 +79,9 @@ void Player::Update()
 	m_physics.m_vel.x = velXZ.x;
 	m_physics.m_vel.z = velXZ.z;
 
+	float diff = MyLib::GetAngleDiff(m_angle, m_transform.rot.y);
+	m_transform.rot.y += diff * 0.1f;
+
 	m_pModel->SetTransform(m_transform);
 
 	m_animator.Update();
@@ -107,7 +111,7 @@ void Player::Control()
 	if (stickVec3.SquaredLength() > 0.0f)
 	{
 		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;
-		m_transform.rot.y = rot;
+		m_angle = rot;
 		// 入力があるときだけ歩くアニメーション
 		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
 	}

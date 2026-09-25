@@ -25,6 +25,7 @@ private:
 private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
+    float m_angle = 0.0f;
 
     // コンポーネント
     Physics m_physics;
