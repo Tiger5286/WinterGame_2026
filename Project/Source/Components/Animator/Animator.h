@@ -21,8 +21,10 @@ public:
 	};
 
 public:
-	Animator(Model& model);
+	Animator() = default;
 	~Animator() = default;
+
+	void Init(Model* pModel);
 
 	void AddAnimation(const std::wstring& animName, float animSpeed = 0.5f, bool isLoop = true);
 
@@ -31,7 +33,7 @@ public:
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
 
 private:
-	Model& m_model;
+	Model* m_pModel = nullptr;
 	std::unordered_map<std::wstring, Animation> m_animations;
 	std::array<AnimationLayer, static_cast<size_t>(Layer::Num)> m_animationLayers;
 };

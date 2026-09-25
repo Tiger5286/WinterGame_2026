@@ -6,11 +6,60 @@
 namespace
 {
 	constexpr float kMoveSpeed = 5.0f;
+
+	enum class AnimationID
+	{
+		Idle,
+		Jog,
+		Run,
+		AimIdle,
+		AimFire,
+		AimWalkForward,
+		AimWalkBackward,
+		AimWalkLeft,
+		AimWalkRight,
+		AimWalkForwardLeft,
+		AimWalkForwardRight,
+		AimWalkBackwardLeft,
+		AimWalkBackwardRight,
+
+		Num
+	};
+
+	constexpr const wchar_t* kAnimNames[static_cast<int>(AnimationID::Num)] = {
+		L"Player|Idle",
+		L"Player|Jog",
+		L"Player|Run",
+		L"Player|AimIdle",
+		L"Player|AimFire",
+		L"Player|AimWalkForward",
+		L"Player|AimWalkBackward",
+		L"Player|AimWalkLeft",
+		L"Player|AimWalkRight",
+		L"Player|AimWalkForwardLeft",
+		L"Player|AimWalkForwardRight",
+		L"Player|AimWalkBackwardLeft",
+		L"Player|AimWalkBackwardRight"
+	};
+
+	static_assert(static_cast<int>(AnimationID::Num) == std::size(kAnimNames));
+}
+
+Player::Player()
+{
 }
 
 void Player::Init()
 {
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");
+	m_animator.Init(m_pModel.get());
+
+	for (const auto& name : kAnimNames)
+	{
+		m_animator.AddAnimation(name);
+	}
+
+	m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 }
 
 void Player::Update()
@@ -18,6 +67,8 @@ void Player::Update()
 	Control();
 
 	m_pModel->SetTransform(m_transform);
+
+	m_animator.Update();
 }
 
 void Player::Draw() const
@@ -45,5 +96,10 @@ void Player::Control()
 	{
 		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;
 		m_transform.rot.y = rot;
+		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+	}
+	else
+	{
+		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 	}
 }

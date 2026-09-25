@@ -3,9 +3,9 @@
 #include "assert.h"
 #include "Resource/Model.h"
 
-Animator::Animator(Model& model) :
-	m_model(model)
+void Animator::Init(Model* pModel)
 {
+	m_pModel = pModel;
 }
 
 void Animator::AddAnimation(const std::wstring& animName, float animSpeed, bool isLoop)
@@ -16,14 +16,14 @@ void Animator::AddAnimation(const std::wstring& animName, float animSpeed, bool 
 		return;
 	}
 
-	int animIndex = MV1GetAnimIndex(m_model.GetHandle(), animName.c_str());
+	int animIndex = MV1GetAnimIndex(m_pModel->GetHandle(), animName.c_str());
 	if (animIndex == -1)
 	{
 		assert(false && "Animator::AddAnimation() : AnimIndex‚ðŽæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
 		return;
 	}
 
-	m_animations.try_emplace(animName, m_model, animIndex, animSpeed, isLoop);
+	m_animations.try_emplace(animName, *m_pModel, animIndex, animSpeed, isLoop);
 }
 
 void Animator::Update()

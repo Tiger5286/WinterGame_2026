@@ -1,5 +1,6 @@
 #pragma once
 #include "Game/GameObjects/GameObject.h"
+#include "Components/Animator/Animator.h"
 
 class Model;
 class Camera;
@@ -8,7 +9,7 @@ class Player :
     public GameObject
 {
 public:
-    Player() = default;
+    Player();
     ~Player() override = default;
 
     void Init() override;
@@ -23,4 +24,6 @@ private:
 private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
+
+    Animator m_animator;
 };

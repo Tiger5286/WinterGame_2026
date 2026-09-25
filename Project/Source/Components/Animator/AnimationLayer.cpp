@@ -16,9 +16,9 @@ void AnimationLayer::Play(Animation* pAnimation)
 		return;
 	}
 
-	// 現在再生中のアニメーションと同じアニメーションを再生しようとした場合は、何もしない
-	if (m_pCurrentAnimation == pAnimation &&
-		m_pNextAnimation == nullptr)
+	// 再生中のアニメーションと同じアニメーションを再生しようとした場合は、何もしない
+	if (m_pCurrentAnimation == pAnimation ||
+		m_pNextAnimation == pAnimation)
 	{
 		return;
 	}
