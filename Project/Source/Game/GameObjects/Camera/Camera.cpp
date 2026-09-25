@@ -6,6 +6,9 @@
 
 namespace
 {
+	constexpr float kDefaultFov = DX_PI_F / 3;
+	constexpr float kAimFov = DX_PI_F / 4;
+
 	constexpr float kDefaultDist = 150.0f;
 	const Vector3 kPosOffset = Vector3(70.0f, 150.0f,0.0f);
 
@@ -18,6 +21,7 @@ void Camera::Init()
 {
 	m_transform.pos = Vector3(0,0,0);
 	SetCameraPositionAndTarget_UpVecY(m_transform.pos, m_targetPos);
+	SetupCamera_Perspective(kDefaultFov);
 }
 
 void Camera::Update()
@@ -53,6 +57,17 @@ void Camera::Update()
 	Vector3 rightVec = Vector3::Up().Cross(m_targetPos - m_transform.pos).Normalized();
 	m_targetPos += rightVec * kPosOffset.x;
 	m_transform.pos += rightVec * kPosOffset.x;
+
+	// エイム時に視野角を狭める
+	if (m_pPlayer.lock()->IsAim())
+	{
+		m_fov = std::lerp(m_fov, kAimFov, 0.5f);
+	}
+	else
+	{
+		m_fov = std::lerp(m_fov, kDefaultFov, 0.5f);
+	}
+	SetupCamera_Perspective(m_fov);
 
 	// DxLibのカメラに適用
 	SetCameraPositionAndTarget_UpVecY(m_transform.pos, m_targetPos);

@@ -94,8 +94,9 @@ void Player::Draw() const
 
 void Player::Control()
 {
+	auto& input = PadInput::GetInstance();
 	// スティック入力を取得
-	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left);
+	Vector2 stick = input.GetStickInput(PadInput::LR::Left);
 
 	// カメラの方向を入力と合成
 	float cameraRotY = m_pCamera.lock()->GetTransform().rot.y;
@@ -119,5 +120,15 @@ void Player::Control()
 	{
 		// 入力がなければ待機アニメーション
 		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
+	}
+
+	if (input.IsPressedTrigger(PadInput::LR::Left))
+	{
+		m_isAim = true;
+		m_angle = cameraRotY - DX_PI_F;
+	}
+	else
+	{
+		m_isAim = false;
 	}
 }

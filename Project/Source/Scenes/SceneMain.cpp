@@ -5,6 +5,7 @@
 #include <string>
 #include "Resource/ResourceManager.h"
 #include "Game/GameObjects/Player/Player.h"
+#include "Game.h"
 
 namespace
 {
@@ -57,6 +58,8 @@ void SceneMain::Update()
 void SceneMain::Draw() const
 {
 	m_pGameObjectManager->Draw();
+
+	DrawCircle(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 10, 0xffffff, false, 3);
 
 #ifdef _DEBUG
 	DrawGrid();

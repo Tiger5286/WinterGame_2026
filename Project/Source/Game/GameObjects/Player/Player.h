@@ -19,6 +19,8 @@ public:
 
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 
+    bool IsAim() const { return m_isAim; }
+
 private:
     void Control();
 
@@ -26,6 +28,8 @@ private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
     float m_angle = 0.0f;
+
+    bool m_isAim = false;
 
     // コンポーネント
     Physics m_physics;
