@@ -7,11 +7,7 @@
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
-namespace
-{
-	constexpr float kMaxMoveSpeed = 5.0f;
-	constexpr float kMoveAccel = 0.5f;
-}
+#include "State/PlayerStateMove.h"
 
 Player::Player()
 {
@@ -43,21 +39,11 @@ void Player::Update()
 {
 	Transform& transform = *GetComponent<Transform>();
 
-	//Control();
-
 	// ステートを更新
 	GetComponent<StateMachine<Player>>()->Update();
 
 	// physicsの更新
-	auto physics = GetComponent<Physics>();
-	physics->Update();
-	Vector3 velXZ = Vector3(physics->m_vel.x, 0.0f, physics->m_vel.z);
-	if (velXZ.SquaredLength() > kMaxMoveSpeed * kMaxMoveSpeed)
-	{
-		velXZ = velXZ.Normalized() * kMaxMoveSpeed;
-	}
-	physics->m_vel.x = velXZ.x;
-	physics->m_vel.z = velXZ.z;
+	GetComponent<Physics>()->Update();
 
 	// 向きを更新
 	float diff = MyLib::GetAngleDiff(m_angle, transform.rot.y);
@@ -81,6 +67,7 @@ void Player::UpdateAnimation()
 {
 	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();
 	auto animator = GetComponent<Animator>();
+	auto physics = GetComponent<Physics>();
 
 	switch (stateID)
 	{
@@ -88,50 +75,16 @@ void Player::UpdateAnimation()
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 		break;
 	case PlayerState::ID::Move:
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+		if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
+		}
+		else
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+		}
 		break;
 	}
 
 	animator->Update();
 }
-
-//void Player::Control()
-//{
-//	auto& input = PadInput::GetInstance();
-//	// スティック入力を取得
-//	Vector2 stick = input.GetStickInput(PadInput::LR::Left);
-//
-//	// カメラの方向を入力と合成
-//	float cameraRotY = m_pCamera.lock()->GetTransform().rot.y;
-//	Matrix4x4 rot = Matrix4x4::GetRotY(cameraRotY);
-//	Vector3 stickVec3 = Vector3(stick.x, 0.0f, stick.y);
-//	stickVec3 *= rot;
-//
-//	// 入力方向に移動
-//	m_physics.m_accel.x = stickVec3.x * kMoveAccel;
-//	m_physics.m_accel.z = stickVec3.z * kMoveAccel;
-//
-//	// 入力があるときだけプレイヤーの向きを変える
-//	if (stickVec3.SquaredLength() > 0.0f)
-//	{
-//		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;
-//		m_angle = rot;
-//		// 入力があるときだけ歩くアニメーション
-//		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
-//	}
-//	else
-//	{
-//		// 入力がなければ待機アニメーション
-//		m_animator.Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
-//	}
-//
-//	if (input.IsPressedTrigger(PadInput::LR::Left))
-//	{
-//		m_isAim = true;
-//		m_angle = cameraRotY - DX_PI_F;
-//	}
-//	else
-//	{
-//		m_isAim = false;
-//	}
-//}

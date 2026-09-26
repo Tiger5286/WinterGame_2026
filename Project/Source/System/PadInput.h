@@ -31,7 +31,7 @@ public:
 	void Update();
 
 	bool IsPressed(int xInput);
-	bool IsTriggerd(int xInput, bool isMargeStickAndDPad);
+	bool IsTriggerd(int xInput, bool isMargeStickAndDPad = false);
 	bool IsReleased(int xInput);
 
 	Vector2 GetStickInput(LR lr);

@@ -26,5 +26,9 @@ public:
 	virtual void Exit() override abstract;
 
 	virtual ID GetID() const abstract;
+
+public:	// ステートが使っていいプレイヤーのメンバ
+	float GetCameraAngleY() const;
+	void SetAngle(float angle);
 };
 

@@ -57,7 +57,7 @@ public:
 
     bool IsAim() const { return m_isAim; }
 
-private:
+private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 
 private:
@@ -66,4 +66,8 @@ private:
     float m_angle = 0.0f;
 
     bool m_isAim = false;
+
+	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
+	// PlayerStateがPlayerのどのメンバを使っていいか判定する
+	friend class PlayerState;
 };

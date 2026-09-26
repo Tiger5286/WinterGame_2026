@@ -25,6 +25,12 @@ public:
     void SetMaxSpeed(float maxSpeed) { m_maxSpeed = maxSpeed; }
     float GetMaxSpeed() const { return m_maxSpeed; }
 
+    /// <summary>
+    /// xz成分だけの速度の2乗を返す
+    /// </summary>
+    /// <returns>xz成分だけの速度の2乗</returns>
+    float GetSquaredMoveSpeed() const { return Vector3(m_vel.x,0.0f, m_vel.z).SquaredLength(); }
+
     Vector3 m_vel;  // posに毎フレーム足す速度
     Vector3 m_accel;    // velに毎フレーム足す加速度
 
