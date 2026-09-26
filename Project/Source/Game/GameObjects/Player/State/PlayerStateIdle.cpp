@@ -6,14 +6,12 @@
 #include "Components/State/StateMachine.h"
 
 PlayerStateIdle::PlayerStateIdle(Player& owner) :
-	State(owner)
+	PlayerState(owner)
 {
 }
 
 void PlayerStateIdle::Enter()
 {
-	// アニメーションを再生
-	m_owner.GetComponent<Animator>()->Play(m_owner.kAnimNames[static_cast<int>(Player::AnimationID::Idle)]);
 }
 
 void PlayerStateIdle::Update()

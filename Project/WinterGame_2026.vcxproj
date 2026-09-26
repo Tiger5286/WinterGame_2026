@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateMove.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.cpp" />
     <ClCompile Include="Source\Utility\MyLib.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerState.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateMove.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.h" />
     <ClInclude Include="Source\Utility\MyLib.h" />

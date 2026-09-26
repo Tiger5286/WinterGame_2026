@@ -67,7 +67,7 @@ void Player::Update()
 	m_pModel->SetTransform(transform);
 
 	// アニメーションを更新
-	GetComponent<Animator>()->Update();
+	UpdateAnimation();
 }
 
 void Player::Draw()
@@ -75,6 +75,24 @@ void Player::Draw()
 	// モデルを描画
 	m_pModel->Draw();
 	GetComponent<StateMachine<Player>>()->Draw();	// ステートに描画したい内容があったら描画
+}
+
+void Player::UpdateAnimation()
+{
+	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();
+	auto animator = GetComponent<Animator>();
+
+	switch (stateID)
+	{
+	case PlayerState::ID::Idle:
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
+		break;
+	case PlayerState::ID::Move:
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+		break;
+	}
+
+	animator->Update();
 }
 
 //void Player::Control()

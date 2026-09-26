@@ -1,9 +1,9 @@
 #pragma once
-#include "Components/State/State.h"
+#include "PlayerState.h"
 
 class Player;
 
-class PlayerStateIdle : public State<Player>
+class PlayerStateIdle : public PlayerState
 {
 public:
 	PlayerStateIdle(Player& owner);
@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Exit() override;
 
+	ID GetID() const override { return ID::Idle; }
 private:
 
 };

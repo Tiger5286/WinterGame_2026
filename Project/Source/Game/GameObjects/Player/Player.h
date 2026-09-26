@@ -58,14 +58,12 @@ public:
     bool IsAim() const { return m_isAim; }
 
 private:
+	void UpdateAnimation();
+
+private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
     float m_angle = 0.0f;
 
     bool m_isAim = false;
-
-    // コンポーネント
-    //Physics m_physics;
-    //Animator m_animator;
-    //StateMachine<Player> m_stateMachine;
 };

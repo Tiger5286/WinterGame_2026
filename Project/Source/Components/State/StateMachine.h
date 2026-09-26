@@ -51,6 +51,17 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// 現在のステートを取得する
+	/// </summary>
+	/// <typeparam name="T">Stateを継承した各オブジェクトのStateクラス</typeparam>
+	/// <returns>現在のステート</returns>
+	template<class T>
+	T* GetState()
+	{
+		return dynamic_cast<T*>(m_pCurrentState.get());
+	}
+
 private:
 	Owner& m_owner;
 
