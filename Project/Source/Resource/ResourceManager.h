@@ -4,6 +4,7 @@
 #include <memory>
 #include "Handle.h"
 #include "Model.h"
+#include "Graph.h"
 
 class Resource;
 
@@ -23,9 +24,9 @@ private:
 public:
 
 	// モデルをロードする
-	void LoadModel(const std::wstring& filePath, const std::wstring key);
+	void LoadModel(const std::wstring& filePath, const std::wstring& key);
 	// 画像をロードする
-	void LoadGraph(const std::wstring& filePath, const std::wstring key);
+	void LoadGraph(const std::wstring& filePath, const std::wstring& key);
 	//void LoadSound(const std::wstring& filePath, const std::wstring key);
 
 	/// <summary>
@@ -40,11 +41,11 @@ public:
 	void DeleteAll();
 
 	/// <summary>
-	/// モデルのハンドルを取得する
+	/// モデルを直接取得する
 	/// </summary>
 	/// <param name="key">登録名</param>
-	/// <returns>モデルのハンドル</returns>
-	Handle GetModel(const std::wstring& key);
+	/// <returns>モデルのポインタ</returns>
+	Model* GetModel(const std::wstring& key);
 
 	/// <summary>
 	/// モデルの複製を作成する
@@ -58,7 +59,7 @@ public:
 	/// </summary>
 	/// <param name="key">登録名</param>
 	/// <returns>画像のハンドル</returns>
-	Handle GetGraph(const std::wstring& key);
+	Graph* GetGraph(const std::wstring& key);
 
 private:
 	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_Resources;

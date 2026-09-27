@@ -15,7 +15,7 @@ ResourceManager::~ResourceManager()
 	DeleteAll();
 }
 
-void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring key)
+void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring& key)
 {
 	// キーが重複していたらエラー
 	if (m_Resources.find(key) != m_Resources.end())
@@ -35,7 +35,7 @@ void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring
 	m_Resources[key] = std::make_unique<Model>(handle);
 }
 
-void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring key)
+void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring& key)
 {
 	// キーが重複していたらエラー
 	if (m_Resources.find(key) != m_Resources.end())
@@ -62,26 +62,30 @@ void ResourceManager::DeleteAll()
 	m_Resources.clear();
 }
 
-Handle ResourceManager::GetModel(const std::wstring& key)
+Model* ResourceManager::GetModel(const std::wstring& key)
 {
-	if (m_Resources.find(key) == m_Resources.end())
+	auto it = m_Resources.find(key);
+	if (it == m_Resources.end())
 	{
 		assert(false && "ResourceManager::GetModel() : キーに対応したリソースが見つかりませんでした");
-		return Handle(-1);
+		return nullptr;
 	}
 
-	return Handle(m_Resources[key]->GetHandle());
+	auto* pModel = dynamic_cast<Model*>(it->second.get());
+	assert(pModel && "ResourceManager::GetModel() : キーに登録されているリソースはModelではありません");
+	return pModel;
 }
 
 std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 {
-	if (m_Resources.find(key) == m_Resources.end())
+	auto it = m_Resources.find(key);
+	if (it == m_Resources.end())
 	{
 		assert(false && "ResourceManager::DuplicateModel() : キーに対応したリソースが見つかりませんでした");
 		return nullptr;
 	}
 
-	int handle = MV1DuplicateModel(m_Resources[key]->GetHandle());
+	int handle = MV1DuplicateModel(it->second.get()->GetHandle());
 
 	if (handle == -1)
 	{
@@ -92,13 +96,16 @@ std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 	return std::make_unique<Model>(handle);
 }
 
-Handle ResourceManager::GetGraph(const std::wstring& key)
+Graph* ResourceManager::GetGraph(const std::wstring& key)
 {
-	if (m_Resources.find(key) == m_Resources.end())
+	auto it = m_Resources.find(key);
+	if (it == m_Resources.end())
 	{
 		assert(false && "ResourceManager::GetGraph() : キーに対応したリソースが見つかりませんでした");
-		return Handle(-1);
+		return nullptr;
 	}
 
-	return Handle(m_Resources[key]->GetHandle());
+	auto* pGraph = dynamic_cast<Graph*>(it->second.get());
+	assert(pGraph && "ResourceManager::GetGraph() : キーに登録されているリソースはGraphではありません");
+	return pGraph;
 }
