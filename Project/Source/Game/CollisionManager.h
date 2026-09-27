@@ -11,7 +11,6 @@ public:
 	~CollisionManager() = default;
 
 	void Update();
-	void Draw();
 
 	void Register(const std::shared_ptr<GameObject>& pObject);
 	void UnRegister(const std::shared_ptr<GameObject>& pObject);

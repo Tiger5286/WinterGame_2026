@@ -9,6 +9,6 @@ ServiceLocator& ServiceLocator::GetInstance()
 
 CollisionManager& ServiceLocator::GetCollisionManager() const
 {
-	assert(m_pCollisionManager && "ServiceLocator::GetCollisionManager() : CollisionManager‚ªnullptr‚Å‚·B")
+	assert(m_pCollisionManager && "ServiceLocator::GetCollisionManager() : CollisionManager‚ªnullptr‚Å‚·B");
 	return *m_pCollisionManager;
 }

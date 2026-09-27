@@ -60,6 +60,7 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
+	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
 }
 
