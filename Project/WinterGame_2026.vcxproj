@@ -47,6 +47,7 @@
     <ClCompile Include="Source\Utility\Matrix4x4.cpp" />
     <ClCompile Include="Source\Utility\Vector2.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Stage\StaticStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\System\ServiceLocator.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Source\Components\Transform.h" />
     <ClInclude Include="Source\Components\State\State.h" />
     <ClInclude Include="Source\Components\State\StateMachine.h" />
+    <ClInclude Include="Source\Game\GameObjects\Stage\StaticStage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

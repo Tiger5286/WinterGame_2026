@@ -1,12 +1,13 @@
 ﻿#include "SceneMain.h"
 #include "DxLib.h"
+#include <string>
+#include "Game.h"
 #include "Game/GameObjectManager.h"
 #include "Game/GameObjects/Camera/Camera.h"
-#include <string>
-#include "Resource/ResourceManager.h"
 #include "Game/GameObjects/Player/Player.h"
-#include "Game.h"
+#include "Game/GameObjects/Stage/StaticStage.h"
 #include "Game/CollisionManager.h"
+#include "Resource/ResourceManager.h"
 #include "System/ServiceLocator.h"
 #include "Components/Component.h"
 
@@ -19,7 +20,8 @@ namespace
 	};
 
 	const LoadData kLoadModelFiles[] = {
-		{ L"data/models/player/player.mv1", L"PlayerModel" }
+		{ L"data/models/player/player.mv1", L"PlayerModel" },
+		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" }
 	};
 }
 
@@ -48,6 +50,8 @@ void SceneMain::Init()
 	}
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
+	// ステージを生成
+	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// カメラを生成
 	auto pCamera = std::make_shared<Camera>();
 	m_pGameObjectManager->Add(pCamera);
