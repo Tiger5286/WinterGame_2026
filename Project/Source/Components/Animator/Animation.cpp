@@ -1,4 +1,4 @@
-#include "Animation.h"
+ï»¿#include "Animation.h"
 #include "DxLib.h"
 #include "Resource/Model.h"
 #include <cassert>
@@ -14,7 +14,7 @@ Animation::Animation(Model& model,int animIndex, float animSpeed, bool isLoop) :
 
 void Animation::Attach()
 {
-	// ‚·‚Å‚ÉƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚éê‡‚ÍƒAƒ^ƒbƒ`‚µ‚È‚¢
+	// ã™ã§ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ã‚¢ã‚¿ãƒƒãƒã—ãªã„
 	if (m_attachIndex != -1)
 	{
 		return;
@@ -23,13 +23,13 @@ void Animation::Attach()
 	m_attachIndex = MV1AttachAnim(m_model.GetHandle(), m_animIndex);
 	if (m_attachIndex == -1)
 	{
-		assert(false && "Animation::Attach() : ƒAƒjƒ[ƒVƒ‡ƒ“‚ª³‚µ‚­ƒAƒ^ƒbƒ`‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "Animation::Attach() : ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒæ­£ã—ãã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
 	}
 }
 
 void Animation::Detach()
 {
-	// ƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚È‚¢‚È‚çƒfƒ^ƒbƒ`‚µ‚È‚¢
+	// ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ãªã„ãªã‚‰ãƒ‡ã‚¿ãƒƒãƒã—ãªã„
 	if (m_attachIndex == -1)
 	{
 		return;
@@ -41,7 +41,7 @@ void Animation::Detach()
 
 void Animation::SetTime(float time)
 {
-	// ƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚È‚¢‚È‚çˆ—‚µ‚È‚¢
+	// ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ãªã„ãªã‚‰å‡¦ç†ã—ãªã„
 	if (m_attachIndex == -1)
 	{
 		return;
@@ -52,7 +52,7 @@ void Animation::SetTime(float time)
 
 void Animation::SetBlendRate(float rate)
 {
-	// ƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚È‚¢‚È‚çˆ—‚µ‚È‚¢
+	// ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ãªã„ãªã‚‰å‡¦ç†ã—ãªã„
 	if (m_attachIndex == -1)
 	{
 		return;

@@ -1,4 +1,4 @@
-#include "ResourceManager.h"
+ï»¿#include "ResourceManager.h"
 #include <cassert>
 #include "DxLib.h"
 #include "Model.h"
@@ -17,36 +17,36 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring key)
 {
-	// ƒL[‚ªd•¡‚µ‚Ä‚¢‚½‚çƒGƒ‰[
+	// ã‚­ãƒ¼ãŒé‡è¤‡ã—ã¦ã„ãŸã‚‰ã‚¨ãƒ©ãƒ¼
 	if (m_Resources.find(key) != m_Resources.end())
 	{
-		assert(false && "ResourceManager::LoadModel() : ‚·‚Å‚É“o˜^Ï‚İ‚ÌƒL[‚ğ“o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·");
+		assert(false && "ResourceManager::LoadModel() : ã™ã§ã«ç™»éŒ²æ¸ˆã¿ã®ã‚­ãƒ¼ã‚’ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ã¾ã™");
 		return;
 	}
-	// ƒ‚ƒfƒ‹‚ğƒ[ƒh‚µ‚Äƒnƒ“ƒhƒ‹‚ğæ“¾
+	// ãƒ¢ãƒ‡ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
 	const int handle = MV1LoadModel(filePath.c_str());
-	// ƒ‚ƒfƒ‹‚ğ³‚µ‚­ƒ[ƒh‚Å‚«‚½‚©ƒ`ƒFƒbƒN
+	// ãƒ¢ãƒ‡ãƒ«ã‚’æ­£ã—ããƒ­ãƒ¼ãƒ‰ã§ããŸã‹ãƒã‚§ãƒƒã‚¯
 	if (handle == -1)
 	{
-		assert(false && "ResourceManager::LoadModel() : ƒ‚ƒfƒ‹‚Ìƒ[ƒh‚ª³‚µ‚­s‚í‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::LoadModel() : ãƒ¢ãƒ‡ãƒ«ã®ãƒ­ãƒ¼ãƒ‰ãŒæ­£ã—ãè¡Œã‚ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
 		return;
 	}
-	// modelƒNƒ‰ƒX‚ğ¶¬‚µ‚Ämap‚É•Û‘¶
+	// modelã‚¯ãƒ©ã‚¹ã‚’ç”Ÿæˆã—ã¦mapã«ä¿å­˜
 	m_Resources[key] = std::make_unique<Model>(handle);
 }
 
 void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring key)
 {
-	// ƒL[‚ªd•¡‚µ‚Ä‚¢‚½‚çƒGƒ‰[
+	// ã‚­ãƒ¼ãŒé‡è¤‡ã—ã¦ã„ãŸã‚‰ã‚¨ãƒ©ãƒ¼
 	if (m_Resources.find(key) != m_Resources.end())
 	{
-		assert(false && "ResourceManager::LoadGraph() : ‚·‚Å‚É“o˜^Ï‚İ‚ÌƒL[‚ğ“o˜^‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·");
+		assert(false && "ResourceManager::LoadGraph() : ã™ã§ã«ç™»éŒ²æ¸ˆã¿ã®ã‚­ãƒ¼ã‚’ç™»éŒ²ã—ã‚ˆã†ã¨ã—ã¦ã„ã¾ã™");
 		return;
 	}
 	const int handle = DxLib::LoadGraph(filePath.c_str());
 	if (handle == -1)
 	{
-		assert(false && "ResourceManager::LoadGraph() : ‰æ‘œ‚Ìƒ[ƒh‚ª³‚µ‚­s‚í‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::LoadGraph() : ç”»åƒã®ãƒ­ãƒ¼ãƒ‰ãŒæ­£ã—ãè¡Œã‚ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
 		return;
 	}
 	m_Resources[key] = std::make_unique<Graph>(handle);
@@ -66,7 +66,7 @@ Handle ResourceManager::GetModel(const std::wstring& key)
 {
 	if (m_Resources.find(key) == m_Resources.end())
 	{
-		assert(false && "ResourceManager::GetModel() : ƒL[‚É‘Î‰‚µ‚½ƒŠƒ\[ƒX‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::GetModel() : ã‚­ãƒ¼ã«å¯¾å¿œã—ãŸãƒªã‚½ãƒ¼ã‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
 		return Handle(-1);
 	}
 
@@ -77,7 +77,7 @@ std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 {
 	if (m_Resources.find(key) == m_Resources.end())
 	{
-		assert(false && "ResourceManager::DuplicateModel() : ƒL[‚É‘Î‰‚µ‚½ƒŠƒ\[ƒX‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::DuplicateModel() : ã‚­ãƒ¼ã«å¯¾å¿œã—ãŸãƒªã‚½ãƒ¼ã‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
 		return nullptr;
 	}
 
@@ -85,7 +85,7 @@ std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 
 	if (handle == -1)
 	{
-		assert(false && "ResourceManager::DuplicateModel() : ƒ‚ƒfƒ‹‚Ì•¡»‚ª³‚µ‚­s‚í‚ê‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::DuplicateModel() : ãƒ¢ãƒ‡ãƒ«ã®è¤‡è£½ãŒæ­£ã—ãè¡Œã‚ã‚Œã¾ã›ã‚“ã§ã—ãŸ");
 		return nullptr;
 	}
 
@@ -96,7 +96,7 @@ Handle ResourceManager::GetGraph(const std::wstring& key)
 {
 	if (m_Resources.find(key) == m_Resources.end())
 	{
-		assert(false && "ResourceManager::GetGraph() : ƒL[‚É‘Î‰‚µ‚½ƒŠƒ\[ƒX‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "ResourceManager::GetGraph() : ã‚­ãƒ¼ã«å¯¾å¿œã—ãŸãƒªã‚½ãƒ¼ã‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
 		return Handle(-1);
 	}
 

@@ -1,4 +1,4 @@
-#include "PlayerStateIdle.h"
+ï»¿#include "PlayerStateIdle.h"
 #include "../Player.h"
 #include "System/PadInput.h"
 #include "PlayerStateMove.h"
@@ -16,7 +16,7 @@ void PlayerStateIdle::Enter()
 
 void PlayerStateIdle::Update()
 {
-	// ƒXƒeƒBƒbƒN“ü—Í‚ª‚ ‚Á‚½‚çmove
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ãŒã‚ã£ãŸã‚‰move
 	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -8,7 +8,7 @@
 class Resource;
 
 /// <summary>
-/// ƒŠƒ\[ƒX‚ğŠÇ—‚·‚éƒVƒ“ƒOƒ‹ƒgƒ“ƒNƒ‰ƒX
+/// ãƒªã‚½ãƒ¼ã‚¹ã‚’ç®¡ç†ã™ã‚‹ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¯ãƒ©ã‚¹
 /// </summary>
 class ResourceManager
 {
@@ -22,42 +22,42 @@ private:
 	ResourceManager() = default;
 public:
 
-	// ƒ‚ƒfƒ‹‚ğƒ[ƒh‚·‚é
+	// ãƒ¢ãƒ‡ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
 	void LoadModel(const std::wstring& filePath, const std::wstring key);
-	// ‰æ‘œ‚ğƒ[ƒh‚·‚é
+	// ç”»åƒã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
 	void LoadGraph(const std::wstring& filePath, const std::wstring key);
 	//void LoadSound(const std::wstring& filePath, const std::wstring key);
 
 	/// <summary>
-	/// ƒŠƒ\[ƒX‚ğ‰ğ•ú‚·‚é
+	/// ãƒªã‚½ãƒ¼ã‚¹ã‚’è§£æ”¾ã™ã‚‹
 	/// </summary>
-	/// <param name="key">“o˜^–¼</param>
+	/// <param name="key">ç™»éŒ²å</param>
 	void Delete(const std::wstring& key);
 
 	/// <summary>
-	/// ‘S‚Ä‚ÌƒŠƒ\[ƒX‚ğ‰ğ•ú‚·‚é
+	/// å…¨ã¦ã®ãƒªã‚½ãƒ¼ã‚¹ã‚’è§£æ”¾ã™ã‚‹
 	/// </summary>
 	void DeleteAll();
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹‚Ìƒnƒ“ƒhƒ‹‚ğæ“¾‚·‚é
+	/// ãƒ¢ãƒ‡ãƒ«ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <param name="key">“o˜^–¼</param>
-	/// <returns>ƒ‚ƒfƒ‹‚Ìƒnƒ“ƒhƒ‹</returns>
+	/// <param name="key">ç™»éŒ²å</param>
+	/// <returns>ãƒ¢ãƒ‡ãƒ«ã®ãƒãƒ³ãƒ‰ãƒ«</returns>
 	Handle GetModel(const std::wstring& key);
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹‚Ì•¡»‚ğì¬‚·‚é
+	/// ãƒ¢ãƒ‡ãƒ«ã®è¤‡è£½ã‚’ä½œæˆã™ã‚‹
 	/// </summary>
-	/// <param name="key">“o˜^–¼</param>
-	/// <returns>•¡»‚³‚ê‚½ƒ‚ƒfƒ‹‚Ìƒnƒ“ƒhƒ‹</returns>
+	/// <param name="key">ç™»éŒ²å</param>
+	/// <returns>è¤‡è£½ã•ã‚ŒãŸãƒ¢ãƒ‡ãƒ«ã®ãƒãƒ³ãƒ‰ãƒ«</returns>
 	std::unique_ptr<Model> DuplicateModel(const std::wstring& key);
 
 	/// <summary>
-	/// ‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ğæ“¾‚·‚é
+	/// ç”»åƒã®ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <param name="key">“o˜^–¼</param>
-	/// <returns>‰æ‘œ‚Ìƒnƒ“ƒhƒ‹</returns>
+	/// <param name="key">ç™»éŒ²å</param>
+	/// <returns>ç”»åƒã®ãƒãƒ³ãƒ‰ãƒ«</returns>
 	Handle GetGraph(const std::wstring& key);
 
 private:

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Component.h"
 #include "Utility/Vector3.h"
 
@@ -15,7 +15,7 @@ public:
     void Init(Transform* pTransform,float drag = kDefaultDrag,float gravity = kDefaultGravity);
     void Update();
 
-    // ‘¬“x‚ÌŒ¸Š—¦‚ğİ’è‚·‚éB0.0~1.0‚Ì”ÍˆÍŠO‚Ì”’l‚ğ“ü‚ê‚é‚ÆƒNƒ‰ƒ“ƒv‚³‚ê‚éB
+    // é€Ÿåº¦ã®æ¸›è¡°ç‡ã‚’è¨­å®šã™ã‚‹ã€‚0.0~1.0ã®ç¯„å›²å¤–ã®æ•°å€¤ã‚’å…¥ã‚Œã‚‹ã¨ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œã‚‹ã€‚
     void SetDrag(float drag);
     float GetDrag() const { return m_drag; }
 
@@ -26,19 +26,19 @@ public:
     float GetMaxSpeed() const { return m_maxSpeed; }
 
     /// <summary>
-    /// xz¬•ª‚¾‚¯‚Ì‘¬“x‚Ì2æ‚ğ•Ô‚·
+    /// xzæˆåˆ†ã ã‘ã®é€Ÿåº¦ã®2ä¹—ã‚’è¿”ã™
     /// </summary>
-    /// <returns>xz¬•ª‚¾‚¯‚Ì‘¬“x‚Ì2æ</returns>
+    /// <returns>xzæˆåˆ†ã ã‘ã®é€Ÿåº¦ã®2ä¹—</returns>
     float GetSquaredMoveSpeed() const { return Vector3(m_vel.x,0.0f, m_vel.z).SquaredLength(); }
 
-    Vector3 m_vel;  // pos‚É–ˆƒtƒŒ[ƒ€‘«‚·‘¬“x
-    Vector3 m_accel;    // vel‚É–ˆƒtƒŒ[ƒ€‘«‚·‰Á‘¬“x
+    Vector3 m_vel;  // posã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ è¶³ã™é€Ÿåº¦
+    Vector3 m_accel;    // velã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ è¶³ã™åŠ é€Ÿåº¦
 
 private:
-    Transform* m_pTransform = nullptr;  // Transform‚ÌQÆ
+    Transform* m_pTransform = nullptr;  // Transformã®å‚ç…§
 
-    float m_drag = kDefaultDrag;    // vel‚É–ˆƒtƒŒ[ƒ€Š|‚¯‚é‘¬“x‚ÌŒ¸Š—¦(0.0~1.0)(1.0‚É‚·‚é‚ÆŒ¸Š‚µ‚È‚¢)(XZ¬•ª‚É‚Ì‚İ—LŒø)
-    float m_gravity = -kDefaultGravity;    // vel.y‚É–ˆƒtƒŒ[ƒ€‘«‚·d—Í‰Á‘¬“x(0‚É‚·‚é‚Æd—Í‚È‚µ)
-    // Å‚‘¬“x(XZ¬•ª‚É‚Ì‚İ—LŒø)
+    float m_drag = kDefaultDrag;    // velã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æ›ã‘ã‚‹é€Ÿåº¦ã®æ¸›è¡°ç‡(0.0~1.0)(1.0ã«ã™ã‚‹ã¨æ¸›è¡°ã—ãªã„)(XZæˆåˆ†ã«ã®ã¿æœ‰åŠ¹)
+    float m_gravity = -kDefaultGravity;    // vel.yã«æ¯ãƒ•ãƒ¬ãƒ¼ãƒ è¶³ã™é‡åŠ›åŠ é€Ÿåº¦(0ã«ã™ã‚‹ã¨é‡åŠ›ãªã—)
+    // æœ€é«˜é€Ÿåº¦(XZæˆåˆ†ã«ã®ã¿æœ‰åŠ¹)
     float m_maxSpeed = kDefaultMaxSpeed;
 };

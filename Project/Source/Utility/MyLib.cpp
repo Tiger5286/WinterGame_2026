@@ -1,4 +1,4 @@
-#include "MyLib.h"
+﻿#include "MyLib.h"
 #include "DxLib.h"
 
 float MyLib::GetAngleDiff(float angle1, float angle2)

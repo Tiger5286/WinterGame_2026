@@ -1,4 +1,4 @@
-#include "Animator.h"
+ï»¿#include "Animator.h"
 #include "DxLib.h"
 #include "assert.h"
 #include "Resource/Model.h"
@@ -12,14 +12,14 @@ void Animator::AddAnimation(const std::wstring& animName, float animSpeed, bool 
 {
 	if (m_animations.find(animName) != m_animations.end())
 	{
-		assert(false && "Animator::AddAnimation() : “¯‚¶–¼‘O‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’Ç‰Á‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·");
+		assert(false && "Animator::AddAnimation() : åŒã˜åå‰ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¿½åŠ ã—ã‚ˆã†ã¨ã—ã¦ã„ã¾ã™");
 		return;
 	}
 
 	int animIndex = MV1GetAnimIndex(m_pModel->GetHandle(), animName.c_str());
 	if (animIndex == -1)
 	{
-		assert(false && "Animator::AddAnimation() : AnimIndex‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "Animator::AddAnimation() : AnimIndexã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸ");
 		return;
 	}
 

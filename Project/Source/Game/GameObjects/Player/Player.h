@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Game/GameObjects/GameObject.h"
 
 class Model;
@@ -57,7 +57,7 @@ public:
 
     bool IsAim() const { return m_isAim; }
 
-private:	// ƒvƒŒƒCƒ„[‚¾‚¯‚ªg‚¤ŠÖ”
+private:	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã ã‘ãŒä½¿ã†é–¢æ•°
 	void UpdateAnimation();
 
 private:
@@ -67,7 +67,7 @@ private:
 
     bool m_isAim = false;
 
-	// ƒvƒŒƒCƒ„[‚ÌƒXƒe[ƒg‚ªƒvƒŒƒCƒ„[‚Ìó‘Ô‚ğ•ÏX‚µ‚½‚¢‚Æ‚«‚à‚ ‚é‚½‚ßfriend
-	// PlayerState‚ªPlayer‚Ì‚Ç‚Ìƒƒ“ƒo‚ğg‚Á‚Ä‚¢‚¢‚©”»’è‚·‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ãƒˆãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®çŠ¶æ…‹ã‚’å¤‰æ›´ã—ãŸã„ã¨ãã‚‚ã‚ã‚‹ãŸã‚friend
+	// PlayerStateãŒPlayerã®ã©ã®ãƒ¡ãƒ³ãƒã‚’ä½¿ã£ã¦ã„ã„ã‹åˆ¤å®šã™ã‚‹
 	friend class PlayerState;
 };

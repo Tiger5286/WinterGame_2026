@@ -1,4 +1,4 @@
-#include "SceneMain.h"
+ï»¿#include "SceneMain.h"
 #include "DxLib.h"
 #include "Game/GameObjectManager.h"
 #include "Game/GameObjects/Camera/Camera.h"
@@ -29,31 +29,31 @@ SceneMain::SceneMain(SceneManager& sceneManager):
 
 SceneMain::~SceneMain()
 {
-	// CollisionManager‚ªÁ‚¦‚é‚Ì‚ÅServiceLocator‚Ì“o˜^‚ğ‰ğœ
+	// CollisionManagerãŒæ¶ˆãˆã‚‹ã®ã§ServiceLocatorã®ç™»éŒ²ã‚’è§£é™¤
 	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
 }
 
 void SceneMain::Init()
 {
-	// CollisionManager‚ğ¶¬‚µAServiceLocator‚É“o˜^
+	// CollisionManagerã‚’ç”Ÿæˆã—ã€ServiceLocatorã«ç™»éŒ²
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 	ServiceLocator::GetInstance().ProvideCollisionManager(m_pCollisionManager.get());
 
-	// •K—v‚ÈƒŠƒ\[ƒX‚ğƒ[ƒh
+	// å¿…è¦ãªãƒªã‚½ãƒ¼ã‚¹ã‚’ãƒ­ãƒ¼ãƒ‰
 	auto& resourceManager = ResourceManager::GetInstance();
 	for (const auto& file : kLoadModelFiles)
 	{
 		resourceManager.LoadModel(file.filePath, file.key);
 	}
-	// GameObjectManager‚ğ¶¬
+	// GameObjectManagerã‚’ç”Ÿæˆ
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
-	// ƒJƒƒ‰‚ğ¶¬
+	// ã‚«ãƒ¡ãƒ©ã‚’ç”Ÿæˆ
 	auto pCamera = std::make_shared<Camera>();
 	m_pGameObjectManager->Add(pCamera);
-	// ƒvƒŒƒCƒ„[‚ğ¶¬
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç”Ÿæˆ
 	auto pPlayer = std::make_shared<Player>();
 	m_pGameObjectManager->Add(pPlayer);
-	// ƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚É‚¨Œİ‚¢‚ÌãQÆ‚ğ“n‚·
+	// ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãŠäº’ã„ã®å¼±å‚ç…§ã‚’æ¸¡ã™
 	pPlayer->SetCamera(pCamera);
 	pCamera->SetPlayer(pPlayer);
 }

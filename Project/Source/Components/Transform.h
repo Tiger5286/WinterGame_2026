@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Utility/Vector3.h"
 #include "Component.h"
 class Transform :
@@ -6,6 +6,6 @@ class Transform :
 {
 public:
     Vector3 pos = Vector3::Zero();
-    Vector3 rot = Vector3::Zero();  // ƒ‰ƒWƒAƒ“
+    Vector3 rot = Vector3::Zero();  // ãƒ©ã‚¸ã‚¢ãƒ³
     Vector3 scale = Vector3::One();
 };

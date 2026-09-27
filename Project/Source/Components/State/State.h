@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 
 /// <summary>
-/// ƒXƒe[ƒgƒpƒ^[ƒ“‚ÌŠeƒXƒe[ƒg‚Ìeƒeƒ“ƒvƒŒ[ƒgƒNƒ‰ƒX
+/// ã‚¹ãƒ†ãƒ¼ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³ã®å„ã‚¹ãƒ†ãƒ¼ãƒˆã®è¦ªãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¯ãƒ©ã‚¹
 /// </summary>
-/// <typeparam name="Owner">Ž‚¿Žå</typeparam>
+/// <typeparam name="Owner">æŒã¡ä¸»</typeparam>
 template<class Owner>
 class State
 {

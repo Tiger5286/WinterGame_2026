@@ -1,11 +1,11 @@
-#include "PadInput.h"
+ï»¿#include "PadInput.h"
 
 namespace
 {
-	// ƒXƒeƒBƒbƒN“ü—Í‚Ìƒfƒbƒhƒ][ƒ“(-32768~32767)
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ã®ãƒ‡ãƒƒãƒ‰ã‚¾ãƒ¼ãƒ³(-32768~32767)
 	constexpr int kMinStickValue = 3000;
 	constexpr int kMaxStickValue = 25000;
-	// ƒgƒŠƒK[‚ª”½‰‚·‚é‚µ‚«‚¢’l(0~255)
+	// ãƒˆãƒªã‚¬ãƒ¼ãŒåå¿œã™ã‚‹ã—ãã„å€¤(0~255)
 	constexpr int kTriggerThreshold = 128;
 }
 
@@ -30,7 +30,7 @@ bool PadInput::IsTriggerd(int xInput, bool isMargeStickAndDPad)
 {
 	if (isMargeStickAndDPad)
 	{
-		// ¶ƒXƒeƒBƒbƒN“ü—Í‚ğ\šƒL[“ü—Í‚É•ÏŠ·‚·‚é
+		// å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ã‚’åå­—ã‚­ãƒ¼å…¥åŠ›ã«å¤‰æ›ã™ã‚‹
 		if (GetStickInput(LR::Left).y > 0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_UP] = true;
 		if (GetStickInput(LR::Left).y < -0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_DOWN] = true;
 		if (GetStickInput(LR::Left).x > 0.5f) m_nowInput.Buttons[XINPUT_BUTTON_DPAD_RIGHT] = true;
@@ -64,7 +64,7 @@ Vector2 PadInput::GetStickInput(LR lr)
 
 bool PadInput::IsPressedTrigger(LR lr)
 {
-	// ƒgƒŠƒK[“ü—Í‚ğæ“¾
+	// ãƒˆãƒªã‚¬ãƒ¼å…¥åŠ›ã‚’å–å¾—
 	unsigned char trigger = 0;
 	if (lr == LR::Left)
 	{
@@ -74,7 +74,7 @@ bool PadInput::IsPressedTrigger(LR lr)
 	{
 		trigger = m_nowInput.RightTrigger;
 	}
-	// ˆê’èˆÈã‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç‰Ÿ‚µ‚½”»’è
+	// ä¸€å®šä»¥ä¸ŠæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰æŠ¼ã—ãŸåˆ¤å®š
 	if (trigger > kTriggerThreshold)
 	{
 		return true;
@@ -95,22 +95,22 @@ bool PadInput::IsReleasedTrigger(LR lr)
 Vector2 PadInput::ConvertStickInput(const Vector2& stick)
 {
 	Vector2 result = stick;
-	// ƒXƒeƒBƒbƒN“ü—Í‚Ìƒfƒbƒhƒ][ƒ“‚ğİ’è
-	// -3000~3000‚Ì”ÍˆÍ‚ğ0‚Æ‚·‚é
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ã®ãƒ‡ãƒƒãƒ‰ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®š
+	// -3000~3000ã®ç¯„å›²ã‚’0ã¨ã™ã‚‹
 	if (result.x > -kMinStickValue && result.x < kMinStickValue) result.x = 0.0f;
 	if (result.y > -kMinStickValue && result.y < kMinStickValue) result.y = 0.0f;
-	// 25000‚ğ’´‚¦‚é“ü—Í‚Í25000‚Æ‚µ‚Äˆµ‚¤
+	// 25000ã‚’è¶…ãˆã‚‹å…¥åŠ›ã¯25000ã¨ã—ã¦æ‰±ã†
 	if (result.x > kMaxStickValue) result.x = kMaxStickValue;
 	if (result.y > kMaxStickValue) result.y = kMaxStickValue;
-	// -25000–¢–‚Ì“ü—Í‚Í-25000‚Æ‚µ‚Äˆµ‚¤
+	// -25000æœªæº€ã®å…¥åŠ›ã¯-25000ã¨ã—ã¦æ‰±ã†
 	if (result.x < -kMaxStickValue) result.x = -kMaxStickValue;
 	if (result.y < -kMaxStickValue) result.y = -kMaxStickValue;
 
-	// -25000~25000‚Ì”ÍˆÍ‚ğ-1.0~1.0‚Ì”ÍˆÍ‚É•ÏŠ·‚·‚é
+	// -25000~25000ã®ç¯„å›²ã‚’-1.0~1.0ã®ç¯„å›²ã«å¤‰æ›ã™ã‚‹
 	result.x = result.x / kMaxStickValue;
 	result.y = result.y / kMaxStickValue;
 
-	// ’·‚³‚ª1‚ğ’´‚¦‚½‚ç1‚ÉƒNƒ‰ƒ“ƒv‚·‚é
+	// é•·ã•ãŒ1ã‚’è¶…ãˆãŸã‚‰1ã«ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹
 	if (result.SquaredLength() > 1.0f) result.Normalize();
 
 	return result;
@@ -118,7 +118,7 @@ Vector2 PadInput::ConvertStickInput(const Vector2& stick)
 
 bool PadInput::IsPrevPressedTrigger(LR lr)
 {
-	// ƒgƒŠƒK[“ü—Í‚ğæ“¾
+	// ãƒˆãƒªã‚¬ãƒ¼å…¥åŠ›ã‚’å–å¾—
 	unsigned char trigger = 0;
 	if (lr == LR::Left)
 	{
@@ -128,7 +128,7 @@ bool PadInput::IsPrevPressedTrigger(LR lr)
 	{
 		trigger = m_prevInput.RightTrigger;
 	}
-	// ˆê’èˆÈã‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç‰Ÿ‚µ‚½”»’è
+	// ä¸€å®šä»¥ä¸ŠæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰æŠ¼ã—ãŸåˆ¤å®š
 	if (trigger > kTriggerThreshold)
 	{
 		return true;

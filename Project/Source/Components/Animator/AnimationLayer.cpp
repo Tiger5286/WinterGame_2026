@@ -1,10 +1,10 @@
-#include "AnimationLayer.h"
+ï»¿#include "AnimationLayer.h"
 #include "Animation.h"
 #include <cassert>
 
 namespace
 {
-	// ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦‚ÌƒuƒŒƒ“ƒhƒtƒŒ[ƒ€”
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆæ™‚ã®ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
 	constexpr int kAnimationBlendFrame = 10;
 }
 
@@ -12,18 +12,18 @@ void AnimationLayer::Play(Animation* pAnimation)
 {
 	if (pAnimation == nullptr)
 	{
-		assert(false && "AnimationLayer::Play() : ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìƒ|ƒCƒ“ƒ^‚ªnullptr‚Å‚·");
+		assert(false && "AnimationLayer::Play() : ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒã‚¤ãƒ³ã‚¿ãŒnullptrã§ã™");
 		return;
 	}
 
-	// Ä¶’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Æ“¯‚¶ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶‚µ‚æ‚¤‚Æ‚µ‚½ê‡‚ÍA‰½‚à‚µ‚È‚¢
+	// å†ç”Ÿä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¨åŒã˜ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿã—ã‚ˆã†ã¨ã—ãŸå ´åˆã¯ã€ä½•ã‚‚ã—ãªã„
 	if (m_pCurrentAnimation == pAnimation ||
 		m_pNextAnimation == pAnimation)
 	{
 		return;
 	}
 
-	// Ÿ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚·‚Å‚Éİ’è‚³‚ê‚Ä‚¢‚éê‡‚ÍAŒ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğŸ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚É’u‚«Š·‚¦‚é
+	// æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒã™ã§ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ã€ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«ç½®ãæ›ãˆã‚‹
 	if (m_pNextAnimation != nullptr)
 	{
 		m_pCurrentAnimation->Detach();
@@ -35,7 +35,7 @@ void AnimationLayer::Play(Animation* pAnimation)
 		m_pCurrentAnimation->Attach();
 	}
 
-	// Œ»İÄ¶’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚È‚¢ê‡‚ÍAŒ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Æ‚µ‚Äİ’è
+	// ç¾åœ¨å†ç”Ÿä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒãªã„å ´åˆã¯ã€ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¨ã—ã¦è¨­å®š
 	if (m_pCurrentAnimation == nullptr)
 	{
 		m_pCurrentAnimation = pAnimation;
@@ -43,7 +43,7 @@ void AnimationLayer::Play(Animation* pAnimation)
 		m_blendFrameCount = 0;
 		m_pCurrentAnimation->Attach();
 	}
-	else	// Œ»İÄ¶’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚ ‚éê‡‚ÍAŸ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Æ‚µ‚Äİ’è
+	else	// ç¾åœ¨å†ç”Ÿä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚‹å ´åˆã¯ã€æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¨ã—ã¦è¨­å®š
 	{
 		m_pNextAnimation = pAnimation;
 		m_nextAnimTime = 0.0f;
@@ -54,14 +54,14 @@ void AnimationLayer::Play(Animation* pAnimation)
 
 void AnimationLayer::Apply()
 {
-	// Œ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
+	// ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	if (m_pCurrentAnimation != nullptr)
 	{
 		m_pCurrentAnimation->SetTime(m_currentAnimTime);
 		m_pCurrentAnimation->SetBlendRate(1.0f - m_blendWeight);
 	}
 
-	// Ÿ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
+	// æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	if (m_pNextAnimation != nullptr)
 	{
 		m_pNextAnimation->SetTime(m_nextAnimTime);
@@ -71,7 +71,7 @@ void AnimationLayer::Apply()
 
 void AnimationLayer::Update()
 {
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶ŠÔ‚ğXV
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿæ™‚é–“ã‚’æ›´æ–°
 	if (m_pCurrentAnimation != nullptr)
 	{
 		m_currentAnimTime += m_pCurrentAnimation->GetAnimSpeed();
@@ -89,14 +89,14 @@ void AnimationLayer::Update()
 		}
 	}
 
-	// ƒuƒŒƒ“ƒh‚µ‚Ä‚¢‚È‚¢
+	// ãƒ–ãƒ¬ãƒ³ãƒ‰ã—ã¦ã„ãªã„
 	if (m_pNextAnimation == nullptr)
 	{
 		m_blendWeight = 0.0f;
 		return;
 	}
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒuƒŒƒ“ƒhˆ—
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ–ãƒ¬ãƒ³ãƒ‰å‡¦ç†
 	if (m_blendFrameCount < kAnimationBlendFrame)
 	{
 		m_blendFrameCount++;
@@ -104,7 +104,7 @@ void AnimationLayer::Update()
 	}
 	else
 	{
-		// ƒuƒŒƒ“ƒh‚ªŠ®—¹‚µ‚½‚çAŸ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğŒ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚É’u‚«Š·‚¦‚é
+		// ãƒ–ãƒ¬ãƒ³ãƒ‰ãŒå®Œäº†ã—ãŸã‚‰ã€æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«ç½®ãæ›ãˆã‚‹
 		if (m_pNextAnimation != nullptr)
 		{
 			m_pCurrentAnimation->Detach();

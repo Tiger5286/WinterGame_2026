@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 #include <memory>
 #include <cassert>
@@ -11,11 +11,11 @@ public:
 	GameObject();
 	virtual ~GameObject() = default;
 
-	// ‰Šú‰»ˆ—
+	// åˆæœŸåŒ–å‡¦ç†
 	virtual void Init() abstract;
-	// XVˆ—
+	// æ›´æ–°å‡¦ç†
 	virtual void Update() abstract;
-	// •`‰æˆ—
+	// æç”»å‡¦ç†
 	virtual void Draw() abstract;
 
 	template<class T, class... Args>
@@ -34,11 +34,11 @@ public:
 				return result;
 			}
 		}
-		assert(false && "GameObject::GetComponent() : w’è‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ªæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+		assert(false && "GameObject::GetComponent() : æŒ‡å®šã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒå–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸ");
 		return nullptr;
 	}
 
-	// ‘¼ƒIƒuƒWƒFƒNƒg‚Æ“–‚½‚Á‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éŠÖ”
+	// ä»–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å½“ãŸã£ãŸã¨ãã«å‘¼ã°ã‚Œã‚‹é–¢æ•°
 	virtual void OnCollision(GameObject& other) {};
 
 protected:

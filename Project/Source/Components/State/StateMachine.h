@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include <memory>
 #include "State.h"
 #include "Components/Component.h"
 
 /// <summary>
-/// ƒXƒe[ƒgƒpƒ^[ƒ“‚ÌŠeƒXƒe[ƒg‚ğŠÇ—‚·‚éƒeƒ“ƒvƒŒ[ƒgƒNƒ‰ƒX
+/// ã‚¹ãƒ†ãƒ¼ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³ã®å„ã‚¹ãƒ†ãƒ¼ãƒˆã‚’ç®¡ç†ã™ã‚‹ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¯ãƒ©ã‚¹
 /// </summary>
-/// <typeparam name="Owner">‚¿å</typeparam>
+/// <typeparam name="Owner">æŒã¡ä¸»</typeparam>
 template<class Owner>
 class StateMachine : public Component
 {
@@ -33,9 +33,9 @@ public:
 	}
 
 	/// <summary>
-	/// ƒXƒe[ƒg‚ğØ‚è‘Ö‚¦‚é
+	/// ã‚¹ãƒ†ãƒ¼ãƒˆã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 	/// </summary>
-	/// <param name="pState">•ÏXæ‚ÌƒXƒe[ƒg</param>
+	/// <param name="pState">å¤‰æ›´å…ˆã®ã‚¹ãƒ†ãƒ¼ãƒˆ</param>
 	void ChangeState(std::unique_ptr<State<Owner>> pState)
 	{
 		if (m_pCurrentState)
@@ -52,10 +52,10 @@ public:
 	}
 
 	/// <summary>
-	/// Œ»İ‚ÌƒXƒe[ƒg‚ğæ“¾‚·‚é
+	/// ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <typeparam name="T">State‚ğŒp³‚µ‚½ŠeƒIƒuƒWƒFƒNƒg‚ÌStateƒNƒ‰ƒX</typeparam>
-	/// <returns>Œ»İ‚ÌƒXƒe[ƒg</returns>
+	/// <typeparam name="T">Stateã‚’ç¶™æ‰¿ã—ãŸå„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Stateã‚¯ãƒ©ã‚¹</typeparam>
+	/// <returns>ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ãƒˆ</returns>
 	template<class T>
 	T* GetState()
 	{

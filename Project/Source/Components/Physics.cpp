@@ -1,4 +1,4 @@
-#include "Physics.h"
+ï»¿#include "Physics.h"
 #include <algorithm>
 #include <cassert>
 #include "Transform.h"
@@ -11,7 +11,7 @@ void Physics::Init(Transform* pTransform, float drag, float gravity)
 
 	if (pTransform == nullptr)
 	{
-		assert(false && "Physics::Init() : pTransform‚ªnullptr‚Å‚·");
+		assert(false && "Physics::Init() : pTransformãŒnullptrã§ã™");
 	}
 
 	m_pTransform = pTransform;
@@ -19,15 +19,15 @@ void Physics::Init(Transform* pTransform, float drag, float gravity)
 
 void Physics::Update()
 {
-	// ‘¬“x‚É‰Á‘¬“x‚ð‘«‚·
+	// é€Ÿåº¦ã«åŠ é€Ÿåº¦ã‚’è¶³ã™
 	m_vel += m_accel;
 	m_vel.y += m_gravity;
 
-	// …•½ˆÚ“®‚ÍŒ¸Š‚·‚é
+	// æ°´å¹³ç§»å‹•ã¯æ¸›è¡°ã™ã‚‹
 	m_vel.x *= m_drag;
 	m_vel.z *= m_drag;
 
-	// …•½ˆÚ“®‚ÌÅ‚‘¬“x‚ðÝ’è
+	// æ°´å¹³ç§»å‹•ã®æœ€é«˜é€Ÿåº¦ã‚’è¨­å®š
 	Vector2 velXZ = Vector2(m_vel.x, m_vel.z);
 	if (velXZ.SquaredLength() > m_maxSpeed * m_maxSpeed)
 	{
@@ -35,7 +35,7 @@ void Physics::Update()
 		m_vel.z = velXZ.y;
 	}
 
-	// ˆÊ’u‚É‘¬“x‚ð‘«‚·
+	// ä½ç½®ã«é€Ÿåº¦ã‚’è¶³ã™
 	m_pTransform->pos += m_vel;
 }
 

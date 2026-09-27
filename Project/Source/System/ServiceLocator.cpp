@@ -1,4 +1,4 @@
-#include "ServiceLocator.h"
+Ôªø#include "ServiceLocator.h"
 #include <cassert>
 
 ServiceLocator& ServiceLocator::GetInstance()
@@ -9,6 +9,6 @@ ServiceLocator& ServiceLocator::GetInstance()
 
 CollisionManager& ServiceLocator::GetCollisionManager() const
 {
-	assert(m_pCollisionManager && "ServiceLocator::GetCollisionManager() : CollisionManagerÇ™nullptrÇ≈Ç∑ÅB");
+	assert(m_pCollisionManager && "ServiceLocator::GetCollisionManager() : CollisionManager„Åånullptr„Åß„Åô„ÄÇ");
 	return *m_pCollisionManager;
 }

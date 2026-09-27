@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class Animation;
 class Model;
@@ -17,13 +17,13 @@ public:
 	float GetBlendWeight() const { return m_blendWeight; }
 
 private:
-	Animation* m_pCurrentAnimation = nullptr;	// Œ»İÄ¶’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
-	Animation* m_pNextAnimation = nullptr;		// Ÿ‚ÉÄ¶‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“
+	Animation* m_pCurrentAnimation = nullptr;	// ç¾åœ¨å†ç”Ÿä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	Animation* m_pNextAnimation = nullptr;		// æ¬¡ã«å†ç”Ÿã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 
-	float m_currentAnimTime = 0.0f;	// Œ»İÄ¶’†‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶ŠÔ
-	float m_nextAnimTime = 0.0f;	// Ÿ‚ÉÄ¶‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶ŠÔ
+	float m_currentAnimTime = 0.0f;	// ç¾åœ¨å†ç”Ÿä¸­ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿæ™‚é–“
+	float m_nextAnimTime = 0.0f;	// æ¬¡ã«å†ç”Ÿã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿæ™‚é–“
 
-	int m_blendFrameCount = 0;	// ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦‚ÌƒuƒŒƒ“ƒhƒtƒŒ[ƒ€”
+	int m_blendFrameCount = 0;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆæ™‚ã®ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
 
-	float m_blendWeight = 0.0f;	// ƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦‚ÌƒuƒŒƒ“ƒhƒEƒFƒCƒg(0.0 : Œ»İ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“100% / 1.0 : Ÿ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“100%)
+	float m_blendWeight = 0.0f;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆæ™‚ã®ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¦ã‚§ã‚¤ãƒˆ(0.0 : ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³100% / 1.0 : æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³100%)
 };

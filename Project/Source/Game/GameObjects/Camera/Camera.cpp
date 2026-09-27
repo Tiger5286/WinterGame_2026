@@ -1,4 +1,4 @@
-#include "Camera.h"
+ï»¿#include "Camera.h"
 #include "Game/GameObjects/Player/Player.h"
 #include "Utility/Matrix4x4.h"
 #include "System/PadInput.h"
@@ -30,39 +30,39 @@ void Camera::Init()
 void Camera::Update()
 {
 	Transform& transform = *GetComponent<Transform>();
-	// “ü—Í‚ğ”½‰f
+	// å…¥åŠ›ã‚’åæ˜ 
 	Control();
-	// ‰ñ“]‚Ì”’l‚ğ’²®
-	// X²‰ñ“]‚ÌãŒÀ‰ºŒÀ‚ğİ’è
+	// å›è»¢ã®æ•°å€¤ã‚’èª¿æ•´
+	// Xè»¸å›è»¢ã®ä¸Šé™ä¸‹é™ã‚’è¨­å®š
 	transform.rot.x = std::clamp(transform.rot.x, -kRotXLimit, kRotXLimit);
-	// Y²‰ñ“]‚ªˆê’èˆÈã‰ñ‚Á‚½‚çƒ‰ƒbƒv‚·‚é
+	// Yè»¸å›è»¢ãŒä¸€å®šä»¥ä¸Šå›ã£ãŸã‚‰ãƒ©ãƒƒãƒ—ã™ã‚‹
 	while (transform.rot.y > DX_PI_F * 2) transform.rot.y -= DX_PI_F * 2;
 	while (transform.rot.y < 0.0f) transform.rot.y += DX_PI_F * 2;
 
-	// ƒ^[ƒQƒbƒgˆÊ’u‚ğŒvZ
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆä½ç½®ã‚’è¨ˆç®—
 	m_targetPos = m_pPlayer.lock()->GetComponent<Transform>()->pos;
 
-	// ƒxƒNƒgƒ‹‚ğ‰ñ“]‚³‚¹‚ÄˆÊ’u‚ğ‹‚ß‚é
+	// ãƒ™ã‚¯ãƒˆãƒ«ã‚’å›è»¢ã•ã›ã¦ä½ç½®ã‚’æ±‚ã‚ã‚‹
 	Vector3 rootVec = Vector3(0, 0, -kDefaultDist);
 
 	Matrix4x4 rotYMat = Matrix4x4::GetRotY(transform.rot.y);
 	Matrix4x4 rotXMat = Matrix4x4::GetRotX(transform.rot.x);
 	Matrix4x4 transMat = Matrix4x4::GetTranslate(m_targetPos);
 
-	// ‹‚ß‚½ˆÊ’u‚ğ‘ã“ü‚µ‚ÄŒvZ
+	// æ±‚ã‚ãŸä½ç½®ã‚’ä»£å…¥ã—ã¦è¨ˆç®—
 	Matrix4x4 mat = rotXMat * rotYMat * transMat;
 	transform.pos = mat * rootVec;
 
-	// YˆÊ’uƒIƒtƒZƒbƒg‚ğ“K—p
+	// Yä½ç½®ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’é©ç”¨
 	m_targetPos.y += kPosOffset.y;
 	transform.pos.y += kPosOffset.y;
 
-	// XˆÊ’uƒIƒtƒZƒbƒg‚ğ“K—p
+	// Xä½ç½®ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’é©ç”¨
 	Vector3 rightVec = Vector3::Up().Cross(m_targetPos - transform.pos).Normalized();
 	m_targetPos += rightVec * kPosOffset.x;
 	transform.pos += rightVec * kPosOffset.x;
 
-	// ƒGƒCƒ€‚É‹–ìŠp‚ğ‹·‚ß‚é
+	// ã‚¨ã‚¤ãƒ æ™‚ã«è¦–é‡è§’ã‚’ç‹­ã‚ã‚‹
 	if (m_pPlayer.lock()->IsAim())
 	{
 		m_fov = std::lerp(m_fov, kAimFov, 0.5f);
@@ -73,13 +73,13 @@ void Camera::Update()
 	}
 	SetupCamera_Perspective(m_fov);
 
-	// DxLib‚ÌƒJƒƒ‰‚É“K—p
+	// DxLibã®ã‚«ãƒ¡ãƒ©ã«é©ç”¨
 	SetCameraPositionAndTarget_UpVecY(transform.pos, m_targetPos);
 }
 
 void Camera::Draw()
 {
-	// ˆ—‚È‚µ
+	// å‡¦ç†ãªã—
 }
 
 void Camera::Control()

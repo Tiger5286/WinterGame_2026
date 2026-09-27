@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Resource.h"
 #include "DxLib.h"
 #include "Components/Transform.h"

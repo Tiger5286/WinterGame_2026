@@ -1,4 +1,4 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 #include "Resource/ResourceManager.h"
 #include "System/PadInput.h"
 #include "Game/GameObjects/Camera/Camera.h"
@@ -18,19 +18,19 @@ Player::Player()
 
 void Player::Init()
 {
-	// physics‚ğ‰Šú‰»
+	// physicsã‚’åˆæœŸåŒ–
 	GetComponent<Physics>()->Init(GetComponent<Transform>(), Physics::kDefaultDrag, 0.0f);
 
-	// ƒ‚ƒfƒ‹‚ğæ“¾‚µ‚ÄƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‰Šú‰»
+	// ãƒ¢ãƒ‡ãƒ«ã‚’å–å¾—ã—ã¦ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆæœŸåŒ–
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");
 	auto animator = GetComponent<Animator>();
 	animator->Init(m_pModel.get());
-	for (const auto& name : kAnimNames)	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’Ç‰Á
+	for (const auto& name : kAnimNames)	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¿½åŠ 
 	{
 		animator->AddAnimation(name);
 	}
 
-	// ƒXƒe[ƒg‚ğ‰Šú‰»
+	// ã‚¹ãƒ†ãƒ¼ãƒˆã‚’åˆæœŸåŒ–
 	auto stateMachine = GetComponent<StateMachine<Player>>();
 	stateMachine->ChangeState(std::make_unique<PlayerStateIdle>(*this));
 }
@@ -39,28 +39,28 @@ void Player::Update()
 {
 	Transform& transform = *GetComponent<Transform>();
 
-	// ƒXƒe[ƒg‚ğXV
+	// ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ›´æ–°
 	GetComponent<StateMachine<Player>>()->Update();
 
-	// physics‚ÌXV
+	// physicsã®æ›´æ–°
 	GetComponent<Physics>()->Update();
 
-	// Œü‚«‚ğXV
+	// å‘ãã‚’æ›´æ–°
 	float diff = MyLib::GetAngleDiff(m_angle, transform.rot.y);
 	transform.rot.y += diff * 0.1f;
 
-	// ƒ‚ƒfƒ‹‚Ìs—ñ‚ğXV
+	// ãƒ¢ãƒ‡ãƒ«ã®è¡Œåˆ—ã‚’æ›´æ–°
 	m_pModel->SetTransform(transform);
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğXV
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ›´æ–°
 	UpdateAnimation();
 }
 
 void Player::Draw()
 {
-	// ƒ‚ƒfƒ‹‚ğ•`‰æ
+	// ãƒ¢ãƒ‡ãƒ«ã‚’æç”»
 	m_pModel->Draw();
-	GetComponent<StateMachine<Player>>()->Draw();	// ƒXƒe[ƒg‚É•`‰æ‚µ‚½‚¢“à—e‚ª‚ ‚Á‚½‚ç•`‰æ
+	GetComponent<StateMachine<Player>>()->Draw();	// ã‚¹ãƒ†ãƒ¼ãƒˆã«æç”»ã—ãŸã„å†…å®¹ãŒã‚ã£ãŸã‚‰æç”»
 }
 
 void Player::UpdateAnimation()

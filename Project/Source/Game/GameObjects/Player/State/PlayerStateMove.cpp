@@ -1,4 +1,4 @@
-#include "PlayerStateMove.h"
+ï»¿#include "PlayerStateMove.h"
 #include "../Player.h"
 #include "System/PadInput.h"
 #include "PlayerStateIdle.h"
@@ -27,32 +27,32 @@ void PlayerStateMove::Update()
 	auto physics = m_owner.GetComponent<Physics>();
 	auto& input = PadInput::GetInstance();
 	Vector2 stick = input.GetStickInput(PadInput::LR::Left);
-	// ƒXƒeƒBƒbƒN“ü—Í‚ª‚ ‚é‚©‚Ç‚¤‚©
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ãŒã‚ã‚‹ã‹ã©ã†ã‹
 	bool isInputStick = stick.SquaredLength() > 0.0f;
-	// …•½‚Ì‘¬“x‚ª’x‚¢‚©‚Ç‚¤‚©
+	// æ°´å¹³ã®é€Ÿåº¦ãŒé…ã„ã‹ã©ã†ã‹
 	Vector2 velXZ = Vector2(physics->m_vel.x, physics->m_vel.z);
 	bool isSlow = velXZ.SquaredLength() < 0.1f;
 	
-	// ƒXƒeƒBƒbƒN“ü—Í‚ª‚È‚¢A‚©‚Â‘¬“x‚ª’x‚¢ê‡‚Íidle‚É–ß‚é
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ãŒãªã„ã€ã‹ã¤é€Ÿåº¦ãŒé…ã„å ´åˆã¯idleã«æˆ»ã‚‹
 	if (!isInputStick && isSlow)
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));
 		return;
 	}
 
-	// ‰EƒXƒeƒBƒbƒN‰Ÿ‚µž‚Ý‚Åƒ_ƒbƒVƒ…Ø‚è‘Ö‚¦
+	// å³ã‚¹ãƒ†ã‚£ãƒƒã‚¯æŠ¼ã—è¾¼ã¿ã§ãƒ€ãƒƒã‚·ãƒ¥åˆ‡ã‚Šæ›¿ãˆ
 	if (input.IsTriggerd(XINPUT_BUTTON_LEFT_THUMB))
 	{
 		m_isRun = !m_isRun;
 	}
 
-	// ˆÚ“®ˆ—
-	// ƒJƒƒ‰‚Ì•ûŒü‚ð“ü—Í‚Æ‡¬
+	// ç§»å‹•å‡¦ç†
+	// ã‚«ãƒ¡ãƒ©ã®æ–¹å‘ã‚’å…¥åŠ›ã¨åˆæˆ
 	Matrix4x4 rot = Matrix4x4::GetRotY(GetCameraAngleY());
 	Vector3 stickVec3 = Vector3(stick.x, 0.0f, stick.y);
 	stickVec3 *= rot;
 
-	// ó‘Ô‚É‚æ‚Á‚ÄÅ‚‘¬“x‚Æ‰Á‘¬“x‚ðÝ’è
+	// çŠ¶æ…‹ã«ã‚ˆã£ã¦æœ€é«˜é€Ÿåº¦ã¨åŠ é€Ÿåº¦ã‚’è¨­å®š
 	float maxSpeed = kMaxJogSpeed;
 	float accel = kJogAccel;
 	if (m_isRun)
@@ -62,11 +62,11 @@ void PlayerStateMove::Update()
 	}
 	physics->SetMaxSpeed(maxSpeed);
 
-	// “ü—Í•ûŒü‚ÉˆÚ“®
+	// å…¥åŠ›æ–¹å‘ã«ç§»å‹•
 	physics->m_accel.x = stickVec3.x * accel;
 	physics->m_accel.z = stickVec3.z * accel;
 
-	// “ü—Í‚ª‚ ‚éŽž‚¾‚¯ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ð•Ï‚¦‚é
+	// å…¥åŠ›ãŒã‚ã‚‹æ™‚ã ã‘ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãã‚’å¤‰ãˆã‚‹
 	if (stickVec3.SquaredLength() > 0.0f)
 	{
 		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;

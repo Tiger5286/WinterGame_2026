@@ -1,21 +1,21 @@
-#pragma once
+ï»¿#pragma once
 #include "../Component.h"
 
 class Transform;
 
 /// <summary>
-/// “–‚½‚è”»’è‚Ìî•ñ‚ğ‚ÂƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒX
+/// å½“ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã‚’æŒã¤ã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Collider : public Component
 {
 public:
-	// “–‚½‚è”»’è‚Ìí—Ş
+	// å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡
 	enum class Type
 	{
 		None,
-		Sphere,		// ‹…
-		Capsule,	// ƒJƒvƒZƒ‹
-		Polygon,	// ƒ|ƒŠƒSƒ“(ƒ‚ƒfƒ‹)
+		Sphere,		// çƒ
+		Capsule,	// ã‚«ãƒ—ã‚»ãƒ«
+		Polygon,	// ãƒãƒªã‚´ãƒ³(ãƒ¢ãƒ‡ãƒ«)
 
 		Num
 	};
@@ -24,17 +24,17 @@ public:
 	Collider(Type type, Transform& transform);
 	virtual ~Collider() = default;
 
-	// “–‚½‚è”»’è‚ğ•`‰æ‚·‚é
+	// å½“ãŸã‚Šåˆ¤å®šã‚’æç”»ã™ã‚‹
 	virtual void Draw() abstract;
 
-	// Transform‚ğæ“¾‚·‚é
+	// Transformã‚’å–å¾—ã™ã‚‹
 	const Transform& GetTransform() const { return m_transform; }
 
-	// —LŒø‚©–³Œø‚©‚ğİ’è/æ“¾‚·‚é
+	// æœ‰åŠ¹ã‹ç„¡åŠ¹ã‹ã‚’è¨­å®š/å–å¾—ã™ã‚‹
 	bool IsEnable() const { return m_isEnable; }
 	void SetEnable(bool isEnable) { m_isEnable = isEnable; }
 
-	// “–‚½‚è”»’è‚Ìí—Ş‚ğæ“¾‚·‚é
+	// å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡ã‚’å–å¾—ã™ã‚‹
 	Type GetType() const { return m_type; }
 
 protected:

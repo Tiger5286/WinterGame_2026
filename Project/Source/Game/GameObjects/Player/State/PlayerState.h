@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Components/State/State.h"
 
 class Player;
@@ -27,7 +27,7 @@ public:
 
 	virtual ID GetID() const abstract;
 
-public:	// ƒXƒe[ƒg‚ªg‚Á‚Ä‚¢‚¢ƒvƒŒƒCƒ„[‚Ìƒƒ“ƒo
+public:	// ã‚¹ãƒ†ãƒ¼ãƒˆãŒä½¿ã£ã¦ã„ã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ¡ãƒ³ãƒ
 	float GetCameraAngleY() const;
 	void SetAngle(float angle);
 };

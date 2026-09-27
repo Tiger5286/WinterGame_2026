@@ -1,18 +1,18 @@
-#pragma once
+ï»¿#pragma once
 
 /// <summary>
-/// •ÏX•s‰Â‚Ìƒnƒ“ƒhƒ‹‚ğ‚ÂƒNƒ‰ƒX
+/// å¤‰æ›´ä¸å¯ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’æŒã¤ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Handle
 {
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Åƒnƒ“ƒhƒ‹‚ğ‰Šú‰»
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ãƒãƒ³ãƒ‰ãƒ«ã‚’åˆæœŸåŒ–
 	Handle(int handle) :
 		m_handle(handle)
 	{
 	}
 
-	// ƒnƒ“ƒhƒ‹‚ğæ“¾
+	// ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
 	int Get() const
 	{
 		return m_handle;
