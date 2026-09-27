@@ -27,7 +27,7 @@ public:
 	virtual void Draw() abstract;
 
 	// Transform‚ğæ“¾‚·‚é
-	Transform& GetTransform() const { return m_transform; }
+	const Transform& GetTransform() const { return m_transform; }
 
 	// —LŒø‚©–³Œø‚©‚ğİ’è/æ“¾‚·‚é
 	bool IsEnable() const { return m_isEnable; }
@@ -40,5 +40,5 @@ protected:
 	Transform& m_transform;
 	bool m_isEnable = true;
 
-	Type m_type = Type::None;
+	const Type m_type = Type::None;
 };
