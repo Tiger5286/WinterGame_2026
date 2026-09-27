@@ -8,12 +8,18 @@
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
 #include "State/PlayerStateMove.h"
+#include "Components/Transform.h"
+#include "Resource/Model.h"
 
 Player::Player()
 {
 	AddComponent<Animator>();
 	AddComponent<Physics>();
 	AddComponent<StateMachine<Player>>(*this);
+}
+
+Player::~Player()
+{
 }
 
 void Player::Init()

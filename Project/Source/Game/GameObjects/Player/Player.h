@@ -47,7 +47,7 @@ public:
 
 public:
     Player();
-    ~Player() override = default;
+    ~Player() override;
 
     void Init() override;
     void Update() override;

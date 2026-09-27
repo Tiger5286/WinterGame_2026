@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Game/CollisionManager.h"
 #include "System/ServiceLocator.h"
+#include "Components/Component.h"
 
 namespace
 {

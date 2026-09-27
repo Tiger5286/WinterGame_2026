@@ -2,11 +2,10 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "Handle.h"
-#include "Model.h"
-#include "Graph.h"
 
 class Resource;
+class Model;
+class Graph;
 
 /// <summary>
 /// リソースを管理するシングルトンクラス
