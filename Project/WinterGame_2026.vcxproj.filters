@@ -81,19 +81,19 @@
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerState.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Collider\Collider.cpp">
+    <ClCompile Include="Source\Components\Collider\Collider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Collider\SphereCollider.cpp">
+    <ClCompile Include="Source\Components\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp">
+    <ClCompile Include="Source\Components\Collider\CapsuleCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Collider\PolygonCollider.cpp">
+    <ClCompile Include="Source\Components\Collider\PolygonCollider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Collidable.cpp">
+    <ClCompile Include="Source\Game\CollisionManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,19 +188,19 @@
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Collider\Collider.h">
+    <ClInclude Include="Source\Components\Collider\Collider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Collider\SphereCollider.h">
+    <ClInclude Include="Source\Components\Collider\SphereCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Collider\CapsuleCollider.h">
+    <ClInclude Include="Source\Components\Collider\CapsuleCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Collider\PolygonCollider.h">
+    <ClInclude Include="Source\Components\Collider\PolygonCollider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Collidable.h">
+    <ClInclude Include="Source\Game\CollisionManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

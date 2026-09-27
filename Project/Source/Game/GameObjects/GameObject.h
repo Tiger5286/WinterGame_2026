@@ -38,6 +38,9 @@ public:
 		return nullptr;
 	}
 
+	// 他オブジェクトと当たったときに呼ばれる関数
+	virtual void OnCollision(GameObject& other) {};
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 };

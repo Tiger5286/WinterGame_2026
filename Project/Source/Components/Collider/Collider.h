@@ -1,11 +1,12 @@
 #pragma once
+#include "../Component.h"
 
 class Transform;
 
 /// <summary>
 /// 当たり判定の情報を持つクラスの基底クラス
 /// </summary>
-class Collider
+class Collider : public Component
 {
 public:
 	// 当たり判定の種類
