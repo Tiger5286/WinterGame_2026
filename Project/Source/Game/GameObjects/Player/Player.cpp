@@ -7,15 +7,25 @@
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
-#include "State/PlayerStateMove.h"
 #include "Components/Transform.h"
+#include "Components/Collider/CapsuleCollider.h"
+#include "State/PlayerStateMove.h"
 #include "Resource/Model.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
+
+namespace
+{
+	constexpr float kColliderRadius = 30.0f;
+	constexpr float kColliderHeight = 180.0f;
+}
 
 Player::Player()
 {
 	AddComponent<Animator>();
 	AddComponent<Physics>();
 	AddComponent<StateMachine<Player>>(*this);
+	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
 }
 
 Player::~Player()
@@ -24,6 +34,9 @@ Player::~Player()
 
 void Player::Init()
 {
+	// CollisionManagerに登録
+	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
+
 	// physicsを初期化
 	GetComponent<Physics>()->Init(GetComponent<Transform>(), Physics::kDefaultDrag, 0.0f);
 
@@ -67,6 +80,10 @@ void Player::Draw()
 	// モデルを描画
 	m_pModel->Draw();
 	GetComponent<StateMachine<Player>>()->Draw();	// ステートに描画したい内容があったら描画
+
+#ifdef _DEBUG
+	GetComponent<CapsuleCollider>()->Draw();
+#endif
 }
 
 void Player::UpdateAnimation()

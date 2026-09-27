@@ -2,10 +2,24 @@
 #include "Resource/ResourceManager.h"
 #include "DxLib.h"
 #include "Resource/Model.h"
+#include "Components/Collider/PolygonCollider.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
+
+StaticStage::StaticStage()
+{	
+}
+
+StaticStage::~StaticStage()
+{
+}
 
 void StaticStage::Init()
 {
+	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
+
 	m_pModel = ResourceManager::GetInstance().GetModel(L"TestStageModel");
+	AddComponent<PolygonCollider>(*GetComponent<Transform>(), m_pModel);
 }
 
 void StaticStage::Update()
@@ -14,5 +28,5 @@ void StaticStage::Update()
 
 void StaticStage::Draw()
 {
-	MV1DrawModel(m_pModel->GetHandle());
+	GetComponent<PolygonCollider>()->Draw();
 }

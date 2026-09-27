@@ -6,14 +6,14 @@ class Model;
 class StaticStage : public GameObject
 {
 public:
-	StaticStage() = default;
-	~StaticStage() = default;
+	StaticStage();
+	~StaticStage();
 
 	void Init() override;
 	void Update() override;
 	void Draw() override;
 
 private:
-	Model* m_pModel;
+	Model* m_pModel = nullptr;
 };
 
