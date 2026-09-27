@@ -1,4 +1,12 @@
 ﻿#include "CollisionManager.h"
+#include "Utility/Vector3.h"
+#include "Components/Collider/Collider.h"
+#include "DxLib.h"
+#include "Components/Collider/CapsuleCollider.h"
+#include "Components/Collider/SphereCollider.h"
+#include "Components/Collider/PolygonCollider.h"
+#include "Resource/Model.h"
+#include "Game/GameObjects/GameObject.h"
 
 void CollisionManager::Update()
 {
@@ -74,4 +82,60 @@ void CollisionManager::UnRegister(const std::shared_ptr<GameObject>& pObject)
 			++it;
 		}
 	}
+}
+
+CollisionManager::HitInfo CollisionManager::CheckCollision(const Collider& movingCol, const Vector3& movedPos)
+{
+	HitInfo result;
+
+	const CapsuleCollider* pCapsule = dynamic_cast<const CapsuleCollider*>(&movingCol);
+	if (!pCapsule || !movingCol.IsEnable())
+	{
+		return result;
+	}
+
+	for (const auto& weakObj : m_pObjects)
+	{
+		auto obj = weakObj.lock();
+		if (!obj) continue;
+
+		Collider* other = obj->GetComponent<Collider>();
+
+		if (other == &movingCol || !other->IsEnable()) continue;
+
+		auto* polygon = dynamic_cast<PolygonCollider*>(other);
+		if (!polygon || !polygon->GetModel()) continue;
+
+		result = ColCheckCP(*pCapsule, movedPos, *polygon);
+	}
+	
+	return result;
+}
+
+CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const Vector3& movedPos, const PolygonCollider& poly)
+{
+	// 当たり判定結果を入れる変数を準備
+	HitInfo result;
+	// 当たり判定をするための情報を準備
+	const int modelHandle = poly.GetModel()->GetHandle();
+	const Vector3 pos1 = movedPos + Vector3::Up() * capsule.GetRadius();
+	const Vector3 pos2 = movedPos + Vector3::Up() * capsule.GetHeight() + Vector3::Down() * capsule.GetRadius();
+	const float radius = capsule.GetRadius();
+	// 当たり判定
+	auto dxResult = MV1CollCheck_Capsule(modelHandle, -1, pos1, pos2, radius);
+	// 準備した変数に必要な情報を代入
+	for (int i = 0; i < dxResult.HitNum; i++)
+	{
+		result.isHit = true;
+		PolyInfo info;
+		info.normal = dxResult.Dim[i].Normal;
+		info.pos1 = dxResult.Dim[i].Position[0];
+		info.pos2 = dxResult.Dim[i].Position[1];
+		info.pos3 = dxResult.Dim[i].Position[2];
+		result.polyInfos.push_back(info);
+	}
+	// メモリを解放
+	MV1CollResultPolyDimTerminate(dxResult);
+	// 結果を返す
+	return result;
 }

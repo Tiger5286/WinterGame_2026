@@ -38,7 +38,7 @@ void Player::Init()
 	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
 
 	// physicsを初期化
-	GetComponent<Physics>()->Init(GetComponent<Transform>(), Physics::kDefaultDrag, 0.0f);
+	GetComponent<Physics>()->Init(GetComponent<Transform>(), GetComponent<CapsuleCollider>(),Physics::kDefaultDrag, 0.0f);
 
 	// モデルを取得してアニメーションを初期化
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"PlayerModel");

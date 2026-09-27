@@ -3,8 +3,11 @@
 #include <cassert>
 #include "Transform.h"
 #include "Utility/Vector2.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
+#include "Components/Collider/Collider.h"
 
-void Physics::Init(Transform* pTransform, float drag, float gravity)
+void Physics::Init(Transform* pTransform, Collider* pCollider, float drag, float gravity)
 {
 	SetDrag(drag);
 	m_gravity = gravity;
@@ -15,6 +18,8 @@ void Physics::Init(Transform* pTransform, float drag, float gravity)
 	}
 
 	m_pTransform = pTransform;
+
+	m_pCollider = pCollider;
 }
 
 void Physics::Update()
@@ -31,8 +36,22 @@ void Physics::Update()
 	Vector2 velXZ = Vector2(m_vel.x, m_vel.z);
 	if (velXZ.SquaredLength() > m_maxSpeed * m_maxSpeed)
 	{
+		velXZ.Normalize();
+		velXZ *= m_maxSpeed;
 		m_vel.x = velXZ.x;
 		m_vel.z = velXZ.y;
+	}
+
+	// 当たり判定と押し戻し
+	// 当たり判定がなければ処理しない
+	if (m_pCollider)
+	{
+		Vector3 movedPos = m_pTransform->pos + m_vel;
+		CollisionManager::HitInfo hitResult = ServiceLocator::GetInstance().GetCollisionManager().CheckCollision(*m_pCollider, movedPos);
+		if (hitResult.isHit)
+		{
+
+		}
 	}
 
 	// 位置に速度を足す
