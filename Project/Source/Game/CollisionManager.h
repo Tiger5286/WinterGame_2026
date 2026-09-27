@@ -13,8 +13,8 @@ public:
 	void Update();
 	void Draw();
 
-	void Register(std::weak_ptr<GameObject> pObject);
-	void UnRegister(std::weak_ptr<GameObject> pObject);
+	void Register(const std::shared_ptr<GameObject>& pObject);
+	void UnRegister(const std::shared_ptr<GameObject>& pObject);
 
 private:
 	std::list<std::weak_ptr<GameObject>> m_pObjects;

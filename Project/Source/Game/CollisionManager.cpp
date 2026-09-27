@@ -8,17 +8,15 @@ void CollisionManager::Update()
 
 void CollisionManager::Draw()
 {
-	for (auto& obj : m_pObjects)
-	{
-	}
+	// TODO:GameObjectのColliderを全部描画する
 }
 
-void CollisionManager::Register(std::weak_ptr<GameObject> pObject)
+void CollisionManager::Register(const std::shared_ptr<GameObject>& pObject)
 {
 	// TODO:listに引数のオブジェクトを追加する機能を作る
 }
 
-void CollisionManager::UnRegister(std::weak_ptr<GameObject> pObject)
+void CollisionManager::UnRegister(const std::shared_ptr<GameObject>& pObject)
 {
 	// TODO:listから引数のオブジェクトを除外する機能を作る
 }
