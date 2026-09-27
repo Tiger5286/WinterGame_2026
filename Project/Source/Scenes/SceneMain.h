@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class GameObjectManager;
+class CollisionManager;
 
 class SceneMain :
     public SceneBase
@@ -15,6 +16,7 @@ public:
     void Draw() const override;
 
 private:
+    std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
 };
 

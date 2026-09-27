@@ -6,6 +6,8 @@
 #include "Resource/ResourceManager.h"
 #include "Game/GameObjects/Player/Player.h"
 #include "Game.h"
+#include "Game/CollisionManager.h"
+#include "System/ServiceLocator.h"
 
 namespace
 {
@@ -27,10 +29,16 @@ SceneMain::SceneMain(SceneManager& sceneManager):
 
 SceneMain::~SceneMain()
 {
+	// CollisionManagerが消えるのでServiceLocatorの登録を解除
+	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
 }
 
 void SceneMain::Init()
 {
+	// CollisionManagerを生成し、ServiceLocatorに登録
+	m_pCollisionManager = std::make_unique<CollisionManager>();
+	ServiceLocator::GetInstance().ProvideCollisionManager(m_pCollisionManager.get());
+
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
 	for (const auto& file : kLoadModelFiles)

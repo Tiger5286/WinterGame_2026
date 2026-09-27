@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
     <ClCompile Include="Source\Components\Collider\Collider.cpp" />
     <ClCompile Include="Source\Components\Collider\SphereCollider.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Source\Utility\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
     <ClInclude Include="Source\Components\Collider\Collider.h" />
     <ClInclude Include="Source\Components\Collider\SphereCollider.h" />
