@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Game\Collider\Collider.cpp" />
     <ClCompile Include="Source\Game\Collider\SphereCollider.cpp" />
     <ClCompile Include="Source\Game\Collider\CapsuleCollider.cpp" />
+    <ClCompile Include="Source\Game\Collider\PolygonCollider.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateMove.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Source\Game\Collider\Collider.h" />
     <ClInclude Include="Source\Game\Collider\SphereCollider.h" />
     <ClInclude Include="Source\Game\Collider\CapsuleCollider.h" />
+    <ClInclude Include="Source\Game\Collider\PolygonCollider.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerState.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateMove.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.h" />
