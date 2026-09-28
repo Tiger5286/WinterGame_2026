@@ -106,7 +106,13 @@ CollisionManager::HitInfo CollisionManager::CheckCollision(const Collider& movin
 		auto* polygon = dynamic_cast<PolygonCollider*>(other);
 		if (!polygon || !polygon->GetModel()) continue;
 
-		result = ColCheckCP(*pCapsule, movedPos, *polygon);
+		HitInfo polyResult;
+		polyResult = ColCheckCP(*pCapsule, movedPos, *polygon);
+		if (polyResult.isHit)
+		{
+			result.isHit = true;
+			result.polyInfos.insert(result.polyInfos.end(), polyResult.polyInfos.begin(), polyResult.polyInfos.end());
+		}
 	}
 	
 	return result;
@@ -132,6 +138,9 @@ CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& ca
 		info.pos1 = dxResult.Dim[i].Position[0];
 		info.pos2 = dxResult.Dim[i].Position[1];
 		info.pos3 = dxResult.Dim[i].Position[2];
+		// 押し戻し量を計算
+		float minDist = Segment_Triangle_MinLength(pos1, pos2, info.pos1, info.pos2, info.pos3);
+		info.pushDist = radius - minDist;
 		result.polyInfos.push_back(info);
 	}
 	// メモリを解放

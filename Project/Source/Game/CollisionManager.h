@@ -20,6 +20,7 @@ public:
 		Vector3 pos1;
 		Vector3 pos2;
 		Vector3 pos3;
+		float pushDist = 0.0f;
 	};
 	struct HitInfo
 	{

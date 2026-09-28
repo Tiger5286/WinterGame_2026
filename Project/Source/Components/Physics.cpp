@@ -44,18 +44,28 @@ void Physics::Update()
 
 	// 当たり判定と押し戻し
 	// 当たり判定がなければ処理しない
+	Vector3 movedPos = m_pTransform->pos + m_vel;
 	if (m_pCollider)
 	{
-		Vector3 movedPos = m_pTransform->pos + m_vel;
 		CollisionManager::HitInfo hitResult = ServiceLocator::GetInstance().GetCollisionManager().CheckCollision(*m_pCollider, movedPos);
 		if (hitResult.isHit)
 		{
+			for (auto& poly : hitResult.polyInfos)
+			{
+				movedPos += poly.normal * poly.pushDist;
 
+				// 面に向かう速度成分を取り除く
+				const float normalSpeed = m_vel.Dot(poly.normal);
+				if (normalSpeed < 0.0f)
+				{
+					m_vel -= poly.normal * normalSpeed;
+				}
+			}
 		}
 	}
 
 	// 位置に速度を足す
-	m_pTransform->pos += m_vel;
+	m_pTransform->pos = movedPos;
 }
 
 void Physics::SetDrag(float drag)
