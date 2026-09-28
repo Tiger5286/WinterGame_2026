@@ -1,11 +1,17 @@
 ﻿#include "Physics.h"
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include "Transform.h"
 #include "Utility/Vector2.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
 #include "Components/Collider/Collider.h"
+
+namespace
+{
+	constexpr float kMaxFloorAngle = DX_PI_F / 4;
+}
 
 void Physics::Init(Transform* pTransform, Collider* pCollider, float drag, float gravity)
 {
@@ -52,13 +58,34 @@ void Physics::Update()
 		{
 			for (auto& poly : hitResult.polyInfos)
 			{
-				movedPos += poly.normal * poly.pushDist;
+				const float minFloorNormalY = std::cosf(kMaxFloorAngle);
+				bool isFloor = poly.normal.y > minFloorNormalY;
+
+				// ポリゴンの面が少しでも上を向いていれば床判定
+				if (isFloor)
+				{
+					movedPos.y += poly.pushDist / poly.normal.y;
+				}
+				else
+				{
+					movedPos += poly.normal * poly.pushDist;
+				}
 
 				// 面に向かう速度成分を取り除く
-				const float normalSpeed = m_vel.Dot(poly.normal);
-				if (normalSpeed < 0.0f)
+				if (isFloor)
 				{
-					m_vel -= poly.normal * normalSpeed;
+					if (m_vel.y < 0.0f)
+					{
+						m_vel.y = 0.0f;
+					}
+				}
+				else
+				{
+					const float normalSpeed = m_vel.Dot(poly.normal);
+					if (normalSpeed < 0.0f)
+					{
+						m_vel -= poly.normal * normalSpeed;
+					}
 				}
 			}
 		}
