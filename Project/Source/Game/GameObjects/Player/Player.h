@@ -72,6 +72,7 @@ private:
     float m_angle = 0.0f;
 
     bool m_isAim = false;
+	bool m_isRun = false;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する

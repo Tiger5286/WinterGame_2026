@@ -13,6 +13,7 @@ PlayerStateIdle::PlayerStateIdle(Player& owner) :
 
 void PlayerStateIdle::Enter()
 {
+	SetIsRun(false);
 }
 
 void PlayerStateIdle::Update()

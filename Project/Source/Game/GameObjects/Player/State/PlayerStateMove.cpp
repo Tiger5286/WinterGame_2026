@@ -56,35 +56,20 @@ void PlayerStateMove::Update()
 	// 右スティック押し込みでダッシュ切り替え
 	if (input.IsTriggerd(XINPUT_BUTTON_LEFT_THUMB))
 	{
-		m_isRun = !m_isRun;
+		SetIsRun(!IsRun());
 	}
 
 	// 移動処理
-	// カメラの方向を入力と合成
-	Matrix4x4 rot = Matrix4x4::GetRotY(GetCameraAngleY());
-	Vector3 stickVec3 = Vector3(stick.x, 0.0f, stick.y);
-	stickVec3 *= rot;
-
 	// 状態によって最高速度と加速度を設定
 	float maxSpeed = kMaxJogSpeed;
 	float accel = kJogAccel;
-	if (m_isRun)
+	if (IsRun())
 	{
 		maxSpeed = kMaxRunSpeed;
 		accel = kRunAccel;
 	}
-	physics->SetMaxSpeed(maxSpeed);
-
-	// 入力方向に移動
-	physics->m_accel.x = stickVec3.x * accel;
-	physics->m_accel.z = stickVec3.z * accel;
-
-	// 入力がある時だけプレイヤーの向きを変える
-	if (stickVec3.SquaredLength() > 0.0f)
-	{
-		float rot = atan2(-stickVec3.z, stickVec3.x) - DX_PI_F / 2;
-		SetAngle(rot);
-	}
+	UpdateMove(accel, maxSpeed);
+	//physics->SetMaxSpeed(maxSpeed);
 }
 
 void PlayerStateMove::Exit()

@@ -30,8 +30,14 @@ public:
 
 	virtual ID GetID() const abstract;
 
-public:	// ステートが使っていいプレイヤーのメンバ
+protected:	// ステートが使っていいプレイヤーのメンバ
 	float GetCameraAngleY() const;
 	void SetAngle(float angle);
+
+	bool IsRun() const;
+	void SetIsRun(bool isRun);
+
+	// State共通で使う処理
+	void UpdateMove(float accel, float maxSpeed);
 };
 
