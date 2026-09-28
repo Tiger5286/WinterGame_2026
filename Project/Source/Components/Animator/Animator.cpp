@@ -10,11 +10,11 @@ namespace
 	const std::vector<std::wstring> kFullBodyBones = { L"mixamorig:Hips" };
 	const std::vector<std::wstring> kFullBodyExclusionBones = {};
 
-	const std::vector<std::wstring> kUpperBodyBones = { L"mixamorig:Spine" };
-	const std::vector<std::wstring> kUpperBodyExclusionBones = {};
+	const std::vector<std::wstring> kUpperBodyBones = { L"mixamorig:Hips" };
+	const std::vector<std::wstring> kUpperBodyExclusionBones = { L"mixamorig:LeftUpLeg", L"mixamorig:RightUpLeg" };
 
-	const std::vector<std::wstring> kLowerBodyBones = { L"mixamorig:Hips" };
-	const std::vector<std::wstring> kLowerBodyExclusionBones = { L"mixamorig:Spine" };
+	const std::vector<std::wstring> kLowerBodyBones = { L"mixamorig:LeftUpLeg", L"mixamorig:RightUpLeg" };
+	const std::vector<std::wstring> kLowerBodyExclusionBones = {};
 }
 
 void Animator::Init(Model* pModel)

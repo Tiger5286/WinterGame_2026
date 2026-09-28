@@ -114,10 +114,13 @@ void Player::UpdateAnimation()
 	case PlayerState::ID::Idle:
 		if (m_isAim)
 		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)]);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)],Animator::Layer::LowerBody);
 		}
 		else
 		{
+			animator->Stop(Animator::Layer::UpperBody);
+			animator->Stop(Animator::Layer::LowerBody);
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 		}
 		break;
@@ -156,10 +159,14 @@ void Player::UpdateAnimation()
 			case PadInput::Direction8::None:
 				break;
 			}
-			animator->Play(kAnimNames[static_cast<int>(animation)]);
+			animator->Play(kAnimNames[static_cast<int>(animation)],Animator::Layer::LowerBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimWalkForward)], Animator::Layer::UpperBody);
+			animator->Stop(Animator::Layer::FullBody);
 		}
 		else
 		{
+			animator->Stop(Animator::Layer::UpperBody);
+			animator->Stop(Animator::Layer::LowerBody);
 			if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
 			{
 				animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
