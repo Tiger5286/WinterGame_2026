@@ -27,6 +27,12 @@ public:
 		bool isHit = false;
 		std::vector<PolyInfo> polyInfos;
 	};
+	struct RayInfo
+	{
+		bool isHit = false;
+		Vector3 hitPos;
+		PolyInfo polyInfo;
+	};
 
 public:
 	CollisionManager() = default;
@@ -38,6 +44,7 @@ public:
 	void UnRegister(const std::shared_ptr<GameObject>& pObject);
 
 	HitInfo CheckCollision(const Collider& movingCol, const Vector3& movedPos);
+	RayInfo RayCast(const Vector3& start, const Vector3& end);
 
 private:
 	HitInfo ColCheckCP(const CapsuleCollider& capsule,const Vector3& movedPos, const PolygonCollider& poly);

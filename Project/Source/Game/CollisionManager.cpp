@@ -7,6 +7,7 @@
 #include "Components/Collider/PolygonCollider.h"
 #include "Resource/Model.h"
 #include "Game/GameObjects/GameObject.h"
+#include <limits>
 
 void CollisionManager::Update()
 {
@@ -115,6 +116,46 @@ CollisionManager::HitInfo CollisionManager::CheckCollision(const Collider& movin
 		}
 	}
 	
+	return result;
+}
+
+CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const Vector3& end)
+{
+	RayInfo result;
+
+	// 最初のヒットを保存できるよう、最短距離の二乗を最大値で初期化する。
+	float nearestDistSq = (std::numeric_limits<float>::max)();
+
+	// 登録順ではなく距離で選ぶため、ヒットしても全モデルを調べる。
+	for (const auto& weakObj : m_pObjects)
+	{
+		auto obj = weakObj.lock();
+		if (!obj) continue;
+
+		Collider* other = obj->GetComponent<Collider>();
+		if (!other->IsEnable()) continue;
+
+		auto* polygon = dynamic_cast<PolygonCollider*>(other);
+		if (!polygon || !polygon->GetModel()) continue;
+
+		// startからendまでの線分と、このモデルとの交差を調べる。
+		const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
+		if (!dxResult.HitFlag) continue;
+
+		// 距離の大小だけを比較するので、平方根を求めず二乗のまま扱う。
+		const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
+		const float distSq = (hitPos - start).SquaredLength();
+		if (distSq >= nearestDistSq) continue;
+
+		// より近いヒットが見つかったときだけ、位置とポリゴン情報を更新する。
+		nearestDistSq = distSq;
+		result.isHit = true;
+		result.hitPos = hitPos;
+		result.polyInfo.normal = dxResult.Normal;
+		result.polyInfo.pos1 = dxResult.Position[0];
+		result.polyInfo.pos2 = dxResult.Position[1];
+		result.polyInfo.pos3 = dxResult.Position[2];
+	}
 	return result;
 }
 
