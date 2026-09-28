@@ -11,6 +11,9 @@
 namespace
 {
 	constexpr float kMaxFloorAngle = DX_PI_F / 4;
+	// これより深い段差では吸着せず、通常の落下を行う。
+	constexpr float kGroundSnapDistance = 12.0f;
+	constexpr int kGroundSnapIterations = 12;
 }
 
 void Physics::Init(Transform* pTransform, Collider* pCollider, float drag, float gravity)
@@ -26,10 +29,16 @@ void Physics::Init(Transform* pTransform, Collider* pCollider, float drag, float
 	m_pTransform = pTransform;
 
 	m_pCollider = pCollider;
+	m_isGrounded = false;
 }
 
 void Physics::Update()
 {
+	// ジャンプで上向きの速度を設定したフレームは吸着しない。
+	const bool canSnap = m_isGrounded && m_vel.y <= 0.0f;
+	m_isGrounded = false;
+	const float minFloorNormalY = std::cos(kMaxFloorAngle);
+
 	// 速度に加速度を足す
 	m_vel += m_accel;
 	m_vel.y += m_gravity;
@@ -51,20 +60,23 @@ void Physics::Update()
 	// 当たり判定と押し戻し
 	// 当たり判定がなければ処理しない
 	Vector3 movedPos = m_pTransform->pos + m_vel;
-	if (m_pCollider)
+	if (m_pCollider && m_pCollider->IsEnable())
 	{
-		CollisionManager::HitInfo hitResult = ServiceLocator::GetInstance().GetCollisionManager().CheckCollision(*m_pCollider, movedPos);
+		auto& collisionManager = ServiceLocator::GetInstance().GetCollisionManager();
+		CollisionManager::HitInfo hitResult = collisionManager.CheckCollision(*m_pCollider, movedPos);
+		float floorPush = 0.0f;
 		if (hitResult.isHit)
 		{
 			for (auto& poly : hitResult.polyInfos)
 			{
-				const float minFloorNormalY = std::cosf(kMaxFloorAngle);
 				bool isFloor = poly.normal.y > minFloorNormalY;
 
-				// ポリゴンの面が少しでも上を向いていれば床判定
+				// 許容角度未満の面を床として扱う。
 				if (isFloor)
 				{
-					movedPos.y += poly.pushDist / poly.normal.y;
+					// 同じ位置で得た補正を足すと三角形の境界で押し戻し過ぎるため、最大値を使う。
+					floorPush = (std::max)(floorPush, poly.pushDist / poly.normal.y);
+					if (m_vel.y <= 0.0f) m_isGrounded = true;
 				}
 				else
 				{
@@ -89,9 +101,45 @@ void Physics::Update()
 				}
 			}
 		}
+		movedPos.y += floorPush;
+
+		// 接地していた物体だけ、移動先の近い床へ追従させる。
+		// レイではなくカプセルで調べ、斜面でも実際の形状の接触高さを探す。
+		if (canSnap && m_vel.y <= 0.0f && !m_isGrounded)
+		{
+			const auto touchesFloor = [&](float downDistance)
+			{
+				const auto probe = collisionManager.CheckCollision(
+					*m_pCollider, movedPos + Vector3::Down() * downDistance);
+				for (const auto& poly : probe.polyInfos)
+				{
+					if (poly.normal.y > minFloorNormalY && poly.pushDist > 0.0f)
+						return true;
+				}
+				return false;
+			};
+
+			// 範囲内に床がある場合だけ、非接触と接触の境界を二分探索する。
+			if (touchesFloor(kGroundSnapDistance))
+			{
+				float clearDistance = 0.0f;
+				float hitDistance = kGroundSnapDistance;
+				for (int i = 0; i < kGroundSnapIterations; ++i)
+				{
+					const float middle = (clearDistance + hitDistance) * 0.5f;
+					if (touchesFloor(middle)) hitDistance = middle;
+					else clearDistance = middle;
+				}
+
+				// めり込まない側まで下げて落下速度を止める。
+				movedPos.y -= clearDistance;
+				m_vel.y = 0.0f;
+				m_isGrounded = true;
+			}
+		}
 	}
 
-	// 位置に速度を足す
+	// 補正済みの位置を反映する。
 	m_pTransform->pos = movedPos;
 }
 

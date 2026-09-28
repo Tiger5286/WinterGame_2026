@@ -17,7 +17,7 @@ void PlayerStateFall::Enter()
 
 void PlayerStateFall::Update()
 {
-	if (m_owner.GetComponent<Physics>()->m_vel.y == 0.0f)
+	if (m_owner.GetComponent<Physics>()->IsGrounded())
 	{
 		m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateLand>(m_owner));

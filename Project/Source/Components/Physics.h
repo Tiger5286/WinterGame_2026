@@ -29,6 +29,7 @@ public:
 
     void SetCollider(Collider* pCollider) { m_pCollider = pCollider; }
     Collider* GetCollider() const { return m_pCollider; }
+    bool IsGrounded() const { return m_isGrounded; }
 
     /// <summary>
     /// xz成分だけの速度の2乗を返す
@@ -42,6 +43,7 @@ public:
 private:
     Transform* m_pTransform = nullptr;  // Transformの参照
     Collider* m_pCollider = nullptr;
+    bool m_isGrounded = false;
 
     float m_drag = kDefaultDrag;    // velに毎フレーム掛ける速度の減衰率(0.0~1.0)(1.0にすると減衰しない)(XZ成分にのみ有効)
     float m_gravity = -kDefaultGravity;    // vel.yに毎フレーム足す重力加速度(0にすると重力なし)
