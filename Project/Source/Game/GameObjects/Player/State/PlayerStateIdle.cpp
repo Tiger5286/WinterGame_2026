@@ -2,6 +2,7 @@
 #include "../Player.h"
 #include "System/PadInput.h"
 #include "PlayerStateMove.h"
+#include "PlayerStateJump.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
 
@@ -16,11 +17,19 @@ void PlayerStateIdle::Enter()
 
 void PlayerStateIdle::Update()
 {
+	auto& pad = PadInput::GetInstance();
+	auto stateMachine = m_owner.GetComponent<StateMachine<Player>>();
 	// スティック入力があったらmove
-	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left);
+	Vector2 stick = pad.GetStickInput(PadInput::LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateMove>(m_owner));
+		stateMachine->ChangeState(std::make_unique<PlayerStateMove>(m_owner));
+		return;
+	}
+	// ジャンプボタンを押したらジャンプ
+	if (pad.IsTriggerd(XINPUT_BUTTON_A))
+	{
+		stateMachine->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
 		return;
 	}
 }

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateJump.cpp" />
     <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
     <ClCompile Include="Source\Components\Collider\Collider.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="Source\Game\GameObjects\Stage\StaticStage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateJump.h" />
     <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
     <ClInclude Include="Source\Components\Collider\Collider.h" />

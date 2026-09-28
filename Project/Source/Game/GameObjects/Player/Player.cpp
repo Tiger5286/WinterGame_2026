@@ -46,7 +46,11 @@ void Player::Init()
 	animator->Init(m_pModel.get());
 	for (const auto& name : kAnimNames)	// アニメーションを追加
 	{
-		animator->AddAnimation(name);
+		bool isLoop = true;
+		if (name == kAnimNames[static_cast<int>(Player::AnimationID::Jump)] ||
+			name == kAnimNames[static_cast<int>(Player::AnimationID::Land)])
+			isLoop = false;
+		animator->AddAnimation(name, 0.5f, isLoop);
 	}
 
 	// ステートを初期化
@@ -83,6 +87,8 @@ void Player::Draw()
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
+	Vector3 vel = GetComponent<Physics>()->m_vel;
+	DrawFormatString(100, 100, 0xff0000, L"Player:vel x:%.1f,y:%.1f,z:%.1f", vel.x, vel.y, vel.z);
 #endif
 }
 

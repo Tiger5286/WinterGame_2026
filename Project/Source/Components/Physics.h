@@ -10,7 +10,7 @@ class Physics :
 {
 public:
     static constexpr float kDefaultDrag = 0.9f;
-    static constexpr float kDefaultGravity = -1.0f;
+    static constexpr float kDefaultGravity = -0.5f;
     static constexpr float kDefaultMaxSpeed = 30.0f;
 
     void Init(Transform* pTransform, Collider* pCollider = nullptr,

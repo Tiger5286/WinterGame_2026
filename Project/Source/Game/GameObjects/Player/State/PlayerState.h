@@ -10,6 +10,9 @@ public:
 	{
 		Idle,
 		Move,
+		Jump,
+		Fall,
+		Land,
 		
 		Num
 	};
