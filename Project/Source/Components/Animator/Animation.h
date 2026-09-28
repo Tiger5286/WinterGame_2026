@@ -21,7 +21,6 @@ public:
 	void SetTime(float time);
 	void SetBlendRate(float rate);
 
-
 private:
 	Model& m_model;
 	int m_attachIndex = -1;

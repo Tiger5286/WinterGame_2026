@@ -39,3 +39,8 @@ void Animator::Play(const std::wstring& animName, Layer layer)
 {
 	m_animationLayers[static_cast<size_t>(layer)].Play(&m_animations.at(animName));
 }
+
+bool Animator::IsEnd(Layer layer) const
+{
+	return m_animationLayers[static_cast<size_t>(layer)].IsEnd();
+}

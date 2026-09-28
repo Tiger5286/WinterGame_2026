@@ -16,6 +16,8 @@ public:
 	float GetNextAnimTime() const { return m_nextAnimTime; }
 	float GetBlendWeight() const { return m_blendWeight; }
 
+	bool IsEnd() const;
+
 private:
 	Animation* m_pCurrentAnimation = nullptr;	// 現在再生中のアニメーション
 	Animation* m_pNextAnimation = nullptr;		// 次に再生するアニメーション

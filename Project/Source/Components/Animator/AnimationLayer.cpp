@@ -116,3 +116,12 @@ void AnimationLayer::Update()
 		}
 	}
 }
+
+bool AnimationLayer::IsEnd() const
+{
+	if (m_pCurrentAnimation->IsLoop()) return false;
+
+	if (m_currentAnimTime < m_pCurrentAnimation->GetAnimTotalTime()) return false;
+
+	return true;
+}

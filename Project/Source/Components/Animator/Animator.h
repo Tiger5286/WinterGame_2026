@@ -32,6 +32,8 @@ public:
 
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
 
+	bool IsEnd(Layer layer = Layer::FullBody) const;
+
 private:
 	Model* m_pModel = nullptr;
 	std::unordered_map<std::wstring, Animation> m_animations;
