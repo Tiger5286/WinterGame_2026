@@ -14,8 +14,8 @@ public:
 	enum class Layer
 	{
 		FullBody,
-		//UpperBody,
-		//LowerBody,
+		UpperBody,
+		LowerBody,
 
 		Num
 	};
@@ -31,6 +31,7 @@ public:
 	void Update();
 
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
+	void Stop(Layer layer = Layer::FullBody);
 
 	bool IsEnd(Layer layer = Layer::FullBody) const;
 
