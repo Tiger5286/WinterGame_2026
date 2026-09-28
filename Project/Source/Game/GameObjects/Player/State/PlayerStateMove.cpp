@@ -8,12 +8,6 @@
 #include "Components/Physics.h"
 #include "Utility/Matrix4x4.h"
 
-namespace
-{
-	constexpr float kJogAccel = 0.5f;
-	constexpr float kRunAccel = 1.0f;
-}
-
 PlayerStateMove::PlayerStateMove(Player& owner) :
 	PlayerState(owner)
 {

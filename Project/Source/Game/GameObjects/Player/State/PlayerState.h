@@ -6,6 +6,14 @@ class Player;
 class PlayerState : public State<Player>
 {
 public:
+	static constexpr float kJogAccel = 0.5f;
+	static constexpr float kRunAccel = 1.0f;
+	static constexpr float kAirAccel = 0.5f;
+
+	static constexpr float kMaxJogSpeed = 5.0f;
+	static constexpr float kMaxRunSpeed = 10.0f;
+
+public:
 	enum class ID
 	{
 		Idle,

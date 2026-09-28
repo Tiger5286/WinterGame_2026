@@ -11,4 +11,7 @@ public:
 	void Exit() override;
 
 	ID GetID() const override;
+
+private:
+	int m_frame = 0;
 };
