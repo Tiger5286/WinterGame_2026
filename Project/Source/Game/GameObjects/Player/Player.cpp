@@ -88,7 +88,9 @@ void Player::Draw()
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
 	Vector3 vel = GetComponent<Physics>()->m_vel;
+	Vector3 acc = GetComponent<Physics>()->m_accel;
 	DrawFormatString(100, 100, 0xff0000, L"Player:vel x:%.1f,y:%.1f,z:%.1f", vel.x, vel.y, vel.z);
+	DrawFormatString(100, 100 + 16, 0xff0000, L"Player:acc x:%.1f,y:%.1f,z:%.1f", acc.x, acc.y, acc.z);
 #endif
 }
 

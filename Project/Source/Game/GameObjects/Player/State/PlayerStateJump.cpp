@@ -2,7 +2,7 @@
 #include "../Player.h"
 #include "Components/Physics.h"
 #include "Components/Animator/Animator.h"
-#include "PlayerStateIdle.h"
+#include "PlayerStateFall.h"
 #include "Components/State/StateMachine.h"
 
 namespace
@@ -25,7 +25,7 @@ void PlayerStateJump::Update()
 {
 	if (m_owner.GetComponent<Animator>()->IsEnd())
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
 	}
 }
 
