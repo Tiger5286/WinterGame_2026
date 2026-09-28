@@ -22,6 +22,19 @@ public:
 		Down
 	};
 
+	enum class Direction8
+	{
+		None = -1,
+		Right,
+		UpRight,
+		Up,
+		UpLeft,
+		Left,
+		DownLeft,
+		Down,
+		DownRight
+	};
+
 private:
 	PadInput(const PadInput&) = delete;
 	PadInput& operator=(const PadInput&) = delete;
@@ -35,6 +48,7 @@ public:
 	bool IsReleased(int xInput);
 
 	Vector2 GetStickInput(LR lr);
+	Direction8 GetStickDirection8(LR lr);
 
 	bool IsPressedTrigger(LR lr);
 	bool IsTriggeredTrigger(LR lr);

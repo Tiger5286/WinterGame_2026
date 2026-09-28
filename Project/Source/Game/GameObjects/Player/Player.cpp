@@ -62,8 +62,16 @@ void Player::Update()
 {
 	Transform& transform = *GetComponent<Transform>();
 
+	UpdateAim();
+
 	// ステートを更新
 	GetComponent<StateMachine<Player>>()->Update();
+	// エイムしているときは向きをカメラの向きに固定する
+	if (m_isAim)
+	{
+		m_angle = m_pCamera.lock()->GetComponent<Transform>()->rot.y - DX_PI_F;
+		m_isRun = false;
+	}
 
 	// physicsの更新
 	GetComponent<Physics>()->Update();
@@ -91,6 +99,7 @@ void Player::Draw()
 	Vector3 acc = GetComponent<Physics>()->m_accel;
 	DrawFormatString(100, 100, 0xff0000, L"Player:vel x:%.1f,y:%.1f,z:%.1f", vel.x, vel.y, vel.z);
 	DrawFormatString(100, 100 + 16, 0xff0000, L"Player:acc x:%.1f,y:%.1f,z:%.1f", acc.x, acc.y, acc.z);
+	DrawFormatString(100, 100 + 16 * 2, 0xff0000, L"Direction8:%d", static_cast<int>(PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left)));
 #endif
 }
 
@@ -103,19 +112,78 @@ void Player::UpdateAnimation()
 	switch (stateID)
 	{
 	case PlayerState::ID::Idle:
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
-		break;
-	case PlayerState::ID::Move:
-		if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
+		if (m_isAim)
 		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)]);
 		}
 		else
 		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
+		}
+		break;
+	case PlayerState::ID::Move:
+		if (m_isAim)
+		{
+			const auto direction = PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left);
+			// 入力がない場合は、減速中でMoveに残っていてもエイム待機にする。
+			AnimationID animation = AnimationID::AimIdle;
+			switch (direction)
+			{
+			case PadInput::Direction8::Right:
+				animation = AnimationID::AimWalkRight;
+				break;
+			case PadInput::Direction8::UpRight:
+				animation = AnimationID::AimWalkForwardRight;
+				break;
+			case PadInput::Direction8::Up:
+				animation = AnimationID::AimWalkForward;
+				break;
+			case PadInput::Direction8::UpLeft:
+				animation = AnimationID::AimWalkForwardLeft;
+				break;
+			case PadInput::Direction8::Left:
+				animation = AnimationID::AimWalkLeft;
+				break;
+			case PadInput::Direction8::DownLeft:
+				animation = AnimationID::AimWalkBackwardLeft;
+				break;
+			case PadInput::Direction8::Down:
+				animation = AnimationID::AimWalkBackward;
+				break;
+			case PadInput::Direction8::DownRight:
+				animation = AnimationID::AimWalkBackwardRight;
+				break;
+			case PadInput::Direction8::None:
+				break;
+			}
+			animator->Play(kAnimNames[static_cast<int>(animation)]);
+		}
+		else
+		{
+			if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
+			}
+			else
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
+			}
 		}
 		break;
 	}
 
 	animator->Update();
+}
+
+void Player::UpdateAim()
+{
+	auto& input = PadInput::GetInstance();
+	if (input.IsPressedTrigger(PadInput::LR::Left))
+	{
+		m_isAim = true;
+	}
+	else
+	{
+		m_isAim = false;
+	}
 }

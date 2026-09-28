@@ -1,4 +1,5 @@
 ﻿#include "PadInput.h"
+#include <cmath>
 
 namespace
 {
@@ -60,6 +61,30 @@ Vector2 PadInput::GetStickInput(LR lr)
 		stick = ConvertStickInput(stick);
 	}
 	return stick;
+}
+
+PadInput::Direction8 PadInput::GetStickDirection8(LR lr)
+{
+	// GetStickInputでデッドゾーン処理済みの入力を使う。
+	const Vector2 stick = GetStickInput(lr);
+	if (stick.SquaredLength() == 0.0f)
+	{
+		return Direction8::None;
+	}
+
+	constexpr float kSectorAngle = DX_PI_F / 4.0f; // 1方向あたり45度
+	// 右を0度、上を90度とする反時計回りの角度を求める。
+	float angle = std::atan2(stick.y, stick.x);
+
+	if (angle < 0.0f)
+	{
+		angle += DX_PI_F * 2.0f;
+	}
+
+	// 22.5度ずらして各方向を区間の中心にする。360度付近は右(0)へ戻す。
+	const int index = static_cast<int>((angle + kSectorAngle * 0.5f) / kSectorAngle) % 8;
+
+	return static_cast<Direction8>(index);
 }
 
 bool PadInput::IsPressedTrigger(LR lr)

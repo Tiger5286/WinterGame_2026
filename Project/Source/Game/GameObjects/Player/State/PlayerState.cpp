@@ -44,7 +44,7 @@ void PlayerState::UpdateMove(float accel, float maxSpeed)
 	physics->m_accel.z = moveDirection.z * accel;
 
 	// 入力があるときだけプレイヤーの向きを変更する。
-	if (moveDirection.SquaredLength() > 0.0f)
+	if (moveDirection.SquaredLength() > 0.0f)	
 	{
 		const float angle = std::atan2(-moveDirection.z, moveDirection.x) - DX_PI_F / 2;
 		SetAngle(angle);

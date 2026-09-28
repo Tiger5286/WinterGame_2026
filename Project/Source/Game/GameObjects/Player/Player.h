@@ -65,6 +65,7 @@ public:
 
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
+	void UpdateAim();
 
 private:
     std::unique_ptr<Model> m_pModel;
