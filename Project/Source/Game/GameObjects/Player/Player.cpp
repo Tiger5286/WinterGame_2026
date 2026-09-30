@@ -77,6 +77,12 @@ void Player::Update()
 	// physicsの更新
 	GetComponent<Physics>()->Update();
 
+	// 奈落に落ちたら原点に戻す
+	if (transform.pos.y < -2000.0f)
+	{
+		transform.pos = Vector3::Zero();
+	}
+
 	// 向きを更新
 	float diff = MyLib::GetAngleDiff(m_angle, transform.rot.y);
 	transform.rot.y += diff * 0.1f;
