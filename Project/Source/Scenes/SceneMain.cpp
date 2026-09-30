@@ -10,6 +10,7 @@
 #include "Resource/ResourceManager.h"
 #include "System/ServiceLocator.h"
 #include "Components/Component.h"
+#include "Components/Transform.h"
 
 namespace
 {
@@ -53,20 +54,24 @@ void SceneMain::Init()
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// カメラを生成
-	auto pCamera = std::make_shared<Camera>();
-	m_pGameObjectManager->Add(pCamera);
+	m_pCamera = std::make_shared<Camera>();
+	m_pGameObjectManager->Add(m_pCamera);
 	// プレイヤーを生成
-	auto pPlayer = std::make_shared<Player>();
-	m_pGameObjectManager->Add(pPlayer);
+	m_pPlayer = std::make_shared<Player>();
+	m_pGameObjectManager->Add(m_pPlayer);
 	// カメラとプレイヤーにお互いの弱参照を渡す
-	pPlayer->SetCamera(pCamera);
-	pCamera->SetPlayer(pPlayer);
+	m_pPlayer->SetCamera(m_pCamera);
+	m_pCamera->SetPlayer(m_pPlayer);
 }
 
 void SceneMain::Update()
 {
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
+
+	// ライトの方向をカメラ→プレイヤーにする
+	Vector3 cameraToPlayer = m_pPlayer->GetComponent<Transform>()->pos - m_pCamera->GetComponent<Transform>()->pos;
+	SetLightDirection(cameraToPlayer);
 }
 
 void SceneMain::Draw() const
