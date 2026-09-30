@@ -28,7 +28,7 @@ void PlayerStateIdle::Update()
 		return;
 	}
 	// ジャンプボタンを押したらジャンプ
-	if (pad.IsTriggerd(XINPUT_BUTTON_A))
+	if (pad.IsTriggerd(XINPUT_BUTTON_A) && !IsAim())
 	{
 		stateMachine->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
 		return;

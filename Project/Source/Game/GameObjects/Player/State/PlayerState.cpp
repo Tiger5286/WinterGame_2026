@@ -27,6 +27,11 @@ void PlayerState::SetIsRun(bool isRun)
 	m_owner.m_isRun = isRun;
 }
 
+bool PlayerState::IsAim() const
+{
+	return m_owner.m_isAim;
+}
+
 void PlayerState::UpdateMove(float accel, float maxSpeed)
 {
 	auto physics = m_owner.GetComponent<Physics>();

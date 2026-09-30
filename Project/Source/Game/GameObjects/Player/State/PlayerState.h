@@ -45,6 +45,8 @@ protected:	// ステートが使っていいプレイヤーのメンバ
 	bool IsRun() const;
 	void SetIsRun(bool isRun);
 
+	bool IsAim() const;
+
 	// State共通で使う処理
 	void UpdateMove(float accel, float maxSpeed);
 };

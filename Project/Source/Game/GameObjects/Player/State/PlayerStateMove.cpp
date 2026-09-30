@@ -38,7 +38,7 @@ void PlayerStateMove::Update()
 	}
 
 	// ジャンプボタンを押したらジャンプ
-	if (input.IsTriggerd(XINPUT_BUTTON_A))
+	if (input.IsTriggerd(XINPUT_BUTTON_A) && !IsAim())
 	{
 		physics->m_accel.x = 0.0f;
 		physics->m_accel.z = 0.0f;
