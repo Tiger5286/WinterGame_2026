@@ -15,6 +15,8 @@ namespace
 
 	const std::vector<std::wstring> kLowerBodyBones = { L"mixamorig:LeftUpLeg", L"mixamorig:RightUpLeg" };
 	const std::vector<std::wstring> kLowerBodyExclusionBones = {};
+
+	constexpr int kBlendFrame = 10;
 }
 
 void Animator::Init(Model* pModel)
@@ -45,10 +47,38 @@ void Animator::AddAnimation(const std::wstring& animName, float animSpeed, bool 
 
 void Animator::Update()
 {
-	for (auto& layer : m_animationLayers)
+	const float blendPerFrame = 1.0f / kBlendFrame;
+	if (m_targetSplitWeight == 0.0f)
 	{
+		m_splitWeight -= blendPerFrame;
+		if (m_splitWeight < 0.0f)
+		{
+			m_splitWeight = 0.0f;
+		}
+	}
+	else if (m_targetSplitWeight == 1.0f)
+	{
+		m_splitWeight += blendPerFrame;
+		if (m_splitWeight > 1.0f)
+		{
+			m_splitWeight = 1.0f;
+		}
+	}
+
+	for (size_t i = 0; i < m_animationLayers.size(); ++i)
+	{
+		auto& layer = m_animationLayers[i];
+		// 全身と上下別は逆の重みで混ぜ、各ボーンの合計を1に保つ。
+		const float weight = i == static_cast<size_t>(Layer::FullBody)
+			? 1.0f - m_splitWeight : m_splitWeight;
+		// フェードが完了して影響がなくなった再生枠だけ解放する。
+		if (weight == 0.0f)
+		{
+			layer.Stop();
+			continue;
+		}
 		layer.Update();
-		layer.Apply();
+		layer.Apply(weight);
 	}
 }
 
@@ -60,6 +90,18 @@ void Animator::Play(const std::wstring& animName, Layer layer)
 void Animator::Stop(Layer layer)
 {
 	m_animationLayers[static_cast<size_t>(layer)].Stop();
+}
+
+void Animator::SetSplitBody(bool enabled)
+{
+	if (enabled)
+	{
+		m_targetSplitWeight = 1.0f;
+	}
+	else
+	{
+		m_targetSplitWeight = 0.0f;
+	}
 }
 
 bool Animator::IsEnd(Layer layer) const

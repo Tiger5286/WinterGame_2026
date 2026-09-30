@@ -20,7 +20,7 @@ public:
 
 	void Play(Animation* pAnimation);
 	void Stop();
-	void Apply();
+	void Apply(float layerWeight);
 	void Update();
 
 	PlayBack GetCurrentAnimation() const { return m_currentAnim; }

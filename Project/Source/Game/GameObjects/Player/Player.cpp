@@ -13,6 +13,7 @@
 #include "Resource/Model.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
+#include <cmath>
 
 namespace
 {
@@ -114,19 +115,20 @@ void Player::UpdateAnimation()
 	case PlayerState::ID::Idle:
 		if (m_isAim)
 		{
+			animator->SetSplitBody(true);
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)],Animator::Layer::LowerBody);
 		}
 		else
 		{
-			animator->Stop(Animator::Layer::UpperBody);
-			animator->Stop(Animator::Layer::LowerBody);
+			animator->SetSplitBody(false);
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
 		}
 		break;
 	case PlayerState::ID::Move:
 		if (m_isAim)
 		{
+			animator->SetSplitBody(true);
 			const auto direction = PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left);
 			// 入力がない場合は、減速中でMoveに残っていてもエイム待機にする。
 			AnimationID animation = AnimationID::AimIdle;
@@ -161,12 +163,10 @@ void Player::UpdateAnimation()
 			}
 			animator->Play(kAnimNames[static_cast<int>(animation)],Animator::Layer::LowerBody);
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimWalkForward)], Animator::Layer::UpperBody);
-			animator->Stop(Animator::Layer::FullBody);
 		}
 		else
 		{
-			animator->Stop(Animator::Layer::UpperBody);
-			animator->Stop(Animator::Layer::LowerBody);
+			animator->SetSplitBody(false);
 			if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
 			{
 				animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
@@ -179,6 +179,11 @@ void Player::UpdateAnimation()
 		break;
 	}
 
+	// ジャンプ・落下・着地は各ステートで全身アニメーションを指定している。
+	if (stateID != PlayerState::ID::Idle && stateID != PlayerState::ID::Move)
+	{
+		animator->SetSplitBody(false);
+	}
 	animator->Update();
 }
 

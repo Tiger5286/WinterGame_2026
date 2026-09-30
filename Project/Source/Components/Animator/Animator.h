@@ -32,6 +32,7 @@ public:
 
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
 	void Stop(Layer layer = Layer::FullBody);
+	void SetSplitBody(bool enabled);
 
 	bool IsEnd(Layer layer = Layer::FullBody) const;
 
@@ -39,5 +40,8 @@ private:
 	Model* m_pModel = nullptr;
 	std::unordered_map<std::wstring, Animation> m_animations;
 	std::array<AnimationLayer, static_cast<size_t>(Layer::Num)> m_animationLayers;
+
+	float m_splitWeight = 0.0f;	// 現在の割合
+	float m_targetSplitWeight = 0.0f;	// 目標の割合
 };
 

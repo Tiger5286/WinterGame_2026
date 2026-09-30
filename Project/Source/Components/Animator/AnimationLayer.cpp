@@ -72,13 +72,22 @@ void AnimationLayer::Play(Animation* pAnimation)
 
 void AnimationLayer::Stop()
 {
-	MV1DetachAnim(m_pModel->GetHandle(), m_currentAnim.attachIndex);
+	// 未再生・停止済みのレイヤーにも安全に呼べるよう、有効な番号だけ解放する。
+	if (m_pModel && m_currentAnim.attachIndex != -1)
+	{
+		MV1DetachAnim(m_pModel->GetHandle(), m_currentAnim.attachIndex);
+	}
 	m_currentAnim = {};
-	MV1DetachAnim(m_pModel->GetHandle(), m_nextAnim.attachIndex);
+	if (m_pModel && m_nextAnim.attachIndex != -1)
+	{
+		MV1DetachAnim(m_pModel->GetHandle(), m_nextAnim.attachIndex);
+	}
 	m_nextAnim = {};
+	m_blendFrameCount = 0;
+	m_blendWeight = 0.0f;
 }
 
-void AnimationLayer::Apply()
+void AnimationLayer::Apply(float layerWeight)
 {
 	// 現在のアニメーション
 	if (m_currentAnim.pAnimation != nullptr)
@@ -90,7 +99,7 @@ void AnimationLayer::Apply()
 		// 指定のボーンにだけアニメーションをブレンド
 		for (const auto& frame : m_frameIndexes)
 		{
-			MV1SetAttachAnimBlendRateToFrame(m_pModel->GetHandle(), m_currentAnim.attachIndex, frame, 1.0f - m_blendWeight);
+			MV1SetAttachAnimBlendRateToFrame(m_pModel->GetHandle(), m_currentAnim.attachIndex, frame, (1.0f - m_blendWeight) * layerWeight);
 		}
 		// 指定のボーンのアニメーションのブレンド率を0にする
 		for (const auto& frame : m_exclusionFrameIndexes)
@@ -108,7 +117,7 @@ void AnimationLayer::Apply()
 		MV1SetAttachAnimBlendRate(m_pModel->GetHandle(), m_nextAnim.attachIndex, 0.0f);
 		for (const auto& frame : m_frameIndexes)
 		{
-			MV1SetAttachAnimBlendRateToFrame(m_pModel->GetHandle(), m_nextAnim.attachIndex, frame, m_blendWeight);
+			MV1SetAttachAnimBlendRateToFrame(m_pModel->GetHandle(), m_nextAnim.attachIndex, frame, m_blendWeight * layerWeight);
 		}
 		// 指定のボーンのアニメーションのブレンド率を0にする
 		for (const auto& frame : m_exclusionFrameIndexes)
