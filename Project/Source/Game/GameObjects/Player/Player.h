@@ -75,6 +75,9 @@ private:
     bool m_isAim = false;
 	bool m_isRun = false;
 
+	float m_aimStartAngle = 0.0f;
+	int m_aimStartFrame = 0;
+
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
 	friend class PlayerState;

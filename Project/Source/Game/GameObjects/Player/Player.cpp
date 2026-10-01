@@ -19,6 +19,9 @@ namespace
 {
 	constexpr float kColliderRadius = 30.0f;
 	constexpr float kColliderHeight = 180.0f;
+
+	// エイムしたときにカメラの向きに合わせるのにかかる時間
+	constexpr int kAimStartFrame = 10;
 }
 
 Player::Player()
@@ -72,6 +75,19 @@ void Player::Update()
 	{
 		m_angle = m_pCamera.lock()->GetComponent<Transform>()->rot.y - DX_PI_F;
 		m_isRun = false;
+
+		m_aimStartFrame++;
+		if (m_aimStartFrame > kAimStartFrame)
+		{
+			m_aimStartAngle = m_angle;
+		}
+		float diff = MyLib::GetAngleDiff(m_angle, m_aimStartAngle);
+		float rate = static_cast<float>(m_aimStartFrame) / static_cast<float>(kAimStartFrame);
+		transform.rot.y = m_aimStartAngle + diff * rate;
+	}
+	else
+	{
+		m_aimStartFrame = 0;
 	}
 
 	// physicsの更新
@@ -196,6 +212,10 @@ void Player::UpdateAnimation()
 void Player::UpdateAim()
 {
 	auto& input = PadInput::GetInstance();
+	if (input.IsTriggeredTrigger(PadInput::LR::Left))
+	{
+		m_aimStartAngle = m_angle;
+	}
 	if (input.IsPressedTrigger(PadInput::LR::Left))
 	{
 		m_isAim = true;
