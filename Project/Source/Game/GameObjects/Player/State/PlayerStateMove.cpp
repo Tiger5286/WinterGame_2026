@@ -42,7 +42,6 @@ void PlayerStateMove::Update()
 	{
 		physics->m_accel.x = 0.0f;
 		physics->m_accel.z = 0.0f;
-		physics->SetDrag(1.0f);
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
 		return;
 	}

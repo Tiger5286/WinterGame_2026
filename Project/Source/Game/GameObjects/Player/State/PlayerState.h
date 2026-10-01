@@ -13,6 +13,9 @@ public:
 	static constexpr float kMaxJogSpeed = 5.0f;
 	static constexpr float kMaxRunSpeed = 10.0f;
 
+	static constexpr float kMaxHoverSpeed = 5.0f;
+	static constexpr float kHoverAccel = 0.2f;
+
 public:
 	enum class ID
 	{
@@ -21,6 +24,7 @@ public:
 		Jump,
 		Fall,
 		Land,
+		Hover,
 		
 		Num
 	};

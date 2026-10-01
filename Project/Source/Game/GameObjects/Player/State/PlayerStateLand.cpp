@@ -4,6 +4,7 @@
 #include "../Player.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
+#include "Components/Physics.h"
 #include "System/PadInput.h"
 
 namespace
@@ -19,6 +20,7 @@ PlayerStateLand::PlayerStateLand(Player& player) :
 void PlayerStateLand::Enter()
 {
 	m_owner.GetComponent<Animator>()->Play(Player::kAnimNames[static_cast<int>(Player::AnimationID::Land)]);
+	m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
 }
 
 void PlayerStateLand::Update()
