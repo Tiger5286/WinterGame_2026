@@ -3,6 +3,7 @@
 #include "System/PadInput.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateJump.h"
+#include "PlayerStateFall.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Physics.h"
@@ -43,6 +44,13 @@ void PlayerStateMove::Update()
 		physics->m_accel.x = 0.0f;
 		physics->m_accel.z = 0.0f;
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
+		return;
+	}
+
+	// 接地していない場合は落下
+	if (!physics->IsGrounded())
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
 		return;
 	}
 

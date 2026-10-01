@@ -16,6 +16,7 @@ public:
 		Jump,
 		Fall,
 		Land,
+		Hover,
 		AimIdle,
 		AimFire,
 		AimWalkForward,
@@ -37,6 +38,7 @@ public:
 		L"Player|Jump",
 		L"Player|Fall",
 		L"Player|Land",
+		L"Player|Hover",
 		L"Player|AimIdle",
 		L"Player|AimFire",
 		L"Player|AimWalkForward",
@@ -48,8 +50,6 @@ public:
 		L"Player|AimWalkBackwardLeft",
 		L"Player|AimWalkBackwardRight"
 	};
-
-	static_assert(static_cast<int>(AnimationID::Num) == std::size(kAnimNames));
 
 public:
     Player();

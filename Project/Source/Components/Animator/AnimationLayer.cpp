@@ -24,7 +24,7 @@ void AnimationLayer::Init(Model* pModel, const std::vector<std::wstring>& boneNa
 	}
 }
 
-void AnimationLayer::Play(Animation* pAnimation)
+void AnimationLayer::Play(Animation* pAnimation,float startTime)
 {
 	if (pAnimation == nullptr)
 	{
@@ -54,13 +54,13 @@ void AnimationLayer::Play(Animation* pAnimation)
 	if (m_currentAnim.pAnimation == nullptr)
 	{
 		// 省略したメンバには既定値（attachIndex=-1、time=0）が入る。
-		m_currentAnim = PlayBack{ pAnimation };
+		m_currentAnim = PlayBack{ pAnimation,-1,startTime };
 		// アタッチして、戻り値をm_currentAnim.attachIndexに保存する。
 		m_currentAnim.attachIndex = MV1AttachAnim(m_pModel->GetHandle(), m_currentAnim.pAnimation->GetAnimIndex());
 	}
 	else	// 現在再生中のアニメーションがある場合は、次のアニメーションとして設定
 	{
-		m_nextAnim = PlayBack{ pAnimation };
+		m_nextAnim = PlayBack{ pAnimation,-1,startTime };
 		// アタッチして、戻り値をm_nextAnim.attachIndexに保存する。
 		m_nextAnim.attachIndex = MV1AttachAnim(m_pModel->GetHandle(), m_nextAnim.pAnimation->GetAnimIndex());
 	}
@@ -194,4 +194,24 @@ bool AnimationLayer::IsEnd() const
 
 		return true;
 	}
+}
+
+bool AnimationLayer::TryGetPlaybackTime(const Animation* pAnimation, float& time) const
+{
+	// 切り替え中ならnextの再生時間を優先する
+	if (m_nextAnim.pAnimation == pAnimation)
+	{
+		time = m_nextAnim.time;
+		return true;
+	}
+
+	// 切り替え中でない場合はcurrentの再生時間を返す
+	if (m_currentAnim.pAnimation == pAnimation)
+	{
+		time = m_currentAnim.time;
+		return true;
+	}
+
+	// どちらのアニメーションでもない場合はfalseを返す
+	return false;
 }

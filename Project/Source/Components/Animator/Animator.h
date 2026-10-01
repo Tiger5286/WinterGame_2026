@@ -31,6 +31,7 @@ public:
 	void Update();
 
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
+	void PlaySynced(const std::wstring& animName, Layer source, Layer destination);
 	void Stop(Layer layer = Layer::FullBody);
 	void SetSplitBody(bool enabled);
 

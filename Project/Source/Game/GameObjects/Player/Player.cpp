@@ -131,80 +131,100 @@ void Player::UpdateAnimation()
 	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();
 	auto animator = GetComponent<Animator>();
 	auto physics = GetComponent<Physics>();
+	// 上下別に再生可能なステートかどうか
+	bool canSplitBody =
+		stateID == PlayerState::ID::Idle ||
+		stateID == PlayerState::ID::Move ||
+		stateID == PlayerState::ID::Hover ||
+		stateID == PlayerState::ID::Land;
+	// 上下別に再生可能なステートかつエイム中のときだけ上下別アニメーションを再生する
+	animator->SetSplitBody(canSplitBody && m_isAim);
 
 	switch (stateID)
 	{
 	case PlayerState::ID::Idle:
-		if (m_isAim)
-		{
-			animator->SetSplitBody(true);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)],Animator::Layer::LowerBody);
-		}
-		else
-		{
-			animator->SetSplitBody(false);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)]);
-		}
+		// 全身は通常待機
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)],Animator::Layer::FullBody);
+		// 上下別アニメーションはエイム待機
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Move:
-		if (m_isAim)
+	{
+		// 全身は走るか歩くかで切り替え
+		if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
 		{
-			animator->SetSplitBody(true);
-			const auto direction = PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left);
-			// 入力がない場合は、減速中でMoveに残っていてもエイム待機にする。
-			AnimationID animation = AnimationID::AimIdle;
-			switch (direction)
-			{
-			case PadInput::Direction8::Right:
-				animation = AnimationID::AimWalkRight;
-				break;
-			case PadInput::Direction8::UpRight:
-				animation = AnimationID::AimWalkForwardRight;
-				break;
-			case PadInput::Direction8::Up:
-				animation = AnimationID::AimWalkForward;
-				break;
-			case PadInput::Direction8::UpLeft:
-				animation = AnimationID::AimWalkForwardLeft;
-				break;
-			case PadInput::Direction8::Left:
-				animation = AnimationID::AimWalkLeft;
-				break;
-			case PadInput::Direction8::DownLeft:
-				animation = AnimationID::AimWalkBackwardLeft;
-				break;
-			case PadInput::Direction8::Down:
-				animation = AnimationID::AimWalkBackward;
-				break;
-			case PadInput::Direction8::DownRight:
-				animation = AnimationID::AimWalkBackwardRight;
-				break;
-			case PadInput::Direction8::None:
-				break;
-			}
-			animator->Play(kAnimNames[static_cast<int>(animation)],Animator::Layer::LowerBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimWalkForward)], Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)], Animator::Layer::FullBody);
 		}
 		else
 		{
-			animator->SetSplitBody(false);
-			if (physics->GetSquaredMoveSpeed() > PlayerStateMove::kMaxJogSpeed * PlayerStateMove::kMaxJogSpeed)
-			{
-				animator->Play(kAnimNames[static_cast<int>(AnimationID::Run)]);
-			}
-			else
-			{
-				animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)]);
-			}
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Jog)], Animator::Layer::FullBody);
 		}
+		// 上下別アニメーションはエイム中のときだけ切り替え
+		const auto direction = PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left);
+		AnimationID animation = AnimationID::AimIdle;
+		switch (direction)
+		{
+		case PadInput::Direction8::Right:
+			animation = AnimationID::AimWalkRight;
+			break;
+		case PadInput::Direction8::UpRight:
+			animation = AnimationID::AimWalkForwardRight;
+			break;
+		case PadInput::Direction8::Up:
+			animation = AnimationID::AimWalkForward;
+			break;
+		case PadInput::Direction8::UpLeft:
+			animation = AnimationID::AimWalkForwardLeft;
+			break;
+		case PadInput::Direction8::Left:
+			animation = AnimationID::AimWalkLeft;
+			break;
+		case PadInput::Direction8::DownLeft:
+			animation = AnimationID::AimWalkBackwardLeft;
+			break;
+		case PadInput::Direction8::Down:
+			animation = AnimationID::AimWalkBackward;
+			break;
+		case PadInput::Direction8::DownRight:
+			animation = AnimationID::AimWalkBackwardRight;
+			break;
+		case PadInput::Direction8::None:
+			break;
+		}
+		animator->Play(kAnimNames[static_cast<int>(animation)], Animator::Layer::LowerBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimWalkForward)], Animator::Layer::UpperBody);
 		break;
 	}
-
-	// ジャンプ・落下・着地は各ステートで全身アニメーションを指定している。
-	if (stateID != PlayerState::ID::Idle && stateID != PlayerState::ID::Move)
-	{
-		animator->SetSplitBody(false);
+	case PlayerState::ID::Jump:
+		// ジャンプは全身アニメーションのみ
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Jump)], Animator::Layer::FullBody);
+		break;
+	case PlayerState::ID::Fall:
+		// 落下は全身アニメーションのみ
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Fall)], Animator::Layer::FullBody);
+		break;
+	case PlayerState::ID::Land:
+		// 着地は全身、上下別ともに着地アニメーションを再生する
+		if (m_isAim)
+		{	// エイム開始時は全身アニメーションの再生時間を上下別アニメーションに同期させる
+			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
+			//animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::LowerBody);
+		}
+		else	// エイム終了時は上下別アニメーションの再生時間を全身アニメーションに同期させる
+		{
+			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::LowerBody, Animator::Layer::FullBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody);
+		}
+		break;
+	case PlayerState::ID::Hover:
+		// ホバーは全身、上下別ともにホバーアニメーションを再生する
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::UpperBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		break;
 	}
 	animator->Update();
 }

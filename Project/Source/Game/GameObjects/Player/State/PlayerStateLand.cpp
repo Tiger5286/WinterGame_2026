@@ -19,7 +19,6 @@ PlayerStateLand::PlayerStateLand(Player& player) :
 
 void PlayerStateLand::Enter()
 {
-	m_owner.GetComponent<Animator>()->Play(Player::kAnimNames[static_cast<int>(Player::AnimationID::Land)]);
 	m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
 }
 
@@ -43,7 +42,13 @@ void PlayerStateLand::Update()
 		return;
 	}
 
-	if (m_owner.GetComponent<Animator>()->IsEnd())
+	auto layer = Animator::Layer::FullBody;
+	if (IsAim())
+	{
+		layer = Animator::Layer::LowerBody;
+	}
+
+	if (m_owner.GetComponent<Animator>()->IsEnd(layer))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));
 		return;

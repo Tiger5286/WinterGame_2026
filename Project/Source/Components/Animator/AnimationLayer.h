@@ -18,7 +18,7 @@ public:
 public:
 	void Init(Model* pModel, const std::vector<std::wstring>& boneNames, const std::vector<std::wstring>& exclusionBoneNames);
 
-	void Play(Animation* pAnimation);
+	void Play(Animation* pAnimation,float startTime = 0.0f);
 	void Stop();
 	void Apply(float layerWeight);
 	void Update();
@@ -28,6 +28,8 @@ public:
 	float GetBlendWeight() const { return m_blendWeight; }
 
 	bool IsEnd() const;
+
+	bool TryGetPlaybackTime(const Animation* pAnimation, float& time) const;
 
 private:
 	Model* m_pModel = nullptr;

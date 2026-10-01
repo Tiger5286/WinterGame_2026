@@ -87,6 +87,18 @@ void Animator::Play(const std::wstring& animName, Layer layer)
 	m_animationLayers[static_cast<size_t>(layer)].Play(&m_animations.at(animName));
 }
 
+void Animator::PlaySynced(const std::wstring& animName, Layer source, Layer destination)
+{
+	auto* pAnimation = &m_animations.at(animName);
+	auto& destinationLayer = m_animationLayers[static_cast<size_t>(destination)];
+	const auto& sourceLayer = m_animationLayers[static_cast<size_t>(source)];
+
+	float startTime = 0.0f;
+	sourceLayer.TryGetPlaybackTime(pAnimation, startTime);
+
+	destinationLayer.Play(pAnimation, startTime);
+}
+
 void Animator::Stop(Layer layer)
 {
 	m_animationLayers[static_cast<size_t>(layer)].Stop();
