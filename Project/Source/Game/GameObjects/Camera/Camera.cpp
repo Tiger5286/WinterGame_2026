@@ -62,6 +62,12 @@ void Camera::Update()
 	m_targetPos += rightVec * kPosOffset.x;
 	transform.pos += rightVec * kPosOffset.x;
 
+	// ライトの方向をカメラの向きに合わせる
+	Vector3 lightDir = (m_targetPos - transform.pos).Normalized();
+	// y軸の方向を調整する
+	lightDir.y = -0.5f;
+	SetLightDirection(lightDir);
+
 	// エイム時に視野角を狭める
 	if (m_pPlayer.lock()->IsAim())
 	{

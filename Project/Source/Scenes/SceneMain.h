@@ -20,7 +20,5 @@ public:
 private:
     std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
-    std::shared_ptr<Player> m_pPlayer = nullptr;
-    std::shared_ptr<Camera> m_pCamera = nullptr;
 };
 
