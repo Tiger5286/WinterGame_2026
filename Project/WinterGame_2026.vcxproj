@@ -52,6 +52,7 @@
     <ClCompile Include="Source\Utility\Vector2.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Stage\StaticStage.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Enemies\TestEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateHover.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Source\Components\State\State.h" />
     <ClInclude Include="Source\Components\State\StateMachine.h" />
     <ClInclude Include="Source\Game\GameObjects\Stage\StaticStage.h" />
+    <ClInclude Include="Source\Game\GameObjects\Enemies\TestEnemy.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -5,6 +5,7 @@
 #include "Game/GameObjectManager.h"
 #include "Game/GameObjects/Camera/Camera.h"
 #include "Game/GameObjects/Player/Player.h"
+#include "Game/GameObjects/Enemies/TestEnemy.h"
 #include "Game/GameObjects/Stage/StaticStage.h"
 #include "Game/CollisionManager.h"
 #include "Resource/ResourceManager.h"
@@ -22,6 +23,7 @@ namespace
 
 	const LoadData kLoadModelFiles[] = {
 		{ L"data/models/player/player.mv1", L"PlayerModel" },
+		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
 		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" }
 	};
 }
@@ -62,6 +64,8 @@ void SceneMain::Init()
 	// カメラとプレイヤーにお互いの弱参照を渡す
 	pPlayer->SetCamera(pCamera);
 	pCamera->SetPlayer(pPlayer);
+	// 敵を生成
+	m_pGameObjectManager->Add(std::make_shared<TestEnemy>());
 }
 
 void SceneMain::Update()

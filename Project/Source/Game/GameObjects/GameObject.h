@@ -9,7 +9,7 @@ class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
 	GameObject();
-	virtual ~GameObject() = default;
+	virtual ~GameObject();
 
 	// 初期化処理
 	virtual void Init() abstract;

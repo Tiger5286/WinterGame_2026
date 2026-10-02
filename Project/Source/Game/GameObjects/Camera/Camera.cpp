@@ -15,6 +15,7 @@ namespace
 	const Vector3 kPosOffset = Vector3(70.0f, 150.0f,0.0f);
 
 	constexpr float kSensitivity = DX_PI_F / 60;
+	constexpr float kAimSensitivity = DX_PI_F / 120;
 
 	constexpr float kRotXLimit = DX_PI_F / 2 - 0.01f;
 	constexpr float kRotXLimitAim = DX_PI_F / 4;
@@ -97,6 +98,11 @@ void Camera::Control()
 {
 	Transform& transform = *GetComponent<Transform>();
 	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Right);
-	transform.rot.y += stick.x * kSensitivity;
-	transform.rot.x += -stick.y * kSensitivity;
+	float sensitivity = kSensitivity;
+	if (m_pPlayer.lock()->IsAim())
+	{
+		sensitivity = kAimSensitivity;
+	}
+	transform.rot.y += stick.x * sensitivity;
+	transform.rot.x += -stick.y * sensitivity;
 }
