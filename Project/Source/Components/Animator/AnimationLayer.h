@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
+#include "DxLib.h"
 
 class Animation;
 class Model;
@@ -31,6 +32,10 @@ public:
 
 	bool TryGetPlaybackTime(const Animation* pAnimation, float& time) const;
 
+	void SetAimAngle(float angle) { m_aimAngle = angle; }
+
+	void ApplyAimRotation();
+
 private:
 	Model* m_pModel = nullptr;
 
@@ -41,6 +46,11 @@ private:
 
 	float m_blendWeight = 0.0f;	// アニメーション切り替え時のブレンドウェイト(0.0 : 現在のアニメーション100% / 1.0 : 次のアニメーション100%)
 
-	std::vector<int> m_frameIndexes;
-	std::vector<int> m_exclusionFrameIndexes;
+	float m_aimAngle = 0.0f;	// 上半身の向き(ラジアン)
+
+	std::vector<int> m_frameIndexes;	// アニメーションを適用するボーンのインデックス
+	std::vector<int> m_exclusionFrameIndexes;	// アニメーションを適用しないボーンのインデックス
+
+	std::vector<int> m_aimRotationFrameIndexes;	// 上半身の回転を適用するボーンのインデックス
+	std::vector<MATRIX> m_aimRotationDefaultMatrices;	// 上半身の回転を適用するボーンの初期姿勢行列
 };

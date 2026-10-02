@@ -3,11 +3,17 @@
 #include <cassert>
 #include "DxLib.h"
 #include "Resource/Model.h"
+#include "Utility/Matrix4x4.h"
 
 namespace
 {
 	// アニメーション切り替え時のブレンドフレーム数
 	constexpr int kAnimationBlendFrame = 10;
+
+	// 上半身を回転する時に回すボーンの名前
+	constexpr const wchar_t* kUpperBodyBoneName[] = {
+		L"mixamorig:Spine2"
+	};
 }
 void AnimationLayer::Init(Model* pModel, const std::vector<std::wstring>& boneNames, const std::vector<std::wstring>& exclusionBoneNames)
 {
@@ -21,6 +27,12 @@ void AnimationLayer::Init(Model* pModel, const std::vector<std::wstring>& boneNa
 	{
 		m_exclusionFrameIndexes.push_back(MV1SearchFrame(m_pModel->GetHandle(), boneName.c_str()));
 		assert(m_exclusionFrameIndexes.back() != -1 && "AnimationLayer::Init() : ボーンが正しく取得できませんでした");
+	}
+	for(const auto& boneName : kUpperBodyBoneName)
+	{
+		m_aimRotationFrameIndexes.push_back(MV1SearchFrame(m_pModel->GetHandle(), boneName));
+		assert(m_aimRotationFrameIndexes.back() != -1 && "AnimationLayer::Init() : 上半身のボーンが正しく取得できませんでした");
+		m_aimRotationDefaultMatrices.push_back(MV1GetFrameLocalMatrix(m_pModel->GetHandle(), m_aimRotationFrameIndexes.back()));
 	}
 }
 
@@ -214,4 +226,18 @@ bool AnimationLayer::TryGetPlaybackTime(const Animation* pAnimation, float& time
 
 	// どちらのアニメーションでもない場合はfalseを返す
 	return false;
+}
+
+void AnimationLayer::ApplyAimRotation()
+{
+	for (int i = 0; i < m_aimRotationFrameIndexes.size(); i++)
+	{
+		if (m_aimRotationFrameIndexes[i] == -1)
+		{
+			continue;
+		}
+		MATRIX rotMtx = MGetRotX(m_aimAngle);
+		MATRIX resultMtx = MMult(rotMtx, m_aimRotationDefaultMatrices[i]);
+		MV1SetFrameUserLocalMatrix(m_pModel->GetHandle(), m_aimRotationFrameIndexes[i], resultMtx);
+	}
 }

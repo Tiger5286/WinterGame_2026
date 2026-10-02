@@ -84,10 +84,15 @@ void Player::Update()
 		float diff = MyLib::GetAngleDiff(m_angle, m_aimStartAngle);
 		float rate = static_cast<float>(m_aimStartFrame) / static_cast<float>(kAimStartFrame);
 		transform.rot.y = m_aimStartAngle + diff * rate;
+
+		// モデルの向きを更新
+		float cameraRotX = m_pCamera.lock()->GetComponent<Transform>()->rot.x;
+		GetComponent<Animator>()->SetAimAngle(-cameraRotX);
 	}
 	else
 	{
 		m_aimStartFrame = 0;
+		GetComponent<Animator>()->SetAimAngle(0.0f);
 	}
 
 	// physicsの更新

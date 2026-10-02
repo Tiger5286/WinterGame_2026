@@ -17,7 +17,7 @@ namespace
 	constexpr float kSensitivity = DX_PI_F / 60;
 
 	constexpr float kRotXLimit = DX_PI_F / 2 - 0.01f;
-	constexpr float kRotXLimitAim = DX_PI_F / 3;
+	constexpr float kRotXLimitAim = DX_PI_F / 4;
 }
 
 void Camera::Init()

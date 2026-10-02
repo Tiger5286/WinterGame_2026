@@ -80,6 +80,8 @@ void Animator::Update()
 		layer.Update();
 		layer.Apply(weight);
 	}
+
+	m_animationLayers[static_cast<size_t>(Layer::UpperBody)].ApplyAimRotation();
 }
 
 void Animator::Play(const std::wstring& animName, Layer layer)
@@ -119,4 +121,9 @@ void Animator::SetSplitBody(bool enabled)
 bool Animator::IsEnd(Layer layer) const
 {
 	return m_animationLayers[static_cast<size_t>(layer)].IsEnd();
+}
+
+void Animator::SetAimAngle(float angle)
+{
+	m_animationLayers[static_cast<size_t>(Layer::UpperBody)].SetAimAngle(angle);
 }

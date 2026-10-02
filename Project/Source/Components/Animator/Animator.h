@@ -37,6 +37,8 @@ public:
 
 	bool IsEnd(Layer layer = Layer::FullBody) const;
 
+	void SetAimAngle(float angle);
+
 private:
 	Model* m_pModel = nullptr;
 	std::unordered_map<std::wstring, Animation> m_animations;
