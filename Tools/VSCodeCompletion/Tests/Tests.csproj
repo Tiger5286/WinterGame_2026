@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net9.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../CompletionCore.cs" Link="CompletionCore.cs" />
+    <Compile Include="../CompletionSettings.cs" Link="CompletionSettings.cs" />
+    <Compile Include="../OllamaClient.cs" Link="OllamaClient.cs" />
+  </ItemGroup>
+</Project>
