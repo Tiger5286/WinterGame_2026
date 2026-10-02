@@ -17,6 +17,7 @@ namespace
 	constexpr float kSensitivity = DX_PI_F / 60;
 
 	constexpr float kRotXLimit = DX_PI_F / 2 - 0.01f;
+	constexpr float kRotXLimitAim = DX_PI_F / 3;
 }
 
 void Camera::Init()
@@ -35,6 +36,10 @@ void Camera::Update()
 	// 回転の数値を調整
 	// X軸回転の上限下限を設定
 	transform.rot.x = std::clamp(transform.rot.x, -kRotXLimit, kRotXLimit);
+	if (m_pPlayer.lock()->IsAim())
+	{
+		transform.rot.x = std::clamp(transform.rot.x, -kRotXLimitAim, kRotXLimitAim);
+	}
 	// Y軸回転が一定以上回ったらラップする
 	while (transform.rot.y > DX_PI_F * 2) transform.rot.y -= DX_PI_F * 2;
 	while (transform.rot.y < 0.0f) transform.rot.y += DX_PI_F * 2;
