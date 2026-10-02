@@ -7,6 +7,8 @@
 #include "Components/Collider/PolygonCollider.h"
 #include "Resource/Model.h"
 #include "Game/GameObjects/GameObject.h"
+#include "Components/Transform.h"
+#include <cmath>
 #include <limits>
 
 void CollisionManager::Update()
@@ -187,5 +189,72 @@ CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& ca
 	// メモリを解放
 	MV1CollResultPolyDimTerminate(dxResult);
 	// 結果を返す
+	return result;
+}
+
+CollisionManager::HitInfo CollisionManager::ColCheckCC(const CapsuleCollider& capsule1, const Vector3& movePos, const CapsuleCollider& capsule2)
+{
+	HitInfo result;
+	if (&capsule1 == &capsule2 || !capsule1.IsEnable() || !capsule2.IsEnable())
+	{
+		return result;
+	}
+
+	// 現在のColliderと同じく、回転・拡大縮小しない直立カプセルとして調べる。
+	// posは足元、heightは半球を含む全体の高さなので、中心線は半径分だけ内側にある。
+	const float radius1 = capsule1.GetRadius();
+	const float radius2 = capsule2.GetRadius();
+	const Vector3& pos2 = capsule2.GetTransform().pos;
+	const float bottom1 = movePos.y + radius1;
+	const float top1 = movePos.y + capsule1.GetHeight() - radius1;
+	const float bottom2 = pos2.y + radius2;
+	const float top2 = pos2.y + capsule2.GetHeight() - radius2;
+
+	// 中心線は両方とも縦向きなので、最短点間のXZ成分は足元同士の差と同じ。
+	// 高さの範囲が重なる場合は同じ高さの点を選べるため、Y成分は0になる。
+	Vector3 difference(movePos.x - pos2.x, 0.0f, movePos.z - pos2.z);
+	if (bottom1 > top2)
+	{
+		// 自分が相手より上にある場合。
+		difference.y = bottom1 - top2;
+	}
+	else if (top1 < bottom2)
+	{
+		// 自分が相手より下にある場合。
+		difference.y = top1 - bottom2;
+	}
+
+	const float radiusSum = radius1 + radius2;
+	const float distanceSq = difference.SquaredLength();
+	// 表面が触れているだけの場合は、押し戻す必要がないので非衝突とする。
+	if (distanceSq >= radiusSum * radiusSum)
+	{
+		return result;
+	}
+
+	const float distance = std::sqrt(distanceSq);
+	result.isHit = true;
+	result.contactInfo.pushDist = radiusSum - distance;
+	if (distance > 0.0f)
+	{
+		// 相手の最短点から自分の最短点へ向かう単位ベクトルが押し出す方向。
+		result.contactInfo.normal = difference / distance;
+	}
+	else
+	{
+		// 中心線が重なると方向を求められないため、移動前にいた側へ横に押し出す。
+		Vector3 previousDifference = capsule1.GetTransform().pos - pos2;
+		previousDifference.y = 0.0f;
+		const float previousDistance = previousDifference.Length();
+		if (previousDistance > 0.0f)
+		{
+			result.contactInfo.normal = previousDifference / previousDistance;
+		}
+		else
+		{
+			// 移動前から同じ軸上にいた場合は、右方向を代替方向にする。
+			result.contactInfo.normal = Vector3::Right();
+		}
+	}
 	return result;
 }

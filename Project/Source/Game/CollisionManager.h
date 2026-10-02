@@ -22,10 +22,16 @@ public:
 		Vector3 pos3;
 		float pushDist = 0.0f;
 	};
+	struct ContactInfo
+	{
+		Vector3 normal;
+		float pushDist = 0.0f;
+	};
 	struct HitInfo
 	{
 		bool isHit = false;
 		std::vector<PolyInfo> polyInfos;
+		ContactInfo contactInfo;
 	};
 	struct RayInfo
 	{
@@ -48,6 +54,7 @@ public:
 
 private:
 	HitInfo ColCheckCP(const CapsuleCollider& capsule,const Vector3& movedPos, const PolygonCollider& poly);
+	HitInfo ColCheckCC(const CapsuleCollider& capsule1, const Vector3& movePos, const CapsuleCollider& capsule2);
 
 private:
 	std::list<std::weak_ptr<GameObject>> m_pObjects;
