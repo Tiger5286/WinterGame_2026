@@ -26,6 +26,7 @@ void PlayerStateLand::Update()
 {
 	m_frame++;
 
+	// 移動処理
 	float accel = kJogAccel;
 	float maxSpeed = kMaxJogSpeed;
 	if (IsRun())
@@ -35,6 +36,7 @@ void PlayerStateLand::Update()
 	}
 	UpdateMove(accel, maxSpeed);
 
+	// 一定フレーム経過後にスティック入力があったらMoveステートに遷移する
 	if (m_frame > kMinFrame &&
 		PadInput::GetInstance().GetStickInput(PadInput::LR::Left).SquaredLength() > 0.0f)
 	{
@@ -42,13 +44,8 @@ void PlayerStateLand::Update()
 		return;
 	}
 
-	auto layer = Animator::Layer::FullBody;
-	if (IsAim())
-	{
-		layer = Animator::Layer::LowerBody;
-	}
-
-	if (m_owner.GetComponent<Animator>()->IsEnd(layer))
+	// 着地アニメーションが終わったらIdleステートに遷移する
+	if (m_owner.GetComponent<Animator>()->IsEnd())
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));
 		return;

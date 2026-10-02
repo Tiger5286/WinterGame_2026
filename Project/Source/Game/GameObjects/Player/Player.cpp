@@ -205,25 +205,22 @@ void Player::UpdateAnimation()
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Fall)], Animator::Layer::FullBody);
 		break;
 	case PlayerState::ID::Land:
-		// 着地は全身、上下別ともに着地アニメーションを再生する
-		if (m_isAim)
-		{	// エイム開始時は全身アニメーションの再生時間を上下別アニメーションに同期させる
-			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-			//animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::LowerBody);
-		}
-		else	// エイム終了時は上下別アニメーションの再生時間を全身アニメーションに同期させる
-		{
-			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::LowerBody, Animator::Layer::FullBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody);
-		}
+		// 着地は全身アニメーションのみ
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody);
 		break;
 	case PlayerState::ID::Hover:
-		// ホバーは全身、上下別ともにホバーアニメーションを再生する
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::UpperBody);
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		if (m_isAim)	// ホバリング中にエイムしている場合は上下別アニメーションを再生
+		{
+			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		}
+		else	// ホバリング中にエイムしていない場合は全身アニメーションを再生
+		{
+			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
+			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
+		}
 		break;
 	}
 	animator->Update();
