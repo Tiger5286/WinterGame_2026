@@ -16,6 +16,7 @@ PlayerStateIdle::PlayerStateIdle(Player& owner) :
 void PlayerStateIdle::Enter()
 {
 	SetIsRun(false);
+	m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
 }
 
 void PlayerStateIdle::Update()

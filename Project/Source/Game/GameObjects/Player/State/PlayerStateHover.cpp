@@ -5,6 +5,8 @@
 #include "Components/State/StateMachine.h"
 #include "PlayerStateLand.h"
 #include "PlayerStateFall.h"
+#include "PlayerStateIdle.h"
+#include "PlayerStateMove.h"
 #include <memory>
 
 namespace
@@ -29,8 +31,26 @@ void PlayerStateHover::Update()
 	// 地面に着地したら着地ステートに遷移する
 	if (m_owner.GetComponent<Physics>()->IsGrounded())
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateLand>(m_owner));
-		return;
+		// エイムしている場合は着地ステートに遷移しない
+		if (IsAim())
+		{
+			// 移動していたらMove, そうでなければIdleに遷移する
+			if (input.GetStickInput(PadInput::LR::Left).SquaredLength() > 0.0f)
+			{
+				m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateMove>(m_owner));
+				return;
+			}
+			else
+			{
+				m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));
+				return;
+			}
+		}
+		else
+		{
+			m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateLand>(m_owner));
+			return;
+		}
 	}
 
 	// エイムしている、もしくはジャンプボタンを押している間はホバリングする

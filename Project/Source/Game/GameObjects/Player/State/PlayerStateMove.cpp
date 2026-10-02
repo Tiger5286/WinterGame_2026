@@ -16,6 +16,7 @@ PlayerStateMove::PlayerStateMove(Player& owner) :
 
 void PlayerStateMove::Enter()
 {
+	m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
 }
 
 void PlayerStateMove::Update()
