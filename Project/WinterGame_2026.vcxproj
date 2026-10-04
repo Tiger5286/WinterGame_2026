@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\Hitbox.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateHover.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateJump.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateFall.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="Source\Game\GameObjects\Enemies\TestEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Components\Hitbox.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateHover.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateJump.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateFall.h" />

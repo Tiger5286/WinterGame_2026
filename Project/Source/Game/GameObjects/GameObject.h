@@ -41,6 +41,9 @@ public:
 	// 他オブジェクトと当たったときに呼ばれる関数
 	virtual void OnCollision(GameObject& other) {};
 
+	// プレイヤーの射撃に当たったときに呼ばれる関数
+	virtual void OnWasShot() {};
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 };
