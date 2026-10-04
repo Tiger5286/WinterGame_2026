@@ -9,7 +9,7 @@
 #include "Game/GameObjects/GameObject.h"
 #include "Components/Transform.h"
 #include <cmath>
-#include <limits>
+#include "Components/Hitbox.h"
 
 void CollisionManager::Update()
 {
@@ -139,7 +139,7 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 	RayInfo result;
 
 	// 最初のヒットを保存できるよう、最短距離の二乗を最大値で初期化する。
-	float nearestDistSq = (std::numeric_limits<float>::max)();
+	float nearestDistSq = FLT_MAX;
 
 	// 登録順ではなく距離で選ぶため、ヒットしても全モデルを調べる。
 	for (const auto& weakObj : m_pObjects)
@@ -169,6 +169,46 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 		result.hitPos = hitPos;
 	}
 	return result;
+}
+
+void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
+{
+	float nearestDistSq = FLT_MAX;
+
+	GameObject* hitObj = nullptr;
+
+	for (auto& obj : m_pObjects)
+	{
+		auto polygon = obj.lock()->GetComponent<PolygonCollider>();
+		if (polygon)
+		{
+			const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
+			const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
+			const float distSq = (hitPos - start).SquaredLength();
+			if (distSq < nearestDistSq)
+			{
+				hitObj = obj.lock().get();
+			}
+		}
+		else
+		{
+			auto hitBox = obj.lock()->GetComponent<Hitbox>();
+			if (!hitBox) continue;
+
+			for (auto& col : hitBox->GetColliders())
+			{
+				if (col.pCollider->GetType() == Collider::Type::Capsule)
+				{
+					auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(col.pCollider);
+					const Vector3 bottom = capsule->GetTransform().pos + Vector3::Up() * capsule->GetRadius();
+					const Vector3 top = capsule->GetTransform().pos + Vector3::Up() * capsule->GetHeight() + Vector3::Down() * capsule->GetRadius();
+					const float radius = capsule->GetRadius();
+
+					// TODO : カプセルと線の当たり判定を実装する
+				}
+			}
+		}
+	}
 }
 
 CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const Vector3& movedPos, const PolygonCollider& poly)

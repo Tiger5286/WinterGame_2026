@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../Component.h"
+#include "Utility/Vector3.h"
 
 class Transform;
 
@@ -37,8 +38,13 @@ public:
 	// 当たり判定の種類を取得する
 	Type GetType() const { return m_type; }
 
+	// 位置オフセットを設定する
+	void SetOffset(const Vector3& offset) { m_offset = offset; }
+	Vector3 GetOffset() const { return m_offset; }
+
 protected:
 	Transform& m_transform;
+	Vector3 m_offset;
 	bool m_isEnable = true;
 
 	const Type m_type = Type::None;

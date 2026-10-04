@@ -6,6 +6,7 @@
 #include "Components/Physics.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
+#include "Components/Hitbox.h"
 
 namespace
 {
@@ -20,6 +21,7 @@ TestEnemy::TestEnemy()
 	AddComponent<Animator>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
 	AddComponent<Physics>();
+	AddComponent<Hitbox>();
 }
 
 TestEnemy::~TestEnemy()
@@ -38,6 +40,15 @@ void TestEnemy::Init()
 	animator->Init(m_pModel.get());
 	animator->AddAnimation(kAnimName);
 	animator->Play(kAnimName);
+
+	std::vector<Hitbox::Info> hitboxInfos;
+	Hitbox::Info info;
+
+	auto capsule = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20.0f, 180.0f);
+	info.pCollider = capsule;
+	hitboxInfos.push_back(info);
+
+	GetComponent<Hitbox>()->Init(hitboxInfos);
 }
 
 void TestEnemy::Update()
@@ -53,5 +64,6 @@ void TestEnemy::Draw()
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
+	GetComponent<Hitbox>()->Draw();
 #endif
 }

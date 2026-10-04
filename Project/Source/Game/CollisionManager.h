@@ -64,6 +64,8 @@ public:
 	/// <returns>レイキャストの結果を表すRayInfoオブジェクト。ヒットの有無や、衝突が発生した場合は衝突位置、法線、距離などの情報を含みます。</returns>
 	RayInfo RayCast(const Vector3& start, const Vector3& end);
 
+	void CheckCollShot(const Vector3& start, const Vector3& end);
+
 private:
 	HitInfo ColCheckCP(const CapsuleCollider& capsule,const Vector3& movedPos, const PolygonCollider& poly);
 	HitInfo ColCheckCC(const CapsuleCollider& capsule1, const Vector3& movePos, const CapsuleCollider& capsule2);

@@ -12,7 +12,6 @@ public:
     struct Info
     {
         std::shared_ptr<Collider> pCollider = nullptr;
-        Vector3 offset;
         bool isWeakPoint = false;
     };
 
@@ -22,6 +21,8 @@ public:
 
     void Init(std::vector<Info> colDatas);
     void Draw();
+
+    const std::vector<Info>& GetColliders() { return m_colliders; }
 
 private:
     std::vector<Info> m_colliders;
