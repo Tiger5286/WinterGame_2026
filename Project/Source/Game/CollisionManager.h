@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 #include "Utility/Vector3.h"
+#include "Components/Collider/Collider.h"
 
 class GameObject;
-class Collider;
 class CapsuleCollider;
 class SphereCollider;
 class PolygonCollider;
@@ -14,30 +14,20 @@ class Model;
 class CollisionManager
 {
 public:
-	struct PolyInfo
-	{
-		Vector3 normal;
-		Vector3 pos1;
-		Vector3 pos2;
-		Vector3 pos3;
-		float pushDist = 0.0f;
-	};
 	struct ContactInfo
 	{
 		Vector3 normal;
 		float pushDist = 0.0f;
+		Collider::Type type;
 	};
 	struct HitInfo
 	{
-		bool isHit = false;
-		std::vector<PolyInfo> polyInfos;
-		ContactInfo contactInfo;
+		std::vector<ContactInfo> contactInfo;
 	};
 	struct RayInfo
 	{
 		bool isHit = false;
 		Vector3 hitPos;
-		PolyInfo polyInfo;
 	};
 
 public:

@@ -1,9 +1,11 @@
-#include "TestEnemy.h"
+﻿#include "TestEnemy.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Model.h"
 #include "Components/Animator/Animator.h"
 #include "Components/Collider/CapsuleCollider.h"
 #include "Components/Physics.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
 
 namespace
 {
@@ -26,6 +28,8 @@ TestEnemy::~TestEnemy()
 
 void TestEnemy::Init()
 {
+	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
+
 	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"TestEnemyModel");
 
 	GetComponent<Physics>()->Init(GetComponent<Transform>(), GetComponent<CapsuleCollider>());

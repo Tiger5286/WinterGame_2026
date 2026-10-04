@@ -91,30 +91,43 @@ CollisionManager::HitInfo CollisionManager::CheckCollision(const Collider& movin
 {
 	HitInfo result;
 
-	const CapsuleCollider* pCapsule = dynamic_cast<const CapsuleCollider*>(&movingCol);
-	if (!pCapsule || !movingCol.IsEnable())
-	{
-		return result;
-	}
+	// コライダーが有効でないならreturn
+	if (!movingCol.IsEnable()) return result;
 
+	// コライダーがカプセルで無ければreturn
+	// これはあとで全部対応するように直す
+	const CapsuleCollider* pCapsule = dynamic_cast<const CapsuleCollider*>(&movingCol);
+	if (!pCapsule) return result;
+
+	// 他の当たり判定するオブジェクトを回す
 	for (const auto& weakObj : m_pObjects)
 	{
+		// オブジェクトがnullなら次へ
 		auto obj = weakObj.lock();
 		if (!obj) continue;
 
+		// オブジェクトのコライダーを取得
 		Collider* other = obj->GetComponent<Collider>();
 
+		// 自分と同じ、もしくは有効でないなら次へ
 		if (other == &movingCol || !other->IsEnable()) continue;
 
-		auto* polygon = dynamic_cast<PolygonCollider*>(other);
-		if (!polygon || !polygon->GetModel()) continue;
+		// 当たり判定結果を入れる用の変数を用意
+		HitInfo info;
 
-		HitInfo polyResult;
-		polyResult = ColCheckCP(*pCapsule, movedPos, *polygon);
-		if (polyResult.isHit)
+		// 当たり判定の種類を取得
+		auto* polygon = dynamic_cast<PolygonCollider*>(other);
+		auto* capsule = dynamic_cast<CapsuleCollider*>(other);
+		// ポリゴンなら当たり判定
+		if (polygon && polygon->GetModel())	// モデルが無い場合スルー
 		{
-			result.isHit = true;
-			result.polyInfos.insert(result.polyInfos.end(), polyResult.polyInfos.begin(), polyResult.polyInfos.end());
+			info = ColCheckCP(*pCapsule, movedPos, *polygon);
+			result.contactInfo.insert(result.contactInfo.end(), info.contactInfo.begin(), info.contactInfo.end());
+		}
+		else if (capsule) // カプセルなら当たり判定
+		{
+			info = ColCheckCC(*pCapsule, movedPos, *capsule);
+			result.contactInfo.insert(result.contactInfo.end(), info.contactInfo.begin(), info.contactInfo.end());
 		}
 	}
 	
@@ -153,10 +166,6 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 		nearestDistSq = distSq;
 		result.isHit = true;
 		result.hitPos = hitPos;
-		result.polyInfo.normal = dxResult.Normal;
-		result.polyInfo.pos1 = dxResult.Position[0];
-		result.polyInfo.pos2 = dxResult.Position[1];
-		result.polyInfo.pos3 = dxResult.Position[2];
 	}
 	return result;
 }
@@ -175,16 +184,14 @@ CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& ca
 	// 準備した変数に必要な情報を代入
 	for (int i = 0; i < dxResult.HitNum; i++)
 	{
-		result.isHit = true;
-		PolyInfo info;
+		ContactInfo info;
+		info.type = Collider::Type::Polygon;
 		info.normal = dxResult.Dim[i].Normal;
-		info.pos1 = dxResult.Dim[i].Position[0];
-		info.pos2 = dxResult.Dim[i].Position[1];
-		info.pos3 = dxResult.Dim[i].Position[2];
 		// 押し戻し量を計算
-		float minDist = Segment_Triangle_MinLength(pos1, pos2, info.pos1, info.pos2, info.pos3);
+		float minDist = Segment_Triangle_MinLength(pos1, pos2,
+			dxResult.Dim[i].Position[0], dxResult.Dim[i].Position[1], dxResult.Dim[i].Position[2]);
 		info.pushDist = radius - minDist;
-		result.polyInfos.push_back(info);
+		result.contactInfo.push_back(info);
 	}
 	// メモリを解放
 	MV1CollResultPolyDimTerminate(dxResult);
@@ -200,61 +207,42 @@ CollisionManager::HitInfo CollisionManager::ColCheckCC(const CapsuleCollider& ca
 		return result;
 	}
 
-	// 現在のColliderと同じく、回転・拡大縮小しない直立カプセルとして調べる。
-	// posは足元、heightは半球を含む全体の高さなので、中心線は半径分だけ内側にある。
+	const Vector3 pos1 = movePos;
+	const Vector3 pos2 = capsule2.GetTransform().pos;
+
+	const Vector3 bottom1 = pos1 + Vector3::Up() * capsule1.GetRadius();
+	const Vector3 top1 = pos1 + Vector3::Up() * capsule1.GetHeight() + Vector3::Down() * capsule1.GetRadius();
 	const float radius1 = capsule1.GetRadius();
+	const Vector3 bottom2 = pos2 + Vector3::Up() * capsule2.GetRadius();
+	const Vector3 top2 = pos2 + Vector3::Up() * capsule2.GetHeight() + Vector3::Down() * capsule2.GetRadius();
 	const float radius2 = capsule2.GetRadius();
-	const Vector3& pos2 = capsule2.GetTransform().pos;
-	const float bottom1 = movePos.y + radius1;
-	const float top1 = movePos.y + capsule1.GetHeight() - radius1;
-	const float bottom2 = pos2.y + radius2;
-	const float top2 = pos2.y + capsule2.GetHeight() - radius2;
 
-	// 中心線は両方とも縦向きなので、最短点間のXZ成分は足元同士の差と同じ。
-	// 高さの範囲が重なる場合は同じ高さの点を選べるため、Y成分は0になる。
-	Vector3 difference(movePos.x - pos2.x, 0.0f, movePos.z - pos2.z);
-	if (bottom1 > top2)
+	// カプセル同士のXZ平面での距離を計算
+	Vector3 difference = Vector3(pos1.x - pos2.x, 0.0f, pos1.z - pos2.z);
+
+	// 高さが離れている場合は近い端点同士の距離を計算する
+	if (bottom1.y > top2.y)
 	{
-		// 自分が相手より上にある場合。
-		difference.y = bottom1 - top2;
+		difference.y = bottom1.y - top2.y;
 	}
-	else if (top1 < bottom2)
+	else if (bottom2.y > top1.y)
 	{
-		// 自分が相手より下にある場合。
-		difference.y = top1 - bottom2;
+		difference.y = top1.y - bottom2.y;
 	}
 
-	const float radiusSum = radius1 + radius2;
-	const float distanceSq = difference.SquaredLength();
-	// 表面が触れているだけの場合は、押し戻す必要がないので非衝突とする。
-	if (distanceSq >= radiusSum * radiusSum)
+	// differenceはカプセル同士の最短距離ベクトルを表す(2->1の方向)
+	float distance = difference.Length();
+
+	// 当たり判定
+	if (distance < radius1 + radius2)
 	{
-		return result;
+		// 当たっている場合、押し戻し量と法線を計算する
+		ContactInfo info;
+		info.type = Collider::Type::Capsule;
+		info.normal = difference.Normalized();
+		info.pushDist = radius1 + radius2 - distance;
+		result.contactInfo.push_back(info);
 	}
 
-	const float distance = std::sqrt(distanceSq);
-	result.isHit = true;
-	result.contactInfo.pushDist = radiusSum - distance;
-	if (distance > 0.0f)
-	{
-		// 相手の最短点から自分の最短点へ向かう単位ベクトルが押し出す方向。
-		result.contactInfo.normal = difference / distance;
-	}
-	else
-	{
-		// 中心線が重なると方向を求められないため、移動前にいた側へ横に押し出す。
-		Vector3 previousDifference = capsule1.GetTransform().pos - pos2;
-		previousDifference.y = 0.0f;
-		const float previousDistance = previousDifference.Length();
-		if (previousDistance > 0.0f)
-		{
-			result.contactInfo.normal = previousDifference / previousDistance;
-		}
-		else
-		{
-			// 移動前から同じ軸上にいた場合は、右方向を代替方向にする。
-			result.contactInfo.normal = Vector3::Right();
-		}
-	}
 	return result;
 }
