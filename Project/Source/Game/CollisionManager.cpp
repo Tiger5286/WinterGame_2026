@@ -144,12 +144,13 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 	// 登録順ではなく距離で選ぶため、ヒットしても全モデルを調べる。
 	for (const auto& weakObj : m_pObjects)
 	{
+		// オブジェクトがnullなら次へ
 		auto obj = weakObj.lock();
 		if (!obj) continue;
-
+		// コライダーが有効でないなら次へ
 		Collider* other = obj->GetComponent<Collider>();
 		if (!other->IsEnable()) continue;
-
+		// ポリゴンでないなら次へ
 		auto* polygon = dynamic_cast<PolygonCollider*>(other);
 		if (!polygon || !polygon->GetModel()) continue;
 
