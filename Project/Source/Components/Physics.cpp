@@ -107,6 +107,40 @@ void Physics::Update()
 			}
 		}
 		movedPos.y += floorPush;
+		// 接地していた物体だけ、移動先の近い床へ追従させる。
+		// レイではなくカプセルで調べ、斜面でも実際の形状の接触高さを探す。
+		if (canSnap && m_vel.y <= 0.0f && !m_isGrounded)
+		{
+			const auto touchesFloor = [&](float downDistance)
+				{
+					const auto probe = collisionManager.CheckCollision(
+						*m_pCollider, movedPos + Vector3::Down() * downDistance);
+					for (const auto& poly : probe.contactInfo)
+					{
+						if (poly.normal.y > minFloorNormalY && poly.pushDist > 0.0f)
+							return true;
+					}
+					return false;
+				};
+
+			// 範囲内に床がある場合だけ、非接触と接触の境界を二分探索する。
+			if (touchesFloor(kGroundSnapDistance))
+			{
+				float clearDistance = 0.0f;
+				float hitDistance = kGroundSnapDistance;
+				for (int i = 0; i < kGroundSnapIterations; ++i)
+				{
+					const float middle = (clearDistance + hitDistance) * 0.5f;
+					if (touchesFloor(middle)) hitDistance = middle;
+					else clearDistance = middle;
+				}
+
+				// めり込まない側まで下げて落下速度を止める。
+				movedPos.y -= clearDistance;
+				m_vel.y = 0.0f;
+				m_isGrounded = true;
+			}
+		}
 	}
 
 	// 補正済みの位置を反映する。
