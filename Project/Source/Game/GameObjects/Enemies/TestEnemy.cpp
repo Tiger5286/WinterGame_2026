@@ -67,3 +67,8 @@ void TestEnemy::Draw()
 	GetComponent<Hitbox>()->Draw();
 #endif
 }
+
+void TestEnemy::OnWasShot()
+{
+	printfDx(L"TestEnemyに当たった\n");
+}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Game/GameObjects/GameObject.h"
 #include <memory>
 
@@ -13,6 +13,8 @@ public:
 	void Init() override;
 	void Update() override;
 	void Draw() override;
+
+	void OnWasShot() override;
 
 private:
 	std::unique_ptr<Model> m_pModel;

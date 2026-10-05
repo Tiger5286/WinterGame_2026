@@ -184,6 +184,7 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
 		if (polygon)
 		{
 			const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
+			if (!dxResult.HitFlag) continue;
 			const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
 			const float distSq = (hitPos - start).SquaredLength();
 			if (distSq < nearestDistSq)
@@ -220,9 +221,13 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
 		}
 	}
 
-	if (!hitObj)
+	if (hitObj)
 	{
 		hitObj->OnWasShot();
+	}
+	else
+	{
+		printfDx(L"何にも当たらなかった\n");
 	}
 }
 

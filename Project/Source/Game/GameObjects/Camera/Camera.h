@@ -19,6 +19,8 @@ public:
 
     void SetPlayer(std::weak_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
+    const Vector3& GetTargetPos() const { return m_targetPos; }
+
 private:
     void Control();
 

@@ -34,7 +34,7 @@ public:
 				return result;
 			}
 		}
-		assert(false && "GameObject::GetComponent() : 指定のコンポーネントが取得できませんでした");
+		//assert(false && "GameObject::GetComponent() : 指定のコンポーネントが取得できませんでした");
 		return nullptr;
 	}
 

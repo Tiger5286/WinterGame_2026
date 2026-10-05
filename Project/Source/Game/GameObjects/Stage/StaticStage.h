@@ -13,6 +13,8 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void OnWasShot() override;
+
 private:
 	Model* m_pModel = nullptr;
 };

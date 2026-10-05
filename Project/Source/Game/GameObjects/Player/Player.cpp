@@ -72,6 +72,8 @@ void Player::Init()
 
 void Player::Update()
 {
+	auto& input = PadInput::GetInstance();
+
 	Transform& transform = *GetComponent<Transform>();
 
 	UpdateAim();
@@ -96,6 +98,19 @@ void Player::Update()
 		// モデルの向きを更新
 		float cameraRotX = m_pCamera.lock()->GetComponent<Transform>()->rot.x;
 		GetComponent<Animator>()->SetAimAngle(-cameraRotX);
+
+		// 射撃
+		if (input.IsTriggeredTrigger(PadInput::LR::Right))
+		{
+			const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+			const Vector3& target = m_pCamera.lock()->GetTargetPos();
+			Vector3 vec = target - cameraPos;
+			vec.Normalize();
+			vec *= 2000;
+			Vector3 end = cameraPos + vec;
+
+			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end);
+		}
 	}
 	else
 	{
