@@ -78,6 +78,9 @@ private:
 	float m_aimStartAngle = 0.0f;
 	int m_aimStartFrame = 0;
 
+	std::unique_ptr<Model> m_pGunModel;
+	int m_haveGunFrameIndex = -1;
+
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
 	friend class PlayerState;

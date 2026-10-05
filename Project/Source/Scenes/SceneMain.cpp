@@ -23,6 +23,7 @@ namespace
 
 	const LoadData kLoadModelFiles[] = {
 		{ L"data/models/player/player.mv1", L"PlayerModel" },
+		{ L"data/models/gun/gun.mv1",L"GunModel" },
 		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
 		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" }
 	};

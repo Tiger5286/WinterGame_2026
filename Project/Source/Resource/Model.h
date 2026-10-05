@@ -21,8 +21,11 @@ public:
 		MV1DrawModel(m_handle.Get());
 	}
 
+	const Transform& GetTransform() const { return m_transform; }
+
 	void SetTransform(const Transform& transform)
 	{
+		m_transform = transform;
 		Matrix4x4 scale = Matrix4x4::GetScale(transform.scale);
 		Matrix4x4 rotX = Matrix4x4::GetRotX(transform.rot.x);
 		Matrix4x4 rotY = Matrix4x4::GetRotY(transform.rot.y);
@@ -31,4 +34,7 @@ public:
 		Matrix4x4 mat = scale * rotX * rotY * rotZ * trans;
 		MV1SetMatrix(m_handle.Get(), mat);
 	}
+
+private:
+	Transform m_transform;
 };

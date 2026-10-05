@@ -22,6 +22,9 @@ namespace
 
 	// エイムしたときにカメラの向きに合わせるのにかかる時間
 	constexpr int kAimStartFrame = 10;
+
+	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:RightHand";
+	constexpr float kGunScale = 0.2f;
 }
 
 Player::Player()
@@ -56,6 +59,11 @@ void Player::Init()
 			isLoop = false;
 		animator->AddAnimation(name, 0.5f, isLoop);
 	}
+	// 銃のモデルを取得して初期化
+	m_pGunModel = ResourceManager::GetInstance().DuplicateModel(L"GunModel");
+
+	m_haveGunFrameIndex = MV1SearchFrame(m_pModel->GetHandle(), kHaveGunFrameName);
+	assert(m_haveGunFrameIndex != -1);
 
 	// ステートを初期化
 	auto stateMachine = GetComponent<StateMachine<Player>>();
@@ -120,6 +128,28 @@ void Player::Draw()
 	// モデルを描画
 	m_pModel->Draw();
 	GetComponent<StateMachine<Player>>()->Draw();	// ステートに描画したい内容があったら描画
+
+	// エイムしているときのみ銃を描画
+	if (m_isAim)
+	{
+		const MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
+
+		const MATRIX gunScale = MGetScale(VGet(kGunScale, kGunScale, kGunScale));
+		const MATRIX gunRotZ = MGetRotZ(-DX_PI_F / 2);
+		const MATRIX gunRotY = MGetRotY(DX_PI_F / 2);
+		const MATRIX gunTrans = MGetTranslate(Vector3(0, 10, 0));
+
+		MATRIX gunLocal = gunScale;
+		gunLocal = MMult(gunLocal, gunRotY);
+		gunLocal = MMult(gunLocal, gunRotZ);
+		gunLocal = MMult(gunLocal, gunTrans);
+		const MATRIX gunWorld = MMult(gunLocal, handWorld);
+
+		MV1SetMatrix(m_pGunModel->GetHandle(), gunWorld);
+		m_pGunModel->Draw();
+	}
+
+	//Vector3 shotStart;
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
