@@ -10,6 +10,7 @@
 #include "Components/Transform.h"
 #include <cmath>
 #include "Components/Hitbox.h"
+#include "Utility/MyLib.h"
 
 void CollisionManager::Update()
 {
@@ -204,10 +205,24 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
 					const Vector3 top = capsule->GetTransform().pos + Vector3::Up() * capsule->GetHeight() + Vector3::Down() * capsule->GetRadius();
 					const float radius = capsule->GetRadius();
 
-					// TODO : カプセルと線の当たり判定を実装する
+					auto result = MyLib::CheckHitLineCapsule(bottom, top, radius, start, end);
+					if (result.isHit)
+					{
+						Vector3 hitRayVec = result.hitPos - start;
+						float lengthSq = hitRayVec.SquaredLength();
+						if (lengthSq < nearestDistSq)
+						{
+							hitObj = obj.lock().get();
+						}
+					}
 				}
 			}
 		}
+	}
+
+	if (!hitObj)
+	{
+		hitObj->OnWasShot();
 	}
 }
 
