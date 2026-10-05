@@ -23,7 +23,7 @@ namespace
 	// エイムしたときにカメラの向きに合わせるのにかかる時間
 	constexpr int kAimStartFrame = 10;
 
-	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:RightHand";
+	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:LeftHand";
 	constexpr float kGunScale = 0.2f;
 }
 
@@ -135,11 +135,13 @@ void Player::Draw()
 		const MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
 
 		const MATRIX gunScale = MGetScale(VGet(kGunScale, kGunScale, kGunScale));
-		const MATRIX gunRotZ = MGetRotZ(-DX_PI_F / 2);
-		const MATRIX gunRotY = MGetRotY(DX_PI_F / 2);
+		const MATRIX gunRotX = MGetRotX(DX_PI_F / 2);
+		const MATRIX gunRotY = MGetRotY(DX_PI_F);
+		const MATRIX gunRotZ = MGetRotZ(DX_PI_F / 4);
 		const MATRIX gunTrans = MGetTranslate(Vector3(0, 10, 0));
 
 		MATRIX gunLocal = gunScale;
+		gunLocal = MMult(gunLocal, gunRotX);
 		gunLocal = MMult(gunLocal, gunRotY);
 		gunLocal = MMult(gunLocal, gunRotZ);
 		gunLocal = MMult(gunLocal, gunTrans);
@@ -228,7 +230,7 @@ void Player::UpdateAnimation()
 			break;
 		}
 		animator->Play(kAnimNames[static_cast<int>(animation)], Animator::Layer::LowerBody);
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimWalkForward)], Animator::Layer::UpperBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
 		break;
 	}
 	case PlayerState::ID::Jump:
