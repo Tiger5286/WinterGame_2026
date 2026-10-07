@@ -18,6 +18,9 @@ MyLib::RayCapsuleResult MyLib::CheckHitLineCapsule(const Vector3& bottom, const 
     // 指定された半径が負なら形状として扱えないため、このままヒットなしで返す。
     RayCapsuleResult result;
     result.hitPos = Vector3::Zero();
+    // start-endの線分と、カプセル中心線bottom-topの最短距離を保存する。
+    // distはカプセルの表面までの距離ではなく、カプセル中心線までの距離。
+    result.dist = Segment_Segment_MinLength(start, end, bottom, top);
     if (radius < 0.0f) return result;
 
     // 線分上の点は start + line * t と表せる。t が0ならstart、1ならend。

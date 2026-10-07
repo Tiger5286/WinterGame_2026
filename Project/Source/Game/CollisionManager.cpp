@@ -151,23 +151,39 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 		// コライダーが有効でないなら次へ
 		Collider* other = obj->GetComponent<Collider>();
 		if (!other->IsEnable()) continue;
-		// ポリゴンでないなら次へ
+		// ポリゴンの当たり判定
 		auto* polygon = dynamic_cast<PolygonCollider*>(other);
-		if (!polygon || !polygon->GetModel()) continue;
+		if (polygon && polygon->GetModel())
+		{
+			// startからendまでの線分と、このモデルとの交差を調べる。
+			const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
+			if (!dxResult.HitFlag) continue;
 
-		// startからendまでの線分と、このモデルとの交差を調べる。
-		const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
-		if (!dxResult.HitFlag) continue;
+			// 距離の大小だけを比較するので、平方根を求めず二乗のまま扱う。
+			const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
+			const float distSq = (hitPos - start).SquaredLength();
+			if (distSq >= nearestDistSq) continue;
 
-		// 距離の大小だけを比較するので、平方根を求めず二乗のまま扱う。
-		const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
-		const float distSq = (hitPos - start).SquaredLength();
-		if (distSq >= nearestDistSq) continue;
-
-		// より近いヒットが見つかったときだけ、位置とポリゴン情報を更新する。
-		nearestDistSq = distSq;
-		result.isHit = true;
-		result.hitPos = hitPos;
+			// より近いヒットが見つかったときだけ、位置とポリゴン情報を更新する。
+			nearestDistSq = distSq;
+			result.isHit = true;
+			result.hitPos = hitPos;
+		}
+		// カプセルの当たり判定
+		auto* capsule = dynamic_cast<CapsuleCollider*>(other);
+		if (capsule)
+		{
+			const Vector3 bottom = capsule->GetTransform().pos + Vector3::Up() * capsule->GetRadius();
+			const Vector3 top = capsule->GetTransform().pos + Vector3::Up() * capsule->GetHeight() + Vector3::Down() * capsule->GetRadius();
+			const float radius = capsule->GetRadius();
+			auto hitResult = MyLib::CheckHitLineCapsule(bottom, top, radius, start, end);
+			if (!hitResult.isHit) continue;
+			const float distSq = (hitResult.hitPos - start).SquaredLength();
+			if (distSq >= nearestDistSq) continue;
+			nearestDistSq = distSq;
+			result.isHit = true;
+			result.hitPos = hitResult.hitPos;
+		}
 	}
 	return result;
 }

@@ -164,9 +164,22 @@ void Player::Draw()
 
 		MV1SetMatrix(m_pGunModel->GetHandle(), gunWorld);
 		m_pGunModel->Draw();
-	}
 
-	//Vector3 shotStart;
+		// 銃口から線を描画
+		const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+		const Vector3& target = m_pCamera.lock()->GetTargetPos();
+		Vector3 vec = target - cameraPos;
+		vec.Normalize();
+		vec *= 2000;
+		Vector3 end = cameraPos + vec;
+		auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, end);
+		if (result.isHit)
+		{
+			const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
+			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
+			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
+		}
+	}
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
