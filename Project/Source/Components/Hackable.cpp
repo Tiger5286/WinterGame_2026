@@ -64,6 +64,8 @@ void Hackable::Update()
 
 	if (m_pos.back() == kGoalPos)
 	{
+		HackedData data = {};
+		m_goalAction(data);
 		Init();
 	}
 }

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Game/GameObjects/GameObject.h"
+#include "Components/Hackable.h"
 #include <memory>
 
 class Model;
@@ -15,6 +16,9 @@ public:
 	void Draw() override;
 
 	void OnWasShot() override;
+
+private:
+	void OnHacked(Hackable::HackedData data);
 
 private:
 	std::unique_ptr<Model> m_pModel;

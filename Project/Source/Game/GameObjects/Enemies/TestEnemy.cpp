@@ -54,6 +54,7 @@ void TestEnemy::Init()
 	GetComponent<Hitbox>()->Init(hitboxInfos);
 
 	GetComponent<Hackable>()->Init();
+	GetComponent<Hackable>()->SetFunc([this](Hackable::HackedData data) { OnHacked(data); });
 }
 
 void TestEnemy::Update()
@@ -76,4 +77,9 @@ void TestEnemy::Draw()
 void TestEnemy::OnWasShot()
 {
 	printfDx(L"TestEnemyに当たった\n");
+}
+
+void TestEnemy::OnHacked(Hackable::HackedData data)
+{
+	printfDx(L"TestEnemyをハックした\n");
 }
