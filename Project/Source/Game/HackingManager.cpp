@@ -20,7 +20,7 @@ void HackingManager::Update()
 	if (!m_pHackingObject.lock()) return;
 	auto hackable = m_pHackingObject.lock()->GetComponent<Hackable>();
 	if (!hackable) return;
-	hackable->Update();
+	hackable->UpdateHacking();
 }
 
 void HackingManager::Draw()

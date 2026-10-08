@@ -15,6 +15,8 @@ namespace
 
 	constexpr float kColliderRadius = 30.0f;
 	constexpr float kColliderHeight = 180.0f;
+
+	const Vector3 kHPUIOffset = Vector3(0.0f, 200.0f, 0.0f);
 }
 
 TestEnemy::TestEnemy()
@@ -62,11 +64,37 @@ void TestEnemy::Update()
 	GetComponent<Physics>()->Update();
 
 	GetComponent<Animator>()->Update();
+
+	GetComponent<Hackable>()->Update();
+
+	bool isHacked = GetComponent<Hackable>()->IsHacked();
+	if (isHacked)
+	{
+		MV1SetMaterialDifColor(m_pModel->GetHandle(), 0, GetColorF(0.0f, 1.0f, 1.0f, 1.0f));
+	}
+	else
+	{
+		MV1SetMaterialDifColor(m_pModel->GetHandle(), 0, GetColorF(0.8f, 0.8f, 0.8f, 1.0f));
+	}
 }
 
 void TestEnemy::Draw()
 {
 	m_pModel->Draw();
+
+	float rate = 1.0f - static_cast<float>(m_hp) / kMaxHP;
+
+	Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(GetComponent<Transform>()->pos + kHPUIOffset));
+
+	constexpr int kHPBarWidth = 200;
+	constexpr int kHPBarHeight = 10;
+	int x1, y1, x2, y2;
+	x1 = screenPos.x - kHPBarWidth / 2;
+	y1 = screenPos.y - kHPBarHeight / 2;
+	x2 = screenPos.x + kHPBarWidth / 2 - kHPBarWidth * rate;
+	y2 = screenPos.y + kHPBarHeight / 2;
+
+	DrawBox(x1, y1, x2, y2, 0xffff00, true);
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
@@ -74,9 +102,23 @@ void TestEnemy::Draw()
 #endif
 }
 
-void TestEnemy::OnWasShot()
+void TestEnemy::OnWasShot(const CollisionManager::ShotInfo& info)
 {
 	printfDx(L"TestEnemyに当たった\n");
+	if (GetComponent<Hackable>()->IsHacked())
+	{
+		m_hp -= info.damage;
+	}
+	else
+	{
+		m_hp -= info.damage / 10;
+	}
+
+	if (m_hp <= 0)
+	{
+		m_hp = 0;
+		m_isDead = true;
+	}
 }
 
 void TestEnemy::OnHacked(Hackable::HackedData data)

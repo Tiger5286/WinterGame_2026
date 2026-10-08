@@ -3,9 +3,18 @@
 
 void GameObjectManager::Update()
 {
+	std::list<std::shared_ptr<GameObject>> deadObjects;
 	for (auto& obj : m_gameObjects)
 	{
 		obj->Update();
+		if (obj->IsDead())
+		{
+			deadObjects.push_back(obj);
+		}
+	}
+	for (auto& obj : deadObjects)
+	{
+		m_gameObjects.remove(obj);
 	}
 }
 

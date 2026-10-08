@@ -26,9 +26,12 @@ public:
 
     void Init();
     void Update();
+    void UpdateHacking();
     void Draw();
 
     void SetFunc(std::function<void(HackedData)> func) { m_goalAction = func; }
+
+    bool IsHacked() const { return m_hackFrame > 0; }
 
 private:
     void Move();
@@ -37,5 +40,6 @@ private:
     std::vector<std::vector<NodeType>> m_board;
     std::vector<Vector2Int> m_pos;
     std::function<void(HackedData)> m_goalAction;
+    int m_hackFrame = 0;
 };
 

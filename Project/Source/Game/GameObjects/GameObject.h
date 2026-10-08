@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <cassert>
+#include "Game/CollisionManager.h"
 
 class Component;
 
@@ -50,11 +51,14 @@ public:
 	virtual void OnCollision(GameObject& other) {};
 
 	// プレイヤーの射撃に当たったときに呼ばれる関数
-	virtual void OnWasShot() {};
+	virtual void OnWasShot(const CollisionManager::ShotInfo& info) {};
 
 	Tag GetTag() const { return m_tag; }
+
+	bool IsDead() const { return m_isDead; }
 
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 	Tag m_tag = Tag::None;
+	bool m_isDead = false;
 };

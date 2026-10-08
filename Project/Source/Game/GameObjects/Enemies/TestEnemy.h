@@ -8,6 +8,9 @@ class Model;
 class TestEnemy : public GameObject
 {
 public:
+	static constexpr int kMaxHP = 500;
+
+public:
 	TestEnemy();
 	~TestEnemy() override;
 
@@ -15,11 +18,12 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void OnWasShot() override;
+	void OnWasShot(const CollisionManager::ShotInfo& info) override;
 
 private:
 	void OnHacked(Hackable::HackedData data);
 
 private:
 	std::unique_ptr<Model> m_pModel;
+	int m_hp = kMaxHP;
 };

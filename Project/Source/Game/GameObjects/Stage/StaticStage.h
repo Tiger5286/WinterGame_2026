@@ -13,7 +13,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void OnWasShot() override;
+	void OnWasShot(const CollisionManager::ShotInfo& info) override;
 
 private:
 	Model* m_pModel = nullptr;

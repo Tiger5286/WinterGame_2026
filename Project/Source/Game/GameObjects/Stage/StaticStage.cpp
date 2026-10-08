@@ -31,7 +31,7 @@ void StaticStage::Draw()
 	GetComponent<PolygonCollider>()->Draw();
 }
 
-void StaticStage::OnWasShot()
+void StaticStage::OnWasShot(const CollisionManager::ShotInfo& info)
 {
 	printfDx(L"StaticStageに当たった\n");
 }

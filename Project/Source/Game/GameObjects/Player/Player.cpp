@@ -26,7 +26,7 @@ namespace
 	constexpr int kAimStartFrame = 10;
 
 	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:LeftHand";
-	constexpr float kGunScale = 0.2f;
+	constexpr float kGunScale = 0.25f;
 }
 
 Player::Player()
@@ -112,7 +112,9 @@ void Player::Update()
 			vec *= 2000;
 			Vector3 end = cameraPos + vec;
 
-			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end);
+			CollisionManager::ShotInfo shotInfo;
+			shotInfo.damage = 50;
+			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
 		}
 
 		// ハッキング対象があればハッキングマネージャーに渡す

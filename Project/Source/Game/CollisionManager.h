@@ -29,6 +29,10 @@ public:
 		bool isHit = false;
 		Vector3 hitPos;
 	};
+	struct ShotInfo
+	{
+		int damage = 0;
+	};
 
 public:
 	CollisionManager() = default;
@@ -64,7 +68,7 @@ public:
 	/// <returns>レイキャストの結果を表すRayInfoオブジェクト。ヒットの有無や、衝突が発生した場合は衝突位置、法線、距離などの情報を含みます。</returns>
 	RayInfo RayCast(const Vector3& start, const Vector3& end);
 
-	void CheckCollShot(const Vector3& start, const Vector3& end);
+	void CheckCollShot(const Vector3& start, const Vector3& end, const ShotInfo shotInfo);
 
 private:
 	HitInfo ColCheckCP(const CapsuleCollider& capsule,const Vector3& movedPos, const PolygonCollider& poly);

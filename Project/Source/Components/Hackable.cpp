@@ -2,15 +2,23 @@
 #include "Game.h"
 #include "DxLib.h"
 #include "System/PadInput.h"
+#include <algorithm>
 
 namespace
 {
+	// ボードのサイズ
 	const Vector2Int kBoardSize = { 4,4 };
+	// ゴールの位置
 	const Vector2Int kGoalPos = { 2,2 };
 
+	// 描画するときの1マスのサイズ
 	constexpr int kNodeSize = 70;
-
+	// オープンノードの数
 	constexpr int kOpenNodeNum = 2;
+	// 最大ハッキング時間
+	constexpr int kMaxHackingFrame = 60 * 20;
+	
+	constexpr int kMinHackFrame = 60 * 3;
 }
 
 Hackable::Hackable()
@@ -60,20 +68,46 @@ void Hackable::Init()
 
 void Hackable::Update()
 {
-	Move();
+	if (m_hackFrame > 0)
+	{
+		m_hackFrame--;
+	}
 
 	if (m_pos.back() == kGoalPos)
 	{
 		HackedData data = {};
 		m_goalAction(data);
+
+		int openNum = 0;
+		for (const auto& pos : m_pos)
+		{
+			if (m_board[pos.y][pos.x] == NodeType::Open)
+			{
+				openNum++;
+			}
+		}
+		if (openNum > 0)
+		{
+			m_hackFrame += kMaxHackingFrame / kOpenNodeNum * openNum;
+		}
+		else
+		{
+			m_hackFrame += kMinHackFrame;
+		}
+		m_hackFrame = std::clamp(m_hackFrame, 0, kMaxHackingFrame);
 		Init();
 	}
 }
 
+void Hackable::UpdateHacking()
+{
+	Move();
+}
+
 void Hackable::Draw()
 {
+	// マスの描画
 	const Vector2Int leftTop = { 800,200 };
-
 	for (int y = 0; y < m_board.size(); y++)
 	{
 		for (int x = 0; x < m_board[y].size(); x++)
@@ -108,6 +142,14 @@ void Hackable::Draw()
 			DrawBox(x1, y1, x2 - 2, y2 - 2, color, true);
 		}
 	}
+	// ハッキング残り時間の描画
+	float rate = static_cast<float>(m_hackFrame) / static_cast<float>(kMaxHackingFrame);
+	int x1, y1, x2, y2;
+	x1 = leftTop.x - 50;
+	y1 = leftTop.y + kNodeSize * 4 - 2 - kNodeSize * 4 * rate;
+	x2 = leftTop.x - 2;
+	y2 = leftTop.y + kNodeSize * 4 - 2;
+	DrawBox(x1, y1, x2, y2, 0x0088ff, true);
 }
 
 void Hackable::Move()

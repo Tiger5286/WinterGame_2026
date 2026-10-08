@@ -188,7 +188,7 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 	return result;
 }
 
-void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
+void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, const ShotInfo shotInfo)
 {
 	float nearestDistSq = FLT_MAX;
 
@@ -239,7 +239,7 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end)
 
 	if (hitObj)
 	{
-		hitObj->OnWasShot();
+		hitObj->OnWasShot(shotInfo);
 	}
 	else
 	{
