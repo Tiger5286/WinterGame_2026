@@ -165,6 +165,7 @@ void Player::Draw()
 		MV1SetMatrix(m_pGunModel->GetHandle(), gunWorld);
 		m_pGunModel->Draw();
 
+#ifdef _DEBUG
 		// 銃口から線を描画
 		const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
 		const Vector3& target = m_pCamera.lock()->GetTargetPos();
@@ -179,6 +180,7 @@ void Player::Draw()
 			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
 			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
 		}
+#endif
 	}
 
 #ifdef _DEBUG
