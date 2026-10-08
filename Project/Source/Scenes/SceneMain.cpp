@@ -12,6 +12,7 @@
 #include "System/ServiceLocator.h"
 #include "Components/Component.h"
 #include "Components/Transform.h"
+#include "Game/HackingManager.h"
 
 namespace
 {
@@ -62,9 +63,15 @@ void SceneMain::Init()
 	// プレイヤーを生成
 	auto pPlayer = std::make_shared<Player>();
 	m_pGameObjectManager->Add(pPlayer);
+	// ハッキングマネージャーを生成
+	m_pHackingManager = std::make_shared<HackingManager>();
+	m_pHackingManager->Init(pPlayer);
 	// カメラとプレイヤーにお互いの弱参照を渡す
 	pPlayer->SetCamera(pCamera);
 	pCamera->SetPlayer(pPlayer);
+	// プレイヤーにマネージャーを渡す
+	pPlayer->SetHackingManager(m_pHackingManager);
+	pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
 	m_pGameObjectManager->Add(std::make_shared<TestEnemy>());
 }
@@ -73,11 +80,13 @@ void SceneMain::Update()
 {
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
+	m_pHackingManager->Update();
 }
 
 void SceneMain::Draw() const
 {
 	m_pGameObjectManager->Draw();
+	m_pHackingManager->Draw();
 
 	DrawCircle(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 10, 0xffffff, false, 3);
 

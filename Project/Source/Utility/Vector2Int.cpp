@@ -15,3 +15,8 @@ Vector2Int::Vector2Int(int x, int y) :
 Vector2Int::~Vector2Int()
 {
 }
+
+bool Vector2Int::operator==(const Vector2Int& v) const
+{
+	return x == v.x && y == v.y;
+}

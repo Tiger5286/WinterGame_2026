@@ -7,6 +7,7 @@
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
 #include "Components/Hitbox.h"
+#include "Components/Hackable.h"
 
 namespace
 {
@@ -22,6 +23,8 @@ TestEnemy::TestEnemy()
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
 	AddComponent<Physics>();
 	AddComponent<Hitbox>();
+	AddComponent<Hackable>();
+	m_tag = Tag::Enemy;
 }
 
 TestEnemy::~TestEnemy()
@@ -49,6 +52,8 @@ void TestEnemy::Init()
 	hitboxInfos.push_back(info);
 
 	GetComponent<Hitbox>()->Init(hitboxInfos);
+
+	GetComponent<Hackable>()->Init();
 }
 
 void TestEnemy::Update()

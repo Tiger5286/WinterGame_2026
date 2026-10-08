@@ -3,6 +3,8 @@
 
 class Model;
 class Camera;
+class HackingManager;
+class GameObjectManager;
 
 class Player :
     public GameObject
@@ -60,16 +62,22 @@ public:
     void Draw() override;
 
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
+	void SetHackingManager(std::weak_ptr<HackingManager> pHackingManager) { m_pHackingManager = pHackingManager; }
+	void SetGameObjectManager(std::weak_ptr<GameObjectManager> pGameObjectManager) { m_pGameObjectManager = pGameObjectManager; }
+
 
     bool IsAim() const { return m_isAim; }
 
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
+	std::shared_ptr<GameObject> FindNearestVisibleEnemy();
 
 private:
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
+	std::weak_ptr<HackingManager> m_pHackingManager;
+	std::weak_ptr<GameObjectManager> m_pGameObjectManager;
     float m_angle = 0.0f;
 
     bool m_isAim = false;

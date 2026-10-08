@@ -8,6 +8,14 @@ class Component;
 class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
+	enum class Tag
+	{
+		None,
+		Player,
+		Enemy
+	};
+
+public:
 	GameObject();
 	virtual ~GameObject();
 
@@ -44,6 +52,9 @@ public:
 	// プレイヤーの射撃に当たったときに呼ばれる関数
 	virtual void OnWasShot() {};
 
+	Tag GetTag() const { return m_tag; }
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
+	Tag m_tag = Tag::None;
 };

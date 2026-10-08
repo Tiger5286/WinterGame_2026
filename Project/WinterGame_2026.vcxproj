@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\HackingManager.cpp" />
     <ClCompile Include="Source\Components\Hackable.cpp" />
     <ClCompile Include="Source\Components\Hitbox.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateHover.cpp" />
@@ -58,6 +59,7 @@
     <ClCompile Include="Source\Utility\Vector2Int.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\HackingManager.h" />
     <ClInclude Include="Source\Components\Hackable.h" />
     <ClInclude Include="Source\Components\Hitbox.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateHover.h" />

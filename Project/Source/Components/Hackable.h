@@ -23,6 +23,9 @@ public:
     void Draw();
 
 private:
+    void Move();
+
+private:
     std::vector<std::vector<NodeType>> m_board;
     std::vector<Vector2Int> m_pos;
 };

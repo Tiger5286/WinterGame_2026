@@ -3,6 +3,7 @@
 
 class GameObjectManager;
 class CollisionManager;
+class HackingManager;
 class Camera;
 class Player;
 
@@ -20,5 +21,6 @@ public:
 private:
     std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
+    std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
 };
 

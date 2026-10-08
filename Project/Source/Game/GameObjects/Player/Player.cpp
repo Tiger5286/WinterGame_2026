@@ -13,6 +13,8 @@
 #include "Resource/Model.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
+#include "Game/GameObjectManager.h"
+#include "Game/HackingManager.h"
 #include <cmath>
 
 namespace
@@ -33,6 +35,7 @@ Player::Player()
 	AddComponent<Physics>();
 	AddComponent<StateMachine<Player>>(*this);
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
+	m_tag = Tag::Player;
 }
 
 Player::~Player()
@@ -111,11 +114,16 @@ void Player::Update()
 
 			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end);
 		}
+
+		// ハッキング対象があればハッキングマネージャーに渡す
+		auto target = FindNearestVisibleEnemy();
+		m_pHackingManager.lock()->SetTarget(target);
 	}
 	else
 	{
 		m_aimStartFrame = 0;
 		GetComponent<Animator>()->SetAimAngle(0.0f);
+		m_pHackingManager.lock()->SetTarget(nullptr);
 	}
 
 	// physicsの更新
@@ -308,4 +316,13 @@ void Player::UpdateAim()
 	{
 		m_isAim = false;
 	}
+}
+
+std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy()
+{
+	auto enemies = m_pGameObjectManager.lock()->GetEnemies();
+
+	if (enemies.empty()) return nullptr;
+
+	return enemies.front().lock();
 }
