@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <vector>
+#include "Utility/Vector2Int.h"
 
 class Hackable :
     public Component
@@ -23,5 +24,6 @@ public:
 
 private:
     std::vector<std::vector<NodeType>> m_board;
+    std::vector<Vector2Int> m_pos;
 };
 
