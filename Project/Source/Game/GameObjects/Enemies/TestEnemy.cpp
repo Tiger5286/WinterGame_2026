@@ -16,6 +16,8 @@ namespace
 	constexpr float kColliderRadius = 30.0f;
 	constexpr float kColliderHeight = 180.0f;
 
+	const Vector3 kCenterOffset = Vector3(0.0f, 100.0f, 0.0f);
+
 	const Vector3 kHPUIOffset = Vector3(0.0f, 200.0f, 0.0f);
 }
 
@@ -27,6 +29,7 @@ TestEnemy::TestEnemy()
 	AddComponent<Hitbox>();
 	AddComponent<Hackable>();
 	m_tag = Tag::Enemy;
+	m_centerOffset = kCenterOffset;
 }
 
 TestEnemy::~TestEnemy()
@@ -76,25 +79,32 @@ void TestEnemy::Update()
 	{
 		MV1SetMaterialDifColor(m_pModel->GetHandle(), 0, GetColorF(0.8f, 0.8f, 0.8f, 1.0f));
 	}
+
+	m_pModel->SetTransform(*GetComponent<Transform>());
 }
 
 void TestEnemy::Draw()
 {
 	m_pModel->Draw();
 
-	float rate = 1.0f - static_cast<float>(m_hp) / kMaxHP;
 
-	Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(GetComponent<Transform>()->pos + kHPUIOffset));
+	Vector3 hpuiPos = GetComponent<Transform>()->pos + kHPUIOffset;
+	if (!CheckCameraViewClip(hpuiPos))
+	{
+		Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(hpuiPos));
 
-	constexpr int kHPBarWidth = 200;
-	constexpr int kHPBarHeight = 10;
-	int x1, y1, x2, y2;
-	x1 = screenPos.x - kHPBarWidth / 2;
-	y1 = screenPos.y - kHPBarHeight / 2;
-	x2 = screenPos.x + kHPBarWidth / 2 - kHPBarWidth * rate;
-	y2 = screenPos.y + kHPBarHeight / 2;
+		float rate = 1.0f - static_cast<float>(m_hp) / kMaxHP;
 
-	DrawBox(x1, y1, x2, y2, 0xffff00, true);
+		constexpr int kHPBarWidth = 200;
+		constexpr int kHPBarHeight = 10;
+		int x1, y1, x2, y2;
+		x1 = screenPos.x - kHPBarWidth / 2;
+		y1 = screenPos.y - kHPBarHeight / 2;
+		x2 = screenPos.x + kHPBarWidth / 2 - kHPBarWidth * rate;
+		y2 = screenPos.y + kHPBarHeight / 2;
+
+		DrawBox(x1, y1, x2, y2, 0xffff00, true);
+	}
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();

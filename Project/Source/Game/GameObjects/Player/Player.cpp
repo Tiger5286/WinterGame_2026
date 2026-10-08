@@ -16,6 +16,8 @@
 #include "Game/GameObjectManager.h"
 #include "Game/HackingManager.h"
 #include <cmath>
+#include "Game.h"
+#include "Components/Hackable.h"
 
 namespace
 {
@@ -118,7 +120,8 @@ void Player::Update()
 		}
 
 		// ハッキング対象があればハッキングマネージャーに渡す
-		auto target = FindNearestVisibleEnemy();
+		Vector2 dummy;
+		auto target = FindNearestVisibleEnemy(dummy);
 		m_pHackingManager.lock()->SetTarget(target);
 	}
 	else
@@ -191,6 +194,19 @@ void Player::Draw()
 			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
 		}
 #endif
+	}
+
+	// ハッキング対象を示すUIを描画
+	Vector2 screenPos;
+	auto target = FindNearestVisibleEnemy(screenPos);
+	if (target)
+	{
+		int x1, y1, x2, y2;
+		x1 = screenPos.x - 70;
+		y1 = screenPos.y - 70;
+		x2 = screenPos.x + 70;
+		y2 = screenPos.y + 70;
+		DrawBox(x1, y1, x2, y2, 0x0088ff, false, 10);
 	}
 
 #ifdef _DEBUG
@@ -320,11 +336,42 @@ void Player::UpdateAim()
 	}
 }
 
-std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy()
+std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy(Vector2& screenPos)
 {
 	auto enemies = m_pGameObjectManager.lock()->GetEnemies();
 
 	if (enemies.empty()) return nullptr;
 
-	return enemies.front().lock();
+	std::shared_ptr<GameObject> nearestEnemy = nullptr;
+
+	float nearestDistSq = FLT_MAX;
+
+	Vector2 centerPos = Vector2(Game::kScreenWidth / 2,Game::kScreenHeight / 2);
+
+	for (auto& weakEnemy : enemies)
+	{
+		auto enemy = weakEnemy.lock();
+		// nullptrなら次へ
+		if (!enemy) continue;
+		// ハッキングできない相手は除外
+		if (!enemy->GetComponent<Hackable>()) continue;
+		// 敵の中心位置を計算
+		Vector3 targetPos = enemy->GetComponent<Transform>()->pos;
+		targetPos += enemy->GetCenterOffset();
+		// 視界の外にいる敵を除外
+		if (CheckCameraViewClip(targetPos)) continue;
+		// ワールド座標をスクリーン座標に変換する
+		Vector3 screenPos3d = Vector3::FromDxLib(ConvWorldPosToScreenPos(targetPos));
+		Vector2 screenPos2d = { screenPos3d.x,screenPos3d.y };
+		// 画面中央からの距離の2乗
+		float distSq = (screenPos2d - centerPos).SquaredLength();
+		if (distSq < nearestDistSq)
+		{
+			nearestDistSq = distSq;
+			nearestEnemy = enemy;
+			screenPos = screenPos2d;
+		}
+	}
+
+	return nearestEnemy;
 }

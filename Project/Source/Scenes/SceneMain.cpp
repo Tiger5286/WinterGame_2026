@@ -73,7 +73,15 @@ void SceneMain::Init()
 	pPlayer->SetHackingManager(m_pHackingManager);
 	pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	m_pGameObjectManager->Add(std::make_shared<TestEnemy>());
+	auto pEnemy = std::make_shared<TestEnemy>();
+	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 0, 200);
+	m_pGameObjectManager->Add(pEnemy);
+	pEnemy = std::make_shared<TestEnemy>();
+	pEnemy->GetComponent<Transform>()->pos = Vector3(200, 0, 200);
+	m_pGameObjectManager->Add(pEnemy);
+	pEnemy = std::make_shared<TestEnemy>();
+	pEnemy->GetComponent<Transform>()->pos = Vector3(-200, 0, 200);
+	m_pGameObjectManager->Add(pEnemy);
 }
 
 void SceneMain::Update()

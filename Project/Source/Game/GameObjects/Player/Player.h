@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Game/GameObjects/GameObject.h"
+#include "Utility/Vector2.h"
 
 class Model;
 class Camera;
@@ -71,7 +72,7 @@ public:
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
-	std::shared_ptr<GameObject> FindNearestVisibleEnemy();
+	std::shared_ptr<GameObject> FindNearestVisibleEnemy(Vector2& screenPos);
 
 private:
     std::unique_ptr<Model> m_pModel;

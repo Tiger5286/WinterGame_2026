@@ -9,7 +9,6 @@ class TestEnemy : public GameObject
 {
 public:
 	static constexpr int kMaxHP = 500;
-
 public:
 	TestEnemy();
 	~TestEnemy() override;
