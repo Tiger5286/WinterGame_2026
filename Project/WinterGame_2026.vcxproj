@@ -26,6 +26,7 @@
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateJump.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateFall.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateLand.cpp" />
+    <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
     <ClCompile Include="Source\Components\Collider\Collider.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateMove.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.cpp" />
+    <ClCompile Include="Source\System\UIManager.cpp" />
     <ClCompile Include="Source\Utility\MyLib.cpp" />
     <ClCompile Include="Source\Components\Physics.cpp" />
     <ClCompile Include="Source\Components\Animator\AnimationLayer.cpp" />
@@ -66,6 +68,7 @@
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateJump.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateFall.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateLand.h" />
+    <ClInclude Include="Source\Game\UI\UIBase.h" />
     <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
     <ClInclude Include="Source\Components\Collider\Collider.h" />
@@ -75,6 +78,7 @@
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerState.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateMove.h" />
     <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.h" />
+    <ClInclude Include="Source\System\UIManager.h" />
     <ClInclude Include="Source\Utility\MyLib.h" />
     <ClInclude Include="Source\Components\Physics.h" />
     <ClInclude Include="Source\Components\Animator\AnimationLayer.h" />
