@@ -8,6 +8,10 @@ class WalkerState :
     public State<Walker>
 {
 public:
+    static constexpr float kAccel = 0.15f;
+    static constexpr float kMinDistance = 100.0f;
+
+public:
     enum class ID
     {
         Approach,

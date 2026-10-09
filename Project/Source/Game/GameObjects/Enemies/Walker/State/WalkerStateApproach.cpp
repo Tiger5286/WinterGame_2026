@@ -4,11 +4,12 @@
 #include "Components/Transform.h"
 #include "Game/GameObjects/Enemies/Walker/Walker.h"
 #include "Components/Physics.h"
+#include "WalkerStateOrbit.h"
+#include "Components/State/StateMachine.h"
 
 namespace
 {
 	constexpr float kMaxMoveSpeed = 2.0f;
-	constexpr float kAccel = 0.15f;
 }
 
 WalkerStateApproach::WalkerStateApproach(Walker& walker) :
@@ -32,11 +33,20 @@ void WalkerStateApproach::Update()
 	Vector3 thisPosXZ = m_owner.GetComponent<Transform>()->pos;
 	thisPosXZ.y = 0.0f;
 
-	Vector3 thisToPlayer = (playerPosXZ - thisPosXZ).Normalized();
+	Vector3 thisToPlayer = (playerPosXZ - thisPosXZ);
+
+	if (thisToPlayer.SquaredLength() < kMinDistance * kMinDistance)
+	{
+		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateOrbit>(m_owner));
+		return;
+	}
+
+	thisToPlayer.Normalize();
 	thisToPlayer *= kAccel;
 	m_owner.GetComponent<Physics>()->m_accel = thisToPlayer;
 }
 
 void WalkerStateApproach::Exit()
 {
+	m_owner.GetComponent<Physics>()->SetMaxSpeed(Physics::kDefaultMaxSpeed);
 }

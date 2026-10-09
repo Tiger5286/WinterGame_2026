@@ -153,6 +153,9 @@
     <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateOrbit.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -315,6 +318,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateOrbit.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
