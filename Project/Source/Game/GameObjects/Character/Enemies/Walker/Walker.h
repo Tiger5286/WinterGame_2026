@@ -12,6 +12,9 @@ public:
     void Draw() override;
 
 private:
+    void OnHacked();
+
+private:
 
     friend class WalkerState;
 };

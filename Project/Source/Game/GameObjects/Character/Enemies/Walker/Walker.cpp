@@ -13,6 +13,8 @@ namespace
 {
 	constexpr float kColliderRadius = 25.0f;
 	constexpr float kColliderHeight = 180.0f;
+
+	const Vector3 kHackLocalPos = { 0.0f,100.0f,0.0f };
 }
 
 Walker::Walker(std::shared_ptr<Player> pPlayer) :
@@ -37,6 +39,14 @@ void Walker::Init()
 
 	auto stateMachine = GetComponent<StateMachine<Walker>>();
 	stateMachine->ChangeState(std::make_unique<WalkerStateApproach>(*this));
+
+	Hackable::Info hackableInfo;
+	hackableInfo.func = [this](Hackable::HackedData data) {OnHacked(); };
+	hackableInfo.hackLocalPos = kHackLocalPos;
+	GetComponent<Hackable>()->SetInfo(hackableInfo);
+	GetComponent<Hackable>()->Init();
+
+	//GetComponent<Hitbox>()->Init();
 }
 
 void Walker::Update()
@@ -44,6 +54,8 @@ void Walker::Update()
 	GetComponent<StateMachine<Walker>>()->Update();
 
 	GetComponent<Physics>()->Update();
+
+	GetComponent<Hackable>()->Update();
 }
 
 void Walker::Draw()
@@ -51,4 +63,9 @@ void Walker::Draw()
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
 #endif
+}
+
+void Walker::OnHacked()
+{
+	printfDx(L"Walker‚ªƒnƒbƒN‚³‚ê‚½\n");
 }
