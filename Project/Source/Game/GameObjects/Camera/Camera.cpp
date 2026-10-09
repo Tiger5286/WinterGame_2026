@@ -1,5 +1,5 @@
 ﻿#include "Camera.h"
-#include "Game/GameObjects/Player/Player.h"
+#include "Game/GameObjects/Character/Player/Player.h"
 #include "Utility/Matrix4x4.h"
 #include "System/PadInput.h"
 #include <algorithm>

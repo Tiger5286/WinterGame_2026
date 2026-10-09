@@ -26,5 +26,4 @@ private:
 private:
 	std::unique_ptr<Model> m_pModel;
 	std::shared_ptr<EnemyHPUI> m_pHPUI;
-	int m_hp = kMaxHP;
 };

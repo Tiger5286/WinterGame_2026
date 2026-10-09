@@ -1,6 +1,6 @@
 ﻿#include "PlayerState.h"
 #include "../Player.h"
-#include "../../Camera/Camera.h"
+#include "Game/GameObjects/Camera/Camera.h"
 #include "Components/Transform.h"
 #include "Components/Physics.h"
 #include "System/PadInput.h"

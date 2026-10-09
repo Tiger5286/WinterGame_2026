@@ -1,10 +1,10 @@
 #pragma once
-#include "../GameObject.h"
+#include "../Character.h"
 
 class Player;
 
 class EnemyBase :
-    public GameObject
+    public Character
 {
 public:
     EnemyBase(std::shared_ptr<Player> pPlayer);

@@ -1,5 +1,5 @@
 #include "WalkerStateOrbit.h"
-#include "Game/GameObjects/Player/Player.h"
+#include "Game/GameObjects/Character/Player/Player.h"
 #include "../Walker.h"
 #include "Components/Transform.h"
 #include "Components/Physics.h"

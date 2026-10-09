@@ -19,16 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Game\GameObjects\Enemies\EnemyBase.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Character.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\EnemyBase.cpp" />
     <ClCompile Include="Source\Game\UI\HackingTargetUI.cpp" />
     <ClCompile Include="Source\Game\UI\EnemyHPUI.cpp" />
     <ClCompile Include="Source\Game\HackingManager.cpp" />
     <ClCompile Include="Source\Components\Hackable.cpp" />
     <ClCompile Include="Source\Components\Hitbox.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateHover.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateJump.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateFall.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateLand.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHover.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateJump.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateLand.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
@@ -36,9 +37,9 @@
     <ClCompile Include="Source\Components\Collider\SphereCollider.cpp" />
     <ClCompile Include="Source\Components\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Source\Components\Collider\PolygonCollider.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerState.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateMove.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerState.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateMove.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateIdle.cpp" />
     <ClCompile Include="Source\System\UIManager.cpp" />
     <ClCompile Include="Source\Utility\MyLib.cpp" />
     <ClCompile Include="Source\Components\Physics.cpp" />
@@ -46,7 +47,7 @@
     <ClCompile Include="Source\Components\Animator\Animation.cpp" />
     <ClCompile Include="Source\Components\Animator\Animator.cpp" />
     <ClCompile Include="Source\Resource\ResourceManager.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Player\Player.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\Player.cpp" />
     <ClCompile Include="Source\Game\GameObjectManager.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Camera\Camera.cpp" />
     <ClCompile Include="Source\System\PadInput.cpp" />
@@ -60,24 +61,25 @@
     <ClCompile Include="Source\Utility\Vector2.cpp" />
     <ClCompile Include="Source\Utility\Vector3.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Stage\StaticStage.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Enemies\TestEnemy.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\TestEnemy.cpp" />
     <ClCompile Include="Source\Utility\Vector2Int.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\Walker.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerState.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateOrbit.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\Walker.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerState.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateApproach.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateOrbit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Game\GameObjects\Enemies\EnemyBase.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Character.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\EnemyBase.h" />
     <ClInclude Include="Source\Game\UI\HackingTargetUI.h" />
     <ClInclude Include="Source\Game\UI\EnemyHPUI.h" />
     <ClInclude Include="Source\Game\HackingManager.h" />
     <ClInclude Include="Source\Components\Hackable.h" />
     <ClInclude Include="Source\Components\Hitbox.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateHover.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateJump.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateFall.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateLand.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHover.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateJump.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateLand.h" />
     <ClInclude Include="Source\Game\UI\UIBase.h" />
     <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
@@ -85,9 +87,9 @@
     <ClInclude Include="Source\Components\Collider\SphereCollider.h" />
     <ClInclude Include="Source\Components\Collider\CapsuleCollider.h" />
     <ClInclude Include="Source\Components\Collider\PolygonCollider.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerState.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateMove.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\State\PlayerStateIdle.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerState.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateMove.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateIdle.h" />
     <ClInclude Include="Source\System\UIManager.h" />
     <ClInclude Include="Source\Utility\MyLib.h" />
     <ClInclude Include="Source\Components\Physics.h" />
@@ -99,7 +101,7 @@
     <ClInclude Include="Source\Resource\Model.h" />
     <ClInclude Include="Source\Resource\Handle.h" />
     <ClInclude Include="Source\Resource\ResourceManager.h" />
-    <ClInclude Include="Source\Game\GameObjects\Player\Player.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\Player.h" />
     <ClInclude Include="Source\Game\GameObjectManager.h" />
     <ClInclude Include="Source\Game\GameObjects\Camera\Camera.h" />
     <ClInclude Include="Source\System\PadInput.h" />
@@ -117,12 +119,12 @@
     <ClInclude Include="Source\Components\State\State.h" />
     <ClInclude Include="Source\Components\State\StateMachine.h" />
     <ClInclude Include="Source\Game\GameObjects\Stage\StaticStage.h" />
-    <ClInclude Include="Source\Game\GameObjects\Enemies\TestEnemy.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\TestEnemy.h" />
     <ClInclude Include="Source\Utility\Vector2Int.h" />
-    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\Walker.h" />
-    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerState.h" />
-    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.h" />
-    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateOrbit.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\Walker.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerState.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateApproach.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateOrbit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

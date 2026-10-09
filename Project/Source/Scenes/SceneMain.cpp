@@ -4,8 +4,8 @@
 #include "Game.h"
 #include "Game/GameObjectManager.h"
 #include "Game/GameObjects/Camera/Camera.h"
-#include "Game/GameObjects/Player/Player.h"
-#include "Game/GameObjects/Enemies/TestEnemy.h"
+#include "Game/GameObjects/Character/Player/Player.h"
+#include "Game/GameObjects/Character/Enemies/TestEnemy.h"
 #include "Game/GameObjects/Stage/StaticStage.h"
 #include "Game/CollisionManager.h"
 #include "Resource/ResourceManager.h"
@@ -14,7 +14,7 @@
 #include "Components/Transform.h"
 #include "Game/HackingManager.h"
 #include "System/UIManager.h"
-#include "Game/GameObjects/Enemies/Walker/Walker.h"
+#include "Game/GameObjects/Character/Enemies/Walker/Walker.h"
 
 namespace
 {

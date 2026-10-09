@@ -26,6 +26,8 @@ namespace
 TestEnemy::TestEnemy(std::shared_ptr<Player> pPlayer) :
 	EnemyBase(pPlayer)
 {
+	m_hp = kMaxHP;
+
 	AddComponent<Animator>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
 	AddComponent<Physics>();

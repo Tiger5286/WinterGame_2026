@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Game/GameObjects/GameObject.h"
+#include "Game/GameObjects/Character/Character.h"
 #include "Utility/Vector2.h"
 
 class Model;
@@ -9,7 +9,7 @@ class GameObjectManager;
 class HackingTargetUI;
 
 class Player :
-    public GameObject
+    public Character
 {
 public:
 	enum class AnimationID
