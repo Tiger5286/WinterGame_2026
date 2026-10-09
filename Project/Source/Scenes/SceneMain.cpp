@@ -14,6 +14,7 @@
 #include "Components/Transform.h"
 #include "Game/HackingManager.h"
 #include "System/UIManager.h"
+#include "Game/GameObjects/Enemies/Walker/Walker.h"
 
 namespace
 {
@@ -76,13 +77,13 @@ void SceneMain::Init()
 	pPlayer->SetHackingManager(m_pHackingManager);
 	pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	auto pEnemy = std::make_shared<TestEnemy>();
-	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 0, 200);
+	std::shared_ptr<GameObject> pEnemy = std::make_shared<Walker>(pPlayer);
+	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 0, 300);
 	m_pGameObjectManager->Add(pEnemy);
-	pEnemy = std::make_shared<TestEnemy>();
+	pEnemy = std::make_shared<TestEnemy>(pPlayer);
 	pEnemy->GetComponent<Transform>()->pos = Vector3(200, 0, 200);
 	m_pGameObjectManager->Add(pEnemy);
-	pEnemy = std::make_shared<TestEnemy>();
+	pEnemy = std::make_shared<TestEnemy>(pPlayer);
 	pEnemy->GetComponent<Transform>()->pos = Vector3(-200, 0, 200);
 	m_pGameObjectManager->Add(pEnemy);
 }

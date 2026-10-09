@@ -23,7 +23,8 @@ namespace
 	const Vector3 kHPUIOffset = Vector3(0.0f, 200.0f, 0.0f);
 }
 
-TestEnemy::TestEnemy()
+TestEnemy::TestEnemy(std::shared_ptr<Player> pPlayer) :
+	EnemyBase(pPlayer)
 {
 	AddComponent<Animator>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);

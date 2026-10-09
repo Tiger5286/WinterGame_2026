@@ -62,6 +62,9 @@
     <ClCompile Include="Source\Game\GameObjects\Stage\StaticStage.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Enemies\TestEnemy.cpp" />
     <ClCompile Include="Source\Utility\Vector2Int.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\Walker.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerState.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\GameObjects\Enemies\EnemyBase.h" />
@@ -115,6 +118,9 @@
     <ClInclude Include="Source\Game\GameObjects\Stage\StaticStage.h" />
     <ClInclude Include="Source\Game\GameObjects\Enemies\TestEnemy.h" />
     <ClInclude Include="Source\Utility\Vector2Int.h" />
+    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\Walker.h" />
+    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerState.h" />
+    <ClInclude Include="Source\Game\GameObjects\Enemies\Walker\State\WalkerStateApproach.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
