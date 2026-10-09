@@ -367,7 +367,7 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy(Vector2& screenPos)
 		if (!enemy->GetComponent<Hackable>()) continue;
 		// 敵の中心位置を計算
 		Vector3 targetPos = enemy->GetComponent<Transform>()->pos;
-		targetPos += enemy->GetCenterOffset();
+		targetPos += enemy->GetComponent<Hackable>()->GetHackLocalPos();
 		// 視界の外にいる敵を除外
 		if (CheckCameraViewClip(targetPos)) continue;
 		// ワールド座標をスクリーン座標に変換する

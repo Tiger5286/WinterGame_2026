@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <vector>
 #include "Utility/Vector2Int.h"
+#include "Utility/Vector3.h"
 #include <functional>
 
 class Hackable :
@@ -11,6 +12,11 @@ public:
     struct HackedData
     {
         int damage = 0;
+    };
+    struct Info
+    {
+        std::function<void(HackedData)> func;
+        Vector3 hackLocalPos;
     };
 
     enum class NodeType
@@ -29,9 +35,11 @@ public:
     void UpdateHacking();
     void Draw();
 
-    void SetFunc(std::function<void(HackedData)> func) { m_goalAction = func; }
+    void SetInfo(const Info& info) { m_info = info; }
 
     bool IsHacked() const { return m_hackFrame > 0; }
+
+    const Vector3& GetHackLocalPos() const { return m_info.hackLocalPos; }
 
 private:
     void Move();
@@ -39,7 +47,7 @@ private:
 private:
     std::vector<std::vector<NodeType>> m_board;
     std::vector<Vector2Int> m_pos;
-    std::function<void(HackedData)> m_goalAction;
     int m_hackFrame = 0;
+    Info m_info;
 };
 

@@ -57,11 +57,8 @@ public:
 
 	bool IsDead() const { return m_isDead; }
 
-	const Vector3& GetCenterOffset() const { return m_centerOffset; }
-
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 	Tag m_tag = Tag::None;
 	bool m_isDead = false;
-	Vector3 m_centerOffset;
 };

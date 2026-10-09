@@ -18,7 +18,7 @@ namespace
 	constexpr float kColliderRadius = 30.0f;
 	constexpr float kColliderHeight = 180.0f;
 
-	const Vector3 kCenterOffset = Vector3(0.0f, 100.0f, 0.0f);
+	const Vector3 kHackLocalPos = Vector3(0.0f, 100.0f, 0.0f);
 
 	const Vector3 kHPUIOffset = Vector3(0.0f, 200.0f, 0.0f);
 }
@@ -31,7 +31,6 @@ TestEnemy::TestEnemy()
 	AddComponent<Hitbox>();
 	AddComponent<Hackable>();
 	m_tag = Tag::Enemy;
-	m_centerOffset = kCenterOffset;
 }
 
 TestEnemy::~TestEnemy()
@@ -62,7 +61,10 @@ void TestEnemy::Init()
 	GetComponent<Hitbox>()->Init(hitboxInfos);
 
 	GetComponent<Hackable>()->Init();
-	GetComponent<Hackable>()->SetFunc([this](Hackable::HackedData data) { OnHacked(data); });
+	Hackable::Info hackableInfo;
+	hackableInfo.func = [this](Hackable::HackedData data) { OnHacked(data); };
+	hackableInfo.hackLocalPos = kHackLocalPos;
+	GetComponent<Hackable>()->SetInfo(hackableInfo);
 
 	m_pHPUI = std::make_shared<EnemyHPUI>();
 	UIManager::GetInstance().AddUI(m_pHPUI);

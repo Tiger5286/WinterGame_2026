@@ -79,7 +79,7 @@ void Hackable::Update()
 	if (m_pos.back() == kGoalPos)
 	{
 		HackedData data = {};
-		m_goalAction(data);
+		m_info.func(data);
 
 		int openNum = 0;
 		for (const auto& pos : m_pos)

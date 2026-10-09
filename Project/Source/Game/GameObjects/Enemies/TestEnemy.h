@@ -1,12 +1,12 @@
 ﻿#pragma once
-#include "Game/GameObjects/GameObject.h"
+#include "EnemyBase.h"
 #include "Components/Hackable.h"
 #include <memory>
 
 class Model;
 class EnemyHPUI;
 
-class TestEnemy : public GameObject
+class TestEnemy : public EnemyBase
 {
 public:
 	static constexpr int kMaxHP = 500;
