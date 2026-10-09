@@ -56,7 +56,10 @@ void Hackable::Init()
 			randPos.y = GetRand(kBoardSize.y - 1);
 			if (m_board[randPos.y][randPos.x] == NodeType::None)
 			{
-				m_board[randPos.y][randPos.x] = NodeType::Open;
+				if (randPos != Vector2Int(0, 0))
+				{
+					m_board[randPos.y][randPos.x] = NodeType::Open;
+				}
 			}
 			else
 			{
