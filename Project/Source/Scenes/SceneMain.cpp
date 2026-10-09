@@ -13,6 +13,7 @@
 #include "Components/Component.h"
 #include "Components/Transform.h"
 #include "Game/HackingManager.h"
+#include "System/UIManager.h"
 
 namespace
 {
@@ -43,6 +44,8 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
+	UIManager::GetInstance().Init();
+
 	// CollisionManagerを生成し、ServiceLocatorに登録
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 	ServiceLocator::GetInstance().ProvideCollisionManager(m_pCollisionManager.get());
@@ -86,6 +89,7 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
+	UIManager::GetInstance().Update();
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
 	m_pHackingManager->Update();
@@ -94,6 +98,9 @@ void SceneMain::Update()
 void SceneMain::Draw() const
 {
 	m_pGameObjectManager->Draw();
+
+	UIManager::GetInstance().Draw();
+
 	m_pHackingManager->Draw();
 
 	DrawCircle(Game::kScreenWidth / 2, Game::kScreenHeight / 2, 10, 0xffffff, false, 3);

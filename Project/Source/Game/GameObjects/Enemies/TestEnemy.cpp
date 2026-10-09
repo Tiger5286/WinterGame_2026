@@ -8,6 +8,8 @@
 #include "Game/CollisionManager.h"
 #include "Components/Hitbox.h"
 #include "Components/Hackable.h"
+#include "Game/UI/EnemyHPUI.h"
+#include "System/UIManager.h"
 
 namespace
 {
@@ -34,6 +36,7 @@ TestEnemy::TestEnemy()
 
 TestEnemy::~TestEnemy()
 {
+	m_pHPUI->Destroy();
 }
 
 void TestEnemy::Init()
@@ -60,6 +63,9 @@ void TestEnemy::Init()
 
 	GetComponent<Hackable>()->Init();
 	GetComponent<Hackable>()->SetFunc([this](Hackable::HackedData data) { OnHacked(data); });
+
+	m_pHPUI = std::make_shared<EnemyHPUI>();
+	UIManager::GetInstance().AddUI(m_pHPUI);
 }
 
 void TestEnemy::Update()
@@ -80,31 +86,18 @@ void TestEnemy::Update()
 		MV1SetMaterialDifColor(m_pModel->GetHandle(), 0, GetColorF(0.8f, 0.8f, 0.8f, 1.0f));
 	}
 
+	EnemyHPUI::Info info;
+	info.uiPos = GetComponent<Transform>()->pos + kHPUIOffset;
+	info.nowHP = m_hp;
+	info.maxHP = kMaxHP;
+	m_pHPUI->SetInfo(info);
+
 	m_pModel->SetTransform(*GetComponent<Transform>());
 }
 
 void TestEnemy::Draw()
 {
 	m_pModel->Draw();
-
-
-	Vector3 hpuiPos = GetComponent<Transform>()->pos + kHPUIOffset;
-	if (!CheckCameraViewClip(hpuiPos))
-	{
-		Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(hpuiPos));
-
-		float rate = 1.0f - static_cast<float>(m_hp) / kMaxHP;
-
-		constexpr int kHPBarWidth = 200;
-		constexpr int kHPBarHeight = 10;
-		int x1, y1, x2, y2;
-		x1 = screenPos.x - kHPBarWidth / 2;
-		y1 = screenPos.y - kHPBarHeight / 2;
-		x2 = screenPos.x + kHPBarWidth / 2 - kHPBarWidth * rate;
-		y2 = screenPos.y + kHPBarHeight / 2;
-
-		DrawBox(x1, y1, x2, y2, 0xffff00, true);
-	}
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();

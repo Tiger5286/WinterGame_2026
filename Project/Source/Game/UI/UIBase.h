@@ -15,6 +15,8 @@ public:
 	bool IsVisible() const { return m_isVisible; }
 	int GetLayer() const { return m_layer; }
 
+	void Destroy() { m_isAlive = false; }
+
 protected:
 	bool m_isAlive = true;
 	bool m_isVisible = true;

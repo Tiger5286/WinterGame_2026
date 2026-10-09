@@ -4,6 +4,7 @@
 #include <memory>
 
 class Model;
+class EnemyHPUI;
 
 class TestEnemy : public GameObject
 {
@@ -24,5 +25,6 @@ private:
 
 private:
 	std::unique_ptr<Model> m_pModel;
+	std::shared_ptr<EnemyHPUI> m_pHPUI;
 	int m_hp = kMaxHP;
 };
