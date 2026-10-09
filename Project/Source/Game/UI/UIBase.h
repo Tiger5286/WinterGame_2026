@@ -13,6 +13,7 @@ public:
 
 	bool IsAlive() const { return m_isAlive; }
 	bool IsVisible() const { return m_isVisible; }
+	void SetIsVisible(bool isVisible) { m_isVisible = isVisible; }
 	int GetLayer() const { return m_layer; }
 
 	void Destroy() { m_isAlive = false; }

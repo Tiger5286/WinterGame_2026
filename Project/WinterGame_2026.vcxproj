@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\UI\HackingTargetUI.cpp" />
     <ClCompile Include="Source\Game\UI\EnemyHPUI.cpp" />
     <ClCompile Include="Source\Game\HackingManager.cpp" />
     <ClCompile Include="Source\Components\Hackable.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="Source\Utility\Vector2Int.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\UI\HackingTargetUI.h" />
     <ClInclude Include="Source\Game\UI\EnemyHPUI.h" />
     <ClInclude Include="Source\Game\HackingManager.h" />
     <ClInclude Include="Source\Components\Hackable.h" />

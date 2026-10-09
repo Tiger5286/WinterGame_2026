@@ -18,6 +18,8 @@
 #include <cmath>
 #include "Game.h"
 #include "Components/Hackable.h"
+#include "Game/UI/HackingTargetUI.h"
+#include "System/UIManager.h"
 
 namespace
 {
@@ -42,6 +44,7 @@ Player::Player()
 
 Player::~Player()
 {
+	m_pHackingTargetUI->Destroy();
 }
 
 void Player::Init()
@@ -73,6 +76,10 @@ void Player::Init()
 	// ステートを初期化
 	auto stateMachine = GetComponent<StateMachine<Player>>();
 	stateMachine->ChangeState(std::make_unique<PlayerStateIdle>(*this));
+
+	m_pHackingTargetUI = std::make_shared<HackingTargetUI>();
+	UIManager::GetInstance().AddUI(m_pHackingTargetUI);
+	
 }
 
 void Player::Update()
@@ -85,6 +92,24 @@ void Player::Update()
 
 	// ステートを更新
 	GetComponent<StateMachine<Player>>()->Update();
+
+	// 視界の中心に近い敵を保存
+	Vector2 screenPos;
+	auto target = FindNearestVisibleEnemy(screenPos);
+
+	// ハッキング対象を示すUIを更新
+	if (target)
+	{
+		HackingTargetUI::Info info;
+		info.screenPos = screenPos;
+		m_pHackingTargetUI->SetInfo(info);
+		m_pHackingTargetUI->SetIsVisible(true);
+	}
+	else
+	{
+		m_pHackingTargetUI->SetIsVisible(false);
+	}
+
 	// エイムしているときは向きをカメラの向きに固定する
 	if (m_isAim)
 	{
@@ -120,8 +145,6 @@ void Player::Update()
 		}
 
 		// ハッキング対象があればハッキングマネージャーに渡す
-		Vector2 dummy;
-		auto target = FindNearestVisibleEnemy(dummy);
 		m_pHackingManager.lock()->SetTarget(target);
 	}
 	else
@@ -194,19 +217,6 @@ void Player::Draw()
 			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
 		}
 #endif
-	}
-
-	// ハッキング対象を示すUIを描画
-	Vector2 screenPos;
-	auto target = FindNearestVisibleEnemy(screenPos);
-	if (target)
-	{
-		int x1, y1, x2, y2;
-		x1 = screenPos.x - 70;
-		y1 = screenPos.y - 70;
-		x2 = screenPos.x + 70;
-		y2 = screenPos.y + 70;
-		DrawBox(x1, y1, x2, y2, 0x0088ff, false, 10);
 	}
 
 #ifdef _DEBUG

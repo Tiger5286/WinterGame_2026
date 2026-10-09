@@ -6,6 +6,7 @@ class Model;
 class Camera;
 class HackingManager;
 class GameObjectManager;
+class HackingTargetUI;
 
 class Player :
     public GameObject
@@ -89,6 +90,8 @@ private:
 
 	std::unique_ptr<Model> m_pGunModel;
 	int m_haveGunFrameIndex = -1;
+
+	std::shared_ptr<HackingTargetUI> m_pHackingTargetUI = nullptr;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
