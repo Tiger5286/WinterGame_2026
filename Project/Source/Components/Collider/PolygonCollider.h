@@ -15,7 +15,7 @@ public:
 	Model* GetModel() const { return m_pModel; }
 	void SetModel(Model* model) { m_pModel = model; }
 
-	void Draw() override;
+	void Draw(const unsigned int color = 0x00ff00) override;
 
 private:
 	Model* m_pModel = nullptr;

@@ -23,14 +23,14 @@ void CapsuleCollider::SetHeight(float height)
 	m_height = (std::max)(height, m_radius * 2.0f);
 }
 
-void CapsuleCollider::Draw()
+void CapsuleCollider::Draw(const unsigned int color)
 {
 	if (!IsEnable())
 	{
 		return;
 	}
 
-	const Vector3 bottom = m_transform.pos + Vector3::Up() * m_radius;
-	const Vector3 top = m_transform.pos + Vector3::Up() * m_height + Vector3::Down() * m_radius;
-	DrawCapsule3D(bottom.ToDxLib(), top.ToDxLib(), m_radius, 16, 0x00ff00, 0xffffff, false);
+	const Vector3 bottom = m_transform.pos + Vector3::Up() * m_radius + m_offset;
+	const Vector3 top = m_transform.pos + Vector3::Up() * m_height + Vector3::Down() * m_radius + m_offset;
+	DrawCapsule3D(bottom, top, m_radius, 16, color, 0xffffff, false);
 }

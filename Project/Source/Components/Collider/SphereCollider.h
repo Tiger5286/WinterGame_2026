@@ -12,7 +12,7 @@ public:
 	float GetRadius() const { return m_radius; }
 	void SetRadius(float radius);
 
-	void Draw() override;
+	void Draw(const unsigned int color = 0x00ff00) override;
 
 private:
 	float m_radius = 0.0f;

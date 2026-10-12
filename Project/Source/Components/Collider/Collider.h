@@ -26,7 +26,7 @@ public:
 	virtual ~Collider() = default;
 
 	// 当たり判定を描画する
-	virtual void Draw() abstract;
+	virtual void Draw(const unsigned int color = 0x00ff00) abstract;
 
 	// Transformを取得する
 	const Transform& GetTransform() const { return m_transform; }

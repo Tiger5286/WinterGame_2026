@@ -1,6 +1,12 @@
 ﻿#include "Hitbox.h"
 #include "Components/Collider/Collider.h"
 
+namespace
+{
+	constexpr unsigned int kHitboxColor = 0xffff00;
+	constexpr unsigned int kWeakPointColor = 0xff0000;
+}
+
 Hitbox::Hitbox()
 {
 }
@@ -18,6 +24,12 @@ void Hitbox::Draw()
 {
 	for (const auto& col : m_colliders)
 	{
-		col.pCollider->Draw();
+		unsigned int color = kHitboxColor;
+		if (col.isWeakPoint)
+		{
+			color = kWeakPointColor;
+		}
+
+		col.pCollider->Draw(color);
 	}
 }

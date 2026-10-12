@@ -1,5 +1,6 @@
-#include "Walker.h"
+Ôªø#include "Walker.h"
 #include "Components/Collider/CapsuleCollider.h"
+#include "Components/Collider/SphereCollider.h"
 #include "Components/Physics.h"
 #include "Components/Hitbox.h"
 #include "Components/Hackable.h"
@@ -46,7 +47,15 @@ void Walker::Init()
 	GetComponent<Hackable>()->SetInfo(hackableInfo);
 	GetComponent<Hackable>()->Init();
 
-	//GetComponent<Hitbox>()->Init();
+	std::vector<Hitbox::Info> hitboxInfoArray;
+	Hitbox::Info hitboxInfo;
+	hitboxInfo.pCollider = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20, 150);
+	hitboxInfoArray.push_back(hitboxInfo);
+	hitboxInfo.pCollider = std::make_shared<SphereCollider>(*GetComponent<Transform>(), 20);
+	hitboxInfo.pCollider->SetOffset(Vector3(0, 150, 0));
+	hitboxInfo.isWeakPoint = true;
+	hitboxInfoArray.push_back(hitboxInfo);
+	GetComponent<Hitbox>()->Init(hitboxInfoArray);
 }
 
 void Walker::Update()
@@ -62,10 +71,11 @@ void Walker::Draw()
 {
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
+	GetComponent<Hitbox>()->Draw();
 #endif
 }
 
 void Walker::OnHacked()
 {
-	printfDx(L"WalkerÇ™ÉnÉbÉNÇ≥ÇÍÇΩ\n");
+	printfDx(L"Walker„Åå„Éè„ÉÉ„ÇØ„Åï„Çå„Åü\n");
 }

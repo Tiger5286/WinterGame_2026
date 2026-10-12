@@ -9,7 +9,7 @@ PolygonCollider::PolygonCollider(Transform& transform, Model* pModel) :
 {
 }
 
-void PolygonCollider::Draw()
+void PolygonCollider::Draw(const unsigned int color)
 {
 	if (!IsEnable() || !m_pModel)
 	{
