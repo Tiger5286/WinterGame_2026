@@ -6,6 +6,7 @@
 #include "Components/Hackable.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Transform.h"
+#include "Components/Animator/Animator.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
 #include "State/WalkerStateApproach.h"
@@ -29,6 +30,7 @@ Walker::Walker(std::shared_ptr<Player> pPlayer) :
 	AddComponent<Hitbox>();
 	AddComponent<Hackable>();
 	AddComponent<StateMachine<Walker>>(*this);
+	AddComponent<Animator>();
 }
 
 Walker::~Walker()
@@ -40,6 +42,14 @@ void Walker::Init()
 	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
 
 	GetComponent<Physics>()->Init(GetComponent<Transform>(), GetComponent<CapsuleCollider>());
+
+	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"Walker");
+
+	auto animator = GetComponent<Animator>();
+	animator->Init(m_pModel.get());
+	animator->AddAnimation(L"Armature|Walk");
+	animator->AddAnimation(L"Armature|LeftWalk");
+	//animator->AddAnimation(L"Armature|Walk");
 
 	auto stateMachine = GetComponent<StateMachine<Walker>>();
 	stateMachine->ChangeState(std::make_unique<WalkerStateApproach>(*this));
@@ -59,8 +69,6 @@ void Walker::Init()
 	hitboxInfo.isWeakPoint = true;
 	hitboxInfoArray.push_back(hitboxInfo);
 	GetComponent<Hitbox>()->Init(hitboxInfoArray);
-
-	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"Walker");
 }
 
 void Walker::Update()
@@ -81,6 +89,8 @@ void Walker::Update()
 	}
 
 	m_pModel->SetTransform(*GetComponent<Transform>());
+
+	GetComponent<Animator>()->Update();
 }
 
 void Walker::Draw()

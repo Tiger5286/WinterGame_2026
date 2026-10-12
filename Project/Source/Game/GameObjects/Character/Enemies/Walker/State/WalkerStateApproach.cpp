@@ -1,4 +1,4 @@
-#include "WalkerStateApproach.h"
+﻿#include "WalkerStateApproach.h"
 #include "Utility/Vector3.h"
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "Components/Transform.h"
@@ -6,6 +6,7 @@
 #include "Components/Physics.h"
 #include "WalkerStateOrbit.h"
 #include "Components/State/StateMachine.h"
+#include "Components/Animator/Animator.h"
 
 namespace
 {
@@ -24,6 +25,7 @@ WalkerStateApproach::~WalkerStateApproach()
 void WalkerStateApproach::Enter()
 {
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
+	m_owner.GetComponent<Animator>()->Play(L"Armature|Walk");
 }
 
 void WalkerStateApproach::Update()

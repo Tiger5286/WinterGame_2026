@@ -1,10 +1,11 @@
-#include "WalkerStateOrbit.h"
+﻿#include "WalkerStateOrbit.h"
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "../Walker.h"
 #include "Components/Transform.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
 #include "WalkerStateApproach.h"
+#include "Components/Animator/Animator.h"
 
 namespace
 {
@@ -23,6 +24,7 @@ WalkerStateOrbit::~WalkerStateOrbit()
 void WalkerStateOrbit::Enter()
 {
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
+	m_owner.GetComponent<Animator>()->Play(L"Armature|Walk");
 }
 
 void WalkerStateOrbit::Update()
