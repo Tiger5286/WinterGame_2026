@@ -1,5 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "../EnemyBase.h"
+
+class Model;
+class Graph;
+
 class Walker :
     public EnemyBase
 {
@@ -15,6 +19,8 @@ private:
     void OnHacked();
 
 private:
+    std::unique_ptr<Model> m_pModel;
+    Graph* m_pModelTexture[2] = { nullptr,nullptr };    // 0 : 通常テクスチャ / 1 : ハックされたテクスチャ
 
     friend class WalkerState;
 };

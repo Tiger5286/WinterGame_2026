@@ -28,7 +28,13 @@ namespace
 		{ L"data/models/player/player.mv1", L"PlayerModel" },
 		{ L"data/models/gun/gun.mv1",L"GunModel" },
 		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
-		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" }
+		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" },
+		{ L"data/models/enemies/Walker.mv1", L"Walker" }
+	};
+
+	const LoadData kLoadGraphFiles[] = {
+		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber.png", L"NormalWalkerTex" },
+		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber_Open.png", L"HackedWalkerTex" },
 	};
 }
 
@@ -56,6 +62,10 @@ void SceneMain::Init()
 	for (const auto& file : kLoadModelFiles)
 	{
 		resourceManager.LoadModel(file.filePath, file.key);
+	}
+	for (const auto& file : kLoadGraphFiles)
+	{
+		resourceManager.LoadGraph(file.filePath, file.key);
 	}
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();

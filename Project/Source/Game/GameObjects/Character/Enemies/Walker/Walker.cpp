@@ -9,6 +9,9 @@
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
 #include "State/WalkerStateApproach.h"
+#include "Resource/ResourceManager.h"
+#include "Resource/Model.h"
+#include "Resource/Graph.h"
 
 namespace
 {
@@ -49,26 +52,40 @@ void Walker::Init()
 
 	std::vector<Hitbox::Info> hitboxInfoArray;
 	Hitbox::Info hitboxInfo;
-	hitboxInfo.pCollider = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20, 150);
+	hitboxInfo.pCollider = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20, 155);
 	hitboxInfoArray.push_back(hitboxInfo);
-	hitboxInfo.pCollider = std::make_shared<SphereCollider>(*GetComponent<Transform>(), 20);
-	hitboxInfo.pCollider->SetOffset(Vector3(0, 150, 0));
+	hitboxInfo.pCollider = std::make_shared<SphereCollider>(*GetComponent<Transform>(), 15);
+	hitboxInfo.pCollider->SetOffset(Vector3(0, 165, 0));
 	hitboxInfo.isWeakPoint = true;
 	hitboxInfoArray.push_back(hitboxInfo);
 	GetComponent<Hitbox>()->Init(hitboxInfoArray);
+
+	m_pModel = ResourceManager::GetInstance().DuplicateModel(L"Walker");
 }
 
 void Walker::Update()
 {
+	auto& resourceManager = ResourceManager::GetInstance();
+
 	GetComponent<StateMachine<Walker>>()->Update();
 
 	GetComponent<Physics>()->Update();
 
-	GetComponent<Hackable>()->Update();
+	auto hackable = GetComponent<Hackable>();
+	hackable->Update();
+	if (!hackable->IsHacked())
+	{
+		// テクスチャを通常に戻す
+		MV1SetTextureGraphHandle(m_pModel->GetHandle(), 0, resourceManager.GetGraph(L"NormalWalkerTex")->GetHandle(), false);
+		MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+	m_pModel->SetTransform(*GetComponent<Transform>());
 }
 
 void Walker::Draw()
 {
+	m_pModel->Draw();
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
 	GetComponent<Hitbox>()->Draw();
@@ -77,5 +94,9 @@ void Walker::Draw()
 
 void Walker::OnHacked()
 {
+	auto& resourceManager = ResourceManager::GetInstance();
 	printfDx(L"Walkerがハックされた\n");
+	// テクスチャをハックされたものに変える
+	MV1SetTextureGraphHandle(m_pModel->GetHandle(), 0, resourceManager.GetGraph(L"HackedWalkerTex")->GetHandle(), false);
+	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f,0.5f,0.5f,1.0f));
 }
