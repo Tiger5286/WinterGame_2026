@@ -15,6 +15,8 @@ public:
     void Update() override;
     void Draw() override;
 
+    void OnWasShot(const CollisionManager::ShotInfo& info) override;
+
 private:
     void OnHacked();
 

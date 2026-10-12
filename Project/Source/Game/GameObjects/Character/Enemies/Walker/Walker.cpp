@@ -92,6 +92,15 @@ void Walker::Draw()
 #endif
 }
 
+void Walker::OnWasShot(const CollisionManager::ShotInfo& info)
+{
+	printfDx(L"Walkerに当たった\n");
+	if (info.isWeakPoint)
+	{
+		printfDx(L"弱点！\n");
+	}
+}
+
 void Walker::OnHacked()
 {
 	auto& resourceManager = ResourceManager::GetInstance();

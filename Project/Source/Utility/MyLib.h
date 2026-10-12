@@ -13,5 +13,6 @@ public:
 	};
 
 	static RayCapsuleResult CheckHitLineCapsule(const Vector3& bottom, const Vector3& top, const float radius, const Vector3& start, const Vector3& end);
+	static RayCapsuleResult CheckHitLineSphere(const Vector3& pos, const float radius, const Vector3& start, const Vector3& end);
 };
 

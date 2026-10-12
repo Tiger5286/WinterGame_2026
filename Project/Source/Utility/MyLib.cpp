@@ -125,3 +125,55 @@ MyLib::RayCapsuleResult MyLib::CheckHitLineCapsule(const Vector3& bottom, const 
     }
     return result;
 }
+
+MyLib::RayCapsuleResult MyLib::CheckHitLineSphere(const Vector3& pos, const float radius, const Vector3& start, const Vector3& end)
+{
+    RayCapsuleResult result;
+    result.hitPos = Vector3::Zero();
+    const Vector3 segment = end - start;
+    const float segmentLengthSq = segment.SquaredLength();
+    const float closestT = segmentLengthSq > 0.0f
+        ? std::clamp((pos - start).Dot(segment) / segmentLengthSq, 0.0f, 1.0f)
+        : 0.0f;
+    result.dist = (start + segment * closestT - pos).Length();
+    if (radius < 0.0f) return result;
+
+    const Vector3 line = end - start;
+    const Vector3 offset = start - pos;
+    const float radiusSq = radius * radius;
+
+    // 始点が球の内側（または表面上）なら、始点をヒット位置として返す。
+    if (offset.SquaredLength() <= radiusSq)
+    {
+        result.isHit = true;
+        result.hitPos = start;
+        return result;
+    }
+
+    // 線分上の点 start + t * line が球面上にある条件を解く。
+    // 線分上にある解だけを採用し、始点に最も近い交点を返す。
+    const float a = line.SquaredLength();
+    if (a <= 0.0f) return result;
+
+    const float b = 2.0f * offset.Dot(line);
+    const float c = offset.SquaredLength() - radiusSq;
+    float discriminant = b * b - 4.0f * a * c;
+    const float tolerance = 1.0e-6f * (b * b + std::abs(4.0f * a * c) + 1.0f);
+    if (discriminant < -tolerance) return result;
+    discriminant = (std::max)(discriminant, 0.0f);
+
+    const float root = std::sqrt(discriminant);
+    const float denominator = 2.0f * a;
+    const float t1 = (-b - root) / denominator;
+    const float t2 = (-b + root) / denominator;
+    float hitT = (std::numeric_limits<float>::max)();
+    if (t1 >= 0.0f && t1 <= 1.0f) hitT = t1;
+    if (t2 >= 0.0f && t2 <= 1.0f && t2 < hitT) hitT = t2;
+
+    if (hitT != (std::numeric_limits<float>::max)())
+    {
+        result.isHit = true;
+        result.hitPos = start + line * hitT;
+    }
+    return result;
+}
