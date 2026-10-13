@@ -10,7 +10,8 @@
 
 namespace
 {
-	constexpr float kMaxMoveSpeed = 2.0f;
+	constexpr float kMaxMoveSpeed = 0.5f;
+	constexpr float kChangeOrbitDist = 100.0f;
 }
 
 WalkerStateApproach::WalkerStateApproach(Walker& walker) :
@@ -37,7 +38,7 @@ void WalkerStateApproach::Update()
 
 	Vector3 thisToPlayer = (playerPosXZ - thisPosXZ);
 
-	if (thisToPlayer.SquaredLength() < kMinDistance * kMinDistance)
+	if (thisToPlayer.SquaredLength() < kChangeOrbitDist * kChangeOrbitDist)
 	{
 		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateOrbit>(m_owner));
 		return;
@@ -46,6 +47,7 @@ void WalkerStateApproach::Update()
 	thisToPlayer.Normalize();
 	thisToPlayer *= kAccel;
 	m_owner.GetComponent<Physics>()->m_accel = thisToPlayer;
+	auto physics = m_owner.GetComponent<Physics>();
 }
 
 void WalkerStateApproach::Exit()

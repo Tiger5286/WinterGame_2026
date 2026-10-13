@@ -13,6 +13,7 @@
 #include "Resource/ResourceManager.h"
 #include "Resource/Model.h"
 #include "Resource/Graph.h"
+#include "Game/GameObjects/Character/Player/Player.h"
 
 namespace
 {
@@ -88,7 +89,13 @@ void Walker::Update()
 		MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
-	m_pModel->SetTransform(*GetComponent<Transform>());
+	auto transform = GetComponent<Transform>();
+	auto playerTrans = m_pPlayer.lock()->GetComponent<Transform>();
+
+	auto toPlayerVec = playerTrans->pos - transform->pos;
+	transform->rot.y = toPlayerVec.Angle();
+
+	m_pModel->SetTransform(*transform);
 
 	GetComponent<Animator>()->Update();
 }

@@ -10,6 +10,7 @@
 namespace
 {
 	constexpr float kMaxMoveSpeed = 1.0f;
+	constexpr float kChangeApproachDist = 130.0f;
 }
 
 WalkerStateOrbit::WalkerStateOrbit(Walker& walker) :
@@ -24,7 +25,7 @@ WalkerStateOrbit::~WalkerStateOrbit()
 void WalkerStateOrbit::Enter()
 {
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
-	m_owner.GetComponent<Animator>()->Play(L"Armature|Walk");
+	m_owner.GetComponent<Animator>()->Play(L"Armature|LeftWalk");
 }
 
 void WalkerStateOrbit::Update()
@@ -36,15 +37,52 @@ void WalkerStateOrbit::Update()
 
 	Vector3 thisToPlayerXZ = playerPosXZ - thisPosXZ;
 
-	if (thisToPlayerXZ.SquaredLength() > kMinDistance * kMinDistance)
+	if (thisToPlayerXZ.SquaredLength() > kChangeApproachDist * kChangeApproachDist)
 	{
 		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateApproach>(m_owner));
 		return;
 	}
 
-	Vector3 right = thisToPlayerXZ.Cross(Vector3::Up()).Normalized();
+	// プレイヤーとの水平距離
+	const float distance = thisToPlayerXZ.Length();
+	if (distance < 0.001f)
+	{
+		return; // 同じ位置では方向を計算できない
+	}
 
-	m_owner.GetComponent<Physics>()->m_accel = right * kAccel;
+	// プレイヤーへ向かう方向
+	const Vector3 toPlayer = thisToPlayerXZ / distance;
+
+	// 今と同じ周回方向
+	const Vector3 tangent = toPlayer.Cross(Vector3::Up());
+
+	constexpr float kOrbitDistance = 90.0f;   // 維持したい距離
+	constexpr float kOrbitSpeed = 0.8f;       // 横移動の速度
+	constexpr float kDistanceGain = 0.05f;    // 距離を戻す強さ
+	constexpr float kMaxCorrectSpeed = 0.5f; // 距離補正の最高速度
+	constexpr float kVelocityGain = 0.2f;    // 目標速度へ近づく強さ
+
+	// 遠ければプレイヤーへ、近ければ離れる方向へ補正する
+	float correctSpeed = (distance - kOrbitDistance) * kDistanceGain;
+
+	if (correctSpeed > kMaxCorrectSpeed)
+	{
+		correctSpeed = kMaxCorrectSpeed;
+	}
+	else if (correctSpeed < -kMaxCorrectSpeed)
+	{
+		correctSpeed = -kMaxCorrectSpeed;
+	}
+
+	// 横移動と距離補正を合わせた「目標速度」
+	const Vector3 targetVelocity =
+		tangent * kOrbitSpeed + toPlayer * correctSpeed;
+
+	auto physics = m_owner.GetComponent<Physics>();
+
+	// 現在の水平速度を目標速度へ近づける
+	const Vector3 currentVelocity(physics->m_vel.x, 0.0f, physics->m_vel.z);
+	physics->m_accel = (targetVelocity - currentVelocity) * kVelocityGain;
 }
 
 void WalkerStateOrbit::Exit()

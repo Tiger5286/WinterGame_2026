@@ -22,7 +22,17 @@ namespace
 void Animator::Init(Model* pModel)
 {
 	m_pModel = pModel;
-	m_animationLayers[static_cast<int>(Layer::FullBody)].Init(m_pModel, kFullBodyBones,kFullBodyExclusionBones);
+	auto frameName = MV1GetFrameName(m_pModel->GetHandle(), 0);
+	if (std::wstring(frameName) == L"Armature")
+	{
+		const std::vector<std::wstring> fullBodyBones = { L"Armature" };
+		m_animationLayers[static_cast<int>(Layer::FullBody)].Init(m_pModel, fullBodyBones, kFullBodyExclusionBones);
+	}
+	else
+	{
+		m_animationLayers[static_cast<int>(Layer::FullBody)].Init(m_pModel, kFullBodyBones,kFullBodyExclusionBones);
+	}
+
 	m_animationLayers[static_cast<int>(Layer::UpperBody)].Init(m_pModel, kUpperBodyBones,kUpperBodyExclusionBones);
 	m_animationLayers[static_cast<int>(Layer::LowerBody)].Init(m_pModel, kLowerBodyBones,kLowerBodyExclusionBones);
 }
