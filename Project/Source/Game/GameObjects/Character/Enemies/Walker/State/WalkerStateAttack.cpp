@@ -2,13 +2,21 @@
 #include "../Walker.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
-#include "WalkerStateApproach.h"
+#include "WalkerStateOrbit.h"
 #include "Game/GameObjects/Attack.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
+#include "Components/Physics.h"
+#include "Components/Transform.h"
+#include "Utility/Matrix4x4.h"
 
 namespace
 {
 	constexpr int kStartColFrame = 28 * 2;
 	constexpr int kEndColFrame = 34 * 2;
+	constexpr int kEndAnimFrame = 95 * 2;
+
+	const Vector3 kAttackOffset = { 0.0f,100.0f,-100.0f };
 }
 
 WalkerStateAttack::WalkerStateAttack(Walker& walker) :
@@ -23,6 +31,7 @@ WalkerStateAttack::~WalkerStateAttack()
 void WalkerStateAttack::Enter()
 {
 	m_owner.GetComponent<Animator>()->Play(L"Armature|Attack");
+	m_owner.GetComponent<Physics>()->m_accel = Vector3::Zero();
 }
 
 void WalkerStateAttack::Update()
@@ -39,14 +48,20 @@ void WalkerStateAttack::Update()
 			.colRadius = 100.0f
 		};
 		m_pAtk->SetData(data);
+		m_pAtk->Init();
+
+		auto transform = m_owner.GetComponent<Transform>();
+		m_pAtk->GetComponent<Transform>()->pos = kAttackOffset * Matrix4x4::GetRotY(transform->rot.y) + transform->pos;
+
+		ServiceLocator::GetInstance().GetCollisionManager().Register(m_pAtk);
 	}
 	if (m_frame == kEndColFrame)
 	{
 		m_pAtk = nullptr;
 	}
-	if (m_owner.GetComponent<Animator>()->IsEnd())
+	if (m_frame > kEndAnimFrame)
 	{
-		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateApproach>(m_owner));
+		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateOrbit>(m_owner));
 		return;
 	}
 }

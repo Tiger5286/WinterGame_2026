@@ -229,6 +229,11 @@ void Player::Draw()
 #endif
 }
 
+void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
+{
+	printfDx(L"攻撃を喰らった！\n");
+}
+
 void Player::UpdateAnimation()
 {
 	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();

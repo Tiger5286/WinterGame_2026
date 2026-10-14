@@ -103,6 +103,7 @@ void Walker::Update()
 void Walker::Draw()
 {
 	m_pModel->Draw();
+	GetComponent<StateMachine<Walker>>()->Draw();
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
 	GetComponent<Hitbox>()->Draw();

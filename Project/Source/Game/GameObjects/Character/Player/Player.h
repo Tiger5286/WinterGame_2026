@@ -63,6 +63,8 @@ public:
     void Update() override;
     void Draw() override;
 
+	void OnHitAttack(const CollisionManager::AttackInfo& info) override;
+
     void SetCamera(std::weak_ptr<Camera> pCamera) { m_pCamera = pCamera; }
 	void SetHackingManager(std::weak_ptr<HackingManager> pHackingManager) { m_pHackingManager = pHackingManager; }
 	void SetGameObjectManager(std::weak_ptr<GameObjectManager> pGameObjectManager) { m_pGameObjectManager = pGameObjectManager; }

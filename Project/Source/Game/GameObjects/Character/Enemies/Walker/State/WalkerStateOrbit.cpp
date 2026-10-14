@@ -6,6 +6,7 @@
 #include "Components/State/StateMachine.h"
 #include "WalkerStateApproach.h"
 #include "Components/Animator/Animator.h"
+#include "WalkerStateAttack.h"
 
 namespace
 {
@@ -83,6 +84,10 @@ void WalkerStateOrbit::Update()
 	// 現在の水平速度を目標速度へ近づける
 	const Vector3 currentVelocity(physics->m_vel.x, 0.0f, physics->m_vel.z);
 	physics->m_accel = (targetVelocity - currentVelocity) * kVelocityGain;
+
+	// 攻撃
+	m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateAttack>(m_owner));
+	return;
 }
 
 void WalkerStateOrbit::Exit()
