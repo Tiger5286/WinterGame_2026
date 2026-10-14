@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Components/State/State.h"
 
 class Walker;
@@ -15,7 +15,7 @@ public:
     {
         Approach,
         Orbit,
-        // Attack,
+        Attack,
 
         Num
     };

@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include <vector>
 
-class State;
 class SphereCollider;
 
 class Attack :
@@ -12,7 +11,6 @@ public:
     struct Data
     {
         CollisionManager::AttackInfo info = {};
-        std::weak_ptr<State> pOwner;
         float colRadius = 0.0f;
     };
 
@@ -31,7 +29,6 @@ public:
 
 private:
     std::vector<int> m_hitObjectIds;
-    std::weak_ptr<State> m_pOwner;
     CollisionManager::AttackInfo m_info;
     float m_radius = 0.0f;
 };

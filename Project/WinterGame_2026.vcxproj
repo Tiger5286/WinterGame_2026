@@ -68,6 +68,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateApproach.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateOrbit.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\GameObjects\Attack.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerState.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateApproach.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateOrbit.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateAttack.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

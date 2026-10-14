@@ -50,7 +50,7 @@ void Walker::Init()
 	animator->Init(m_pModel.get());
 	animator->AddAnimation(L"Armature|Walk");
 	animator->AddAnimation(L"Armature|LeftWalk");
-	//animator->AddAnimation(L"Armature|Walk");
+	animator->AddAnimation(L"Armature|Attack", 0.5f, false);
 
 	auto stateMachine = GetComponent<StateMachine<Walker>>();
 	stateMachine->ChangeState(std::make_unique<WalkerStateApproach>(*this));

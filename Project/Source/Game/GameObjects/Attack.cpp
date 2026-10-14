@@ -41,7 +41,6 @@ void Attack::SetData(const Data& data)
 {
 	m_info = data.info;
 	m_radius = data.colRadius;
-	m_pOwner = data.pOwner;
 }
 
 void Attack::OnCollision(GameObject& other)
