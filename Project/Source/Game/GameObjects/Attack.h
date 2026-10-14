@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include <vector>
+
 class Attack :
     public GameObject
 {
@@ -12,6 +14,5 @@ public:
     void Draw() override;
 
 private:
-
+    std::vector<int> m_hitObjectIds;
 };
-

@@ -19,5 +19,6 @@ public:
 
 private:
 	std::list<std::shared_ptr<GameObject>> m_gameObjects;
+	int m_newId = 0;
 };
 

@@ -30,6 +30,8 @@ void GameObjectManager::Add(std::shared_ptr<GameObject> gameObject)
 {
 	gameObject->Init();
 	m_gameObjects.push_back(gameObject);
+	gameObject->SetId(m_newId);
+	m_newId++;
 }
 
 std::list<std::weak_ptr<GameObject>> GameObjectManager::GetEnemies() const

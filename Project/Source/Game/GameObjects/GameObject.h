@@ -57,8 +57,14 @@ public:
 
 	bool IsDead() const { return m_isDead; }
 
+	int GetId() const { return m_id; }
+
+	// GameObject::SetId()はGameObjectManager::Add()でのみ使用する
+	void SetId(int id) { m_id = id; }
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 	Tag m_tag = Tag::None;
 	bool m_isDead = false;
+	int m_id;
 };
