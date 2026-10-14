@@ -30,6 +30,81 @@ void CollisionManager::Update()
 			++it;
 		}
 	}
+	// OnCollision()を呼ぶために全てのオブジェクトで当たり判定を行う
+	for (auto& obj1weak : m_pObjects)
+	{
+		for (auto& obj2weak : m_pObjects)
+		{
+			auto obj1 = obj1weak.lock();
+			auto obj2 = obj2weak.lock();
+			// オブジェクトがnullなら次へ
+			if (!obj1 || !obj2) continue;
+			// 同じオブジェクトなら次へ
+			if (obj1 == obj2) continue;
+			// コライダーがnullなら次へ
+			auto obj1Col = obj1->GetComponent<Collider>();
+			auto obj2Col = obj2->GetComponent<Collider>();
+			if (!obj1Col || !obj2Col) continue;
+			// コライダーの種類を特定
+			auto obj1sphere = obj1->GetComponent<SphereCollider>();
+			auto obj2sphere = obj2->GetComponent<SphereCollider>();
+			auto obj1capsule = obj1->GetComponent<CapsuleCollider>();
+			auto obj2capsule = obj2->GetComponent<CapsuleCollider>();
+			auto obj1polygon = obj1->GetComponent<PolygonCollider>();
+			auto obj2polygon = obj2->GetComponent<PolygonCollider>();
+			// どちらもポリゴンなら次へ
+			if (obj1polygon && obj2polygon) continue;
+			// 当たり判定
+			bool isHit = false;
+			if (obj1sphere)
+			{
+				if (obj2sphere)
+				{
+					if (ColCheckSS(*obj1sphere, *obj2sphere)) isHit = true;
+				}
+				else if (obj2capsule)
+				{
+					if (ColCheckSC(*obj1sphere, *obj2capsule)) isHit = true;
+				}
+				else if (obj2polygon)
+				{
+					if (ColCheckSP(*obj1sphere, *obj2polygon)) isHit = true;
+				}
+			}
+			else if (obj1capsule)
+			{
+				if (obj2sphere)
+				{
+					if (ColCheckSC(*obj2sphere, *obj1capsule)) isHit = true;
+				}
+				else if (obj2capsule)
+				{
+					if (ColCheckCC(*obj1capsule, *obj2capsule)) isHit = true;
+				}
+				else if (obj2polygon)
+				{
+					if (ColCheckCP(*obj1capsule, *obj2polygon)) isHit = true;
+				}
+			}
+			else if (obj1polygon)
+			{
+				if (obj2sphere)
+				{
+					if (ColCheckSP(*obj2sphere, *obj1polygon)) isHit = true;
+				}
+				else if (obj2capsule)
+				{
+					if (ColCheckCP(*obj2capsule, *obj1polygon)) isHit = true;
+				}
+			}
+			// 当たっていたらお互いのOnCollision()を呼ぶ
+			if (isHit)
+			{
+				obj1->OnCollision(*obj2);
+				obj2->OnCollision(*obj1);
+			}
+		}
+	}
 }
 
 void CollisionManager::Register(const std::shared_ptr<GameObject>& pObject)
@@ -345,4 +420,56 @@ CollisionManager::HitInfo CollisionManager::ColCheckCC(const CapsuleCollider& ca
 	}
 
 	return result;
+}
+
+bool CollisionManager::ColCheckSS(const SphereCollider& sphere1, const SphereCollider& sphere2)
+{
+	float sqLen = (sphere1.GetTransform().pos - sphere2.GetTransform().pos).SquaredLength();
+	float hitLen = sphere1.GetRadius() + sphere2.GetRadius();
+	if (sqLen < hitLen * hitLen)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CollisionManager::ColCheckSC(const SphereCollider& sphere, const CapsuleCollider& capsule)
+{
+	Vector3 bottom = capsule.GetTransform().pos + Vector3::Up() * capsule.GetRadius();
+	Vector3 top = capsule.GetTransform().pos + Vector3::Up() * capsule.GetHeight() + Vector3::Down() * capsule.GetRadius();
+	float sqLen = Segment_Point_MinLength_Square(bottom, top, sphere.GetTransform().pos);
+	float hitLen = sphere.GetRadius() + capsule.GetRadius();
+	if (sqLen < hitLen * hitLen)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CollisionManager::ColCheckSP(const SphereCollider& sphere, const PolygonCollider& polygon)
+{
+	bool isHit = false;
+	auto dxResult = MV1CollCheck_Sphere(polygon.GetModel()->GetHandle(), -1, sphere.GetTransform().pos, sphere.GetRadius());
+	isHit = dxResult.HitNum;
+	MV1CollResultPolyDimTerminate(dxResult);
+	return isHit;
+}
+
+bool CollisionManager::ColCheckCC(const CapsuleCollider& capsule1, const CapsuleCollider& capsule2)
+{
+	float sqLen = Segment_Segment_MinLength_Square(capsule1.GetBottom(), capsule1.GetTop(), capsule2.GetBottom(), capsule2.GetTop());
+	float hitLen = capsule1.GetRadius() + capsule2.GetRadius();
+	if (sqLen < hitLen * hitLen)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const PolygonCollider& polygon)
+{
+	bool isHit = false;
+	auto dxResult = MV1CollCheck_Capsule(polygon.GetModel()->GetHandle(), -1, capsule.GetBottom(), capsule.GetTop(), capsule.GetRadius());
+	isHit = dxResult.HitNum;
+	return isHit;
 }

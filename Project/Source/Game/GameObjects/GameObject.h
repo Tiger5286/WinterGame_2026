@@ -48,10 +48,13 @@ public:
 	}
 
 	// 他オブジェクトと当たったときに呼ばれる関数
-	virtual void OnCollision(GameObject& other) {};
+	virtual void OnCollision(GameObject& other) {}
 
 	// プレイヤーの射撃に当たったときに呼ばれる関数
-	virtual void OnWasShot(const CollisionManager::ShotInfo& info) {};
+	virtual void OnWasShot(const CollisionManager::ShotInfo& info) {}
+
+	// 攻撃に当たったときに呼ばれる関数
+	virtual void OnHitAttack(const CollisionManager::AttackInfo& info) {}
 
 	Tag GetTag() const { return m_tag; }
 

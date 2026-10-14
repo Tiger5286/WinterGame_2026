@@ -34,6 +34,10 @@ public:
 		int damage = 0;
 		bool isWeakPoint = false;
 	};
+	struct AttackInfo
+	{
+		int damage = 0;
+	};
 
 public:
 	CollisionManager() = default;
@@ -80,6 +84,12 @@ public:
 private:
 	HitInfo ColCheckCP(const CapsuleCollider& capsule,const Vector3& movedPos, const PolygonCollider& poly);
 	HitInfo ColCheckCC(const CapsuleCollider& capsule1, const Vector3& movePos, const CapsuleCollider& capsule2);
+
+	bool ColCheckSS(const SphereCollider& sphere1, const SphereCollider& sphere2);
+	bool ColCheckSC(const SphereCollider& sphere, const CapsuleCollider& capsule);
+	bool ColCheckSP(const SphereCollider& sphere, const PolygonCollider& polygon);
+	bool ColCheckCC(const CapsuleCollider& capsule1, const CapsuleCollider& capsule2);
+	bool ColCheckCP(const CapsuleCollider& capsule, const PolygonCollider& polygon);
 
 private:
 	std::list<std::weak_ptr<GameObject>> m_pObjects;
