@@ -69,6 +69,12 @@ public:
 	/// <returns>レイキャストの結果を表すRayInfoオブジェクト。ヒットの有無や、衝突が発生した場合は衝突位置、法線、距離などの情報を含みます。</returns>
 	RayInfo RayCast(const Vector3& start, const Vector3& end);
 
+	/// <summary>
+	/// プレイヤーの射撃専用の当たり判定関数
+	/// </summary>
+	/// <param name="start">射撃開始位置(銃口)</param>
+	/// <param name="end">狙っている位置</param>
+	/// <param name="shotInfo">当たった情報</param>
 	void CheckCollShot(const Vector3& start, const Vector3& end, ShotInfo& shotInfo);
 
 private:

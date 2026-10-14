@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\Attack.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Character.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\EnemyBase.cpp" />
     <ClCompile Include="Source\Game\UI\HackingTargetUI.cpp" />
@@ -69,6 +70,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateOrbit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\Attack.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Character.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\EnemyBase.h" />
     <ClInclude Include="Source\Game\UI\HackingTargetUI.h" />
