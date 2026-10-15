@@ -32,5 +32,7 @@ public:
 
 protected:
     std::shared_ptr<Player> GetPlayer() const;
+    int GetAttackCooltime() const;
+    void SetAttackCooltime(int coolTime);
 };
 

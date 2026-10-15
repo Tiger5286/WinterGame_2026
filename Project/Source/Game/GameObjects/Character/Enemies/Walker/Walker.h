@@ -23,6 +23,7 @@ private:
 private:
     std::unique_ptr<Model> m_pModel;
     Graph* m_pModelTexture[2] = { nullptr,nullptr };    // 0 : 通常テクスチャ / 1 : ハックされたテクスチャ
+    int m_attackCooltime = 0;
 
     friend class WalkerState;
 };

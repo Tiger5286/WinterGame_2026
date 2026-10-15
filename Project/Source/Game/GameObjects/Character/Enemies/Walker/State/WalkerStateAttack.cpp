@@ -16,7 +16,9 @@ namespace
 	constexpr int kEndColFrame = 34 * 2;
 	constexpr int kEndAnimFrame = 95 * 2;
 
-	const Vector3 kAttackOffset = { 0.0f,100.0f,-100.0f };
+	const Vector3 kAttackOffset = { 0.0f,100.0f,-60.0f };
+
+	constexpr int kAttackCooltime = 180;
 }
 
 WalkerStateAttack::WalkerStateAttack(Walker& walker) :
@@ -45,7 +47,8 @@ void WalkerStateAttack::Update()
 		};
 		Attack::Data data = {
 			.info = info,
-			.colRadius = 100.0f
+			.colRadius = 60.0f,
+			.hitObjTag = GameObject::Tag::Player
 		};
 		m_pAtk->SetData(data);
 		m_pAtk->Init();
@@ -68,6 +71,7 @@ void WalkerStateAttack::Update()
 
 void WalkerStateAttack::Exit()
 {
+	SetAttackCooltime(kAttackCooltime);
 }
 
 void WalkerStateAttack::Draw()

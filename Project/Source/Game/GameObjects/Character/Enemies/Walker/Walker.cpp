@@ -77,6 +77,8 @@ void Walker::Update()
 	auto& resourceManager = ResourceManager::GetInstance();
 
 	GetComponent<StateMachine<Walker>>()->Update();
+	m_attackCooltime--;
+	if (m_attackCooltime < 0) m_attackCooltime = 0;
 
 	GetComponent<Physics>()->Update();
 

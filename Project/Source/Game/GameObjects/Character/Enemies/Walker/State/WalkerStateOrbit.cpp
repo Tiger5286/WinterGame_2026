@@ -86,7 +86,10 @@ void WalkerStateOrbit::Update()
 	physics->m_accel = (targetVelocity - currentVelocity) * kVelocityGain;
 
 	// 攻撃
-	m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateAttack>(m_owner));
+	if (GetAttackCooltime() == 0)
+	{
+		m_owner.GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateAttack>(m_owner));
+	}
 	return;
 }
 

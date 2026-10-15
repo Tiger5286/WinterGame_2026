@@ -12,6 +12,7 @@ public:
     {
         CollisionManager::AttackInfo info = {};
         float colRadius = 0.0f;
+        Tag hitObjTag = Tag::None;
     };
 
 public:
