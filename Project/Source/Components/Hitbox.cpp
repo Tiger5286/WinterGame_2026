@@ -22,6 +22,7 @@ void Hitbox::Init(std::vector<Info> colDatas)
 
 void Hitbox::Draw()
 {
+#ifdef _DEBUG
 	for (const auto& col : m_colliders)
 	{
 		unsigned int color = kHitboxColor;
@@ -32,4 +33,5 @@ void Hitbox::Draw()
 
 		col.pCollider->Draw(color);
 	}
+#endif
 }
