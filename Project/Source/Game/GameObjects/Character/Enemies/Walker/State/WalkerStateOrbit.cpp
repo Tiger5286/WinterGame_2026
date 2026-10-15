@@ -31,6 +31,8 @@ void WalkerStateOrbit::Enter()
 
 void WalkerStateOrbit::Update()
 {
+	RotToPlayer();
+
 	Vector3 playerPosXZ = GetPlayer()->GetComponent<Transform>()->pos;
 	playerPosXZ.y = 0.0f;
 	Vector3 thisPosXZ = m_owner.GetComponent<Transform>()->pos;

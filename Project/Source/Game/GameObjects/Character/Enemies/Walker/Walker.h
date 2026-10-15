@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../EnemyBase.h"
+#include "Components/Hackable.h"
 
 class Model;
 class Graph;
@@ -22,7 +23,8 @@ public:
     void OnWasShot(const CollisionManager::ShotInfo& info) override;
 
 private:
-    void OnHacked();
+    void OnHacked(Hackable::HackedData data);
+    void RotToPlayer();
 
 private:
     std::unique_ptr<Model> m_pModel;

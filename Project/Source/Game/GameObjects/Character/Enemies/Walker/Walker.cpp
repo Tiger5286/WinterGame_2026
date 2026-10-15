@@ -16,6 +16,7 @@
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "Game/UI/EnemyHPUI.h"
 #include "System/UIManager.h"
+#include "State/WalkerStateDeath.h"
 
 namespace
 {
@@ -41,6 +42,7 @@ Walker::Walker(std::shared_ptr<Player> pPlayer) :
 
 Walker::~Walker()
 {
+	m_pHPUI->Destroy();
 }
 
 void Walker::Init()
@@ -62,7 +64,7 @@ void Walker::Init()
 	stateMachine->ChangeState(std::make_unique<WalkerStateApproach>(*this));
 
 	Hackable::Info hackableInfo;
-	hackableInfo.func = [this](Hackable::HackedData data) {OnHacked(); };
+	hackableInfo.func = [this](Hackable::HackedData data) { OnHacked(data); };
 	hackableInfo.hackLocalPos = kHackLocalPos;
 	GetComponent<Hackable>()->SetInfo(hackableInfo);
 	GetComponent<Hackable>()->Init();
@@ -102,11 +104,6 @@ void Walker::Update()
 	}
 
 	auto transform = GetComponent<Transform>();
-	auto playerTrans = m_pPlayer.lock()->GetComponent<Transform>();
-
-	auto toPlayerVec = playerTrans->pos - transform->pos;
-	transform->rot.y = toPlayerVec.Angle();
-
 	m_pModel->SetTransform(*transform);
 
 	GetComponent<Animator>()->Update();
@@ -131,17 +128,44 @@ void Walker::Draw()
 void Walker::OnWasShot(const CollisionManager::ShotInfo& info)
 {
 	printfDx(L"Walkerに当たった\n");
-	if (info.isWeakPoint)
+	if (GetComponent<Hackable>()->IsHacked())
 	{
-		printfDx(L"弱点！\n");
+		if (info.isWeakPoint)
+		{
+			printfDx(L"弱点！\n");
+			m_hp -= info.damage * 1.5f;
+		}
+		else
+		{
+			m_hp -= info.damage;
+		}
+	}
+	else
+	{
+		m_hp -= info.damage / 10;
+	}
+
+	if (m_hp <= 0)
+	{
+		m_hp = 0;
+		GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateDeath>(*this));
 	}
 }
 
-void Walker::OnHacked()
+void Walker::OnHacked(Hackable::HackedData data)
 {
 	auto& resourceManager = ResourceManager::GetInstance();
 	printfDx(L"Walkerがハックされた\n");
 	// テクスチャをハックされたものに変える
 	MV1SetTextureGraphHandle(m_pModel->GetHandle(), 0, resourceManager.GetGraph(L"HackedWalkerTex")->GetHandle(), false);
 	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f,0.5f,0.5f,1.0f));
+}
+
+void Walker::RotToPlayer()
+{
+	auto transform = GetComponent<Transform>();
+	auto playerTrans = m_pPlayer.lock()->GetComponent<Transform>();
+
+	auto toPlayerVec = playerTrans->pos - transform->pos;
+	transform->rot.y = toPlayerVec.Angle();
 }

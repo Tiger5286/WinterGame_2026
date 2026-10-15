@@ -40,7 +40,7 @@ void EnemyHPUI::Draw()
 		x2 = screenPos.x + kHPBarWidth / 2 - kHPBarWidth * rate;
 		y2 = screenPos.y + kHPBarHeight / 2;
 
-		DrawBox(x1 - kOutlineThickness, y1 - kOutlineThickness, x2 + kOutlineThickness, y2 + kOutlineThickness, kOutlineColor, true);
+		DrawBox(x1 - kOutlineThickness, y1 - kOutlineThickness, screenPos.x + kHPBarWidth / 2 + kOutlineThickness, y2 + kOutlineThickness, kOutlineColor, true);
 		DrawBox(x1, y1, x2, y2, kColor, true);
 	}
 }

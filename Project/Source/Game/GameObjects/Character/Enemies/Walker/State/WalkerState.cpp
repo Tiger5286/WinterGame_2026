@@ -24,3 +24,13 @@ void WalkerState::SetAttackCooltime(int coolTime)
 {
 	m_owner.m_attackCooltime = coolTime;
 }
+
+void WalkerState::Die()
+{
+	m_owner.m_isDead = true;
+}
+
+void WalkerState::RotToPlayer()
+{
+	m_owner.RotToPlayer();
+}

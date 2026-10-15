@@ -16,6 +16,7 @@ public:
         Approach,
         Orbit,
         Attack,
+        Death,
 
         Num
     };
@@ -34,5 +35,7 @@ protected:
     std::shared_ptr<Player> GetPlayer() const;
     int GetAttackCooltime() const;
     void SetAttackCooltime(int coolTime);
+    void Die();
+    void RotToPlayer();
 };
 
