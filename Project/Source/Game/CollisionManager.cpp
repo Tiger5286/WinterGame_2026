@@ -9,7 +9,7 @@
 #include "Game/GameObjects/GameObject.h"
 #include "Components/Transform.h"
 #include <cmath>
-#include "Components/Hitbox.h"
+#include "Components/Hitbox/Hitbox.h"
 #include "Utility/MyLib.h"
 
 void CollisionManager::Update()

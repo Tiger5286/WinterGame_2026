@@ -6,7 +6,7 @@
 #include "Components/Physics.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
-#include "Components/Hitbox.h"
+#include "Components/Hitbox/Hitbox.h"
 #include "Components/Hackable.h"
 #include "Game/UI/EnemyHPUI.h"
 #include "System/UIManager.h"

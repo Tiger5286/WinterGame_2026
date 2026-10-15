@@ -2,7 +2,7 @@
 #include "Components/Collider/CapsuleCollider.h"
 #include "Components/Collider/SphereCollider.h"
 #include "Components/Physics.h"
-#include "Components/Hitbox.h"
+#include "Components/Hitbox/Hitbox.h"
 #include "Components/Hackable.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Transform.h"

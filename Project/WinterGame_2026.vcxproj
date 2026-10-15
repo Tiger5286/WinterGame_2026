@@ -26,7 +26,7 @@
     <ClCompile Include="Source\Game\UI\EnemyHPUI.cpp" />
     <ClCompile Include="Source\Game\HackingManager.cpp" />
     <ClCompile Include="Source\Components\Hackable.cpp" />
-    <ClCompile Include="Source\Components\Hitbox.cpp" />
+    <ClCompile Include="Source\Components\Hitbox\Hitbox.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHover.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateJump.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.cpp" />
@@ -79,7 +79,7 @@
     <ClInclude Include="Source\Game\UI\EnemyHPUI.h" />
     <ClInclude Include="Source\Game\HackingManager.h" />
     <ClInclude Include="Source\Components\Hackable.h" />
-    <ClInclude Include="Source\Components\Hitbox.h" />
+    <ClInclude Include="Source\Components\Hitbox\Hitbox.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHover.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateJump.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.h" />

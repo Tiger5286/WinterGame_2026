@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Component.h"
+#include "Components/Component.h"
 #include <vector>
 #include <memory>
 #include "Utility/Vector3.h"
