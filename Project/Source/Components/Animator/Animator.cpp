@@ -22,10 +22,10 @@ namespace
 void Animator::Init(Model* pModel)
 {
 	m_pModel = pModel;
-	auto frameName = MV1GetFrameName(m_pModel->GetHandle(), 0);
-	if (std::wstring(frameName) == L"Armature")
+	auto frameName = MV1GetFrameName(m_pModel->GetHandle(), 2);
+	if (std::wstring(frameName) == L"mixamorig1:Hips")
 	{
-		const std::vector<std::wstring> fullBodyBones = { L"Armature" };
+		const std::vector<std::wstring> fullBodyBones = { L"mixamorig1:Hips" };
 		m_animationLayers[static_cast<int>(Layer::FullBody)].Init(m_pModel, fullBodyBones, kFullBodyExclusionBones);
 	}
 	else

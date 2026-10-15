@@ -26,7 +26,7 @@ WalkerStateApproach::~WalkerStateApproach()
 void WalkerStateApproach::Enter()
 {
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
-	m_owner.GetComponent<Animator>()->Play(L"Armature|Walk");
+	m_owner.GetComponent<Animator>()->Play(L"Walker|Walk");
 }
 
 void WalkerStateApproach::Update()

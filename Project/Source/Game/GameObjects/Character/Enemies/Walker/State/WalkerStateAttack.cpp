@@ -32,7 +32,7 @@ WalkerStateAttack::~WalkerStateAttack()
 
 void WalkerStateAttack::Enter()
 {
-	m_owner.GetComponent<Animator>()->Play(L"Armature|Attack");
+	m_owner.GetComponent<Animator>()->Play(L"Walker|Attack");
 	m_owner.GetComponent<Physics>()->m_accel = Vector3::Zero();
 }
 

@@ -14,6 +14,8 @@
 #include "Resource/Model.h"
 #include "Resource/Graph.h"
 #include "Game/GameObjects/Character/Player/Player.h"
+#include "Game/UI/EnemyHPUI.h"
+#include "System/UIManager.h"
 
 namespace
 {
@@ -21,6 +23,8 @@ namespace
 	constexpr float kColliderHeight = 180.0f;
 
 	const Vector3 kHackLocalPos = { 0.0f,100.0f,0.0f };
+
+	const Vector3 kHPUIOffset = { 0.0f,200.0f,0.0f };
 }
 
 Walker::Walker(std::shared_ptr<Player> pPlayer) :
@@ -32,6 +36,7 @@ Walker::Walker(std::shared_ptr<Player> pPlayer) :
 	AddComponent<Hackable>();
 	AddComponent<StateMachine<Walker>>(*this);
 	AddComponent<Animator>();
+	m_tag = Tag::Enemy;
 }
 
 Walker::~Walker()
@@ -48,9 +53,10 @@ void Walker::Init()
 
 	auto animator = GetComponent<Animator>();
 	animator->Init(m_pModel.get());
-	animator->AddAnimation(L"Armature|Walk");
-	animator->AddAnimation(L"Armature|LeftWalk");
-	animator->AddAnimation(L"Armature|Attack", 0.5f, false);
+	animator->AddAnimation(L"Walker|Walk");
+	animator->AddAnimation(L"Walker|LeftWalk");
+	animator->AddAnimation(L"Walker|Attack", 0.5f, false);
+	animator->AddAnimation(L"Walker|Death", 0.5f, false);
 
 	auto stateMachine = GetComponent<StateMachine<Walker>>();
 	stateMachine->ChangeState(std::make_unique<WalkerStateApproach>(*this));
@@ -70,6 +76,10 @@ void Walker::Init()
 	hitboxInfo.isWeakPoint = true;
 	hitboxInfoArray.push_back(hitboxInfo);
 	GetComponent<Hitbox>()->Init(hitboxInfoArray);
+
+	m_hp = kMaxHp;
+	m_pHPUI = std::make_shared<EnemyHPUI>();
+	UIManager::GetInstance().AddUI(m_pHPUI);
 }
 
 void Walker::Update()
@@ -100,6 +110,12 @@ void Walker::Update()
 	m_pModel->SetTransform(*transform);
 
 	GetComponent<Animator>()->Update();
+
+	EnemyHPUI::Info info;
+	info.uiPos = GetComponent<Transform>()->pos + kHPUIOffset;
+	info.nowHP = m_hp;
+	info.maxHP = kMaxHp;
+	m_pHPUI->SetInfo(info);
 }
 
 void Walker::Draw()

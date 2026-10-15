@@ -26,7 +26,7 @@ WalkerStateOrbit::~WalkerStateOrbit()
 void WalkerStateOrbit::Enter()
 {
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
-	m_owner.GetComponent<Animator>()->Play(L"Armature|LeftWalk");
+	m_owner.GetComponent<Animator>()->Play(L"Walker|LeftWalk");
 }
 
 void WalkerStateOrbit::Update()
