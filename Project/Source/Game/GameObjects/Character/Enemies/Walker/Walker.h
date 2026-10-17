@@ -25,6 +25,7 @@ public:
 private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();
+    void SetHitbox();
 
 private:
     std::unique_ptr<Model> m_pModel;

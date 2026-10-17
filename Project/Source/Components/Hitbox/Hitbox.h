@@ -3,28 +3,27 @@
 #include <vector>
 #include <memory>
 #include "Utility/Vector3.h"
+#include "HitboxCollider.h"
+#include <string>
+#include "HitboxSphere.h"
+#include "HitboxCapsule.h"
 
 class Collider;
+class Transform;
+class Model;
 
 class Hitbox : public Component
 {
 public:
-    struct Info
-    {
-        std::shared_ptr<Collider> pCollider = nullptr;
-        bool isWeakPoint = false;
-    };
-
-public:
     Hitbox();
     ~Hitbox();
 
-    void Init(std::vector<Info> colDatas);
+    void Update();
     void Draw();
 
-    const std::vector<Info>& GetColliders() { return m_colliders; }
+    void AddCollider(const HitboxSphere::Info& info);
+    void AddCollider(const HitboxCapsule::Info& info);
 
 private:
-    std::vector<Info> m_colliders;
+    std::vector<std::shared_ptr<HitboxCollider>> m_hitboxes;
 };
-

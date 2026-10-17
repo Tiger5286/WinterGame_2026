@@ -266,83 +266,83 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 
 void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, ShotInfo& shotInfo)
 {
-	float nearestDistSq = FLT_MAX;
+	//float nearestDistSq = FLT_MAX;
 
-	GameObject* hitObj = nullptr;
+	//GameObject* hitObj = nullptr;
 
-	for (auto& obj : m_pObjects)
-	{
-		auto polygon = obj.lock()->GetComponent<PolygonCollider>();
-		if (polygon)
-		{
-			const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
-			if (!dxResult.HitFlag) continue;
-			const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
-			const float distSq = (hitPos - start).SquaredLength();
-			if (distSq < nearestDistSq)
-			{
-				hitObj = obj.lock().get();
-				nearestDistSq = distSq;
-			}
-		}
-		else
-		{
-			auto hitBox = obj.lock()->GetComponent<Hitbox>();
-			if (!hitBox) continue;
+	//for (auto& obj : m_pObjects)
+	//{
+	//	auto polygon = obj.lock()->GetComponent<PolygonCollider>();
+	//	if (polygon)
+	//	{
+	//		const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
+	//		if (!dxResult.HitFlag) continue;
+	//		const Vector3 hitPos = Vector3::FromDxLib(dxResult.HitPosition);
+	//		const float distSq = (hitPos - start).SquaredLength();
+	//		if (distSq < nearestDistSq)
+	//		{
+	//			hitObj = obj.lock().get();
+	//			nearestDistSq = distSq;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		auto hitBox = obj.lock()->GetComponent<Hitbox>();
+	//		if (!hitBox) continue;
 
-			for (auto& col : hitBox->GetColliders())
-			{
-				if (col.pCollider->GetType() == Collider::Type::Capsule)
-				{
-					auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(col.pCollider);
-					const Vector3 bottom = capsule->GetTransform().pos + Vector3::Up() * capsule->GetRadius() + capsule->GetOffset();
-					const Vector3 top = capsule->GetTransform().pos + Vector3::Up() * capsule->GetHeight() + Vector3::Down() * capsule->GetRadius() + capsule->GetOffset();
-					const float radius = capsule->GetRadius();
+	//		for (auto& col : hitBox->GetColliders())
+	//		{
+	//			if (col.pCollider->GetType() == Collider::Type::Capsule)
+	//			{
+	//				auto capsule = std::dynamic_pointer_cast<CapsuleCollider>(col.pCollider);
+	//				const Vector3 bottom = capsule->GetTransform().pos + Vector3::Up() * capsule->GetRadius() + capsule->GetOffset();
+	//				const Vector3 top = capsule->GetTransform().pos + Vector3::Up() * capsule->GetHeight() + Vector3::Down() * capsule->GetRadius() + capsule->GetOffset();
+	//				const float radius = capsule->GetRadius();
 
-					auto result = MyLib::CheckHitLineCapsule(bottom, top, radius, start, end);
-					if (result.isHit)
-					{
-						Vector3 hitRayVec = result.hitPos - start;
-						float lengthSq = hitRayVec.SquaredLength();
-						if (lengthSq < nearestDistSq)
-						{
-							hitObj = obj.lock().get();
-							nearestDistSq = lengthSq;
-							shotInfo.isWeakPoint = col.isWeakPoint;
-						}
-					}
-				}
-				else if (col.pCollider->GetType() == Collider::Type::Sphere)
-				{
-					auto sphere = std::dynamic_pointer_cast<SphereCollider>(col.pCollider);
-					const Vector3 pos = sphere->GetTransform().pos + sphere->GetOffset();
-					const float radius = sphere->GetRadius();
+	//				auto result = MyLib::CheckHitLineCapsule(bottom, top, radius, start, end);
+	//				if (result.isHit)
+	//				{
+	//					Vector3 hitRayVec = result.hitPos - start;
+	//					float lengthSq = hitRayVec.SquaredLength();
+	//					if (lengthSq < nearestDistSq)
+	//					{
+	//						hitObj = obj.lock().get();
+	//						nearestDistSq = lengthSq;
+	//						shotInfo.isWeakPoint = col.isWeakPoint;
+	//					}
+	//				}
+	//			}
+	//			else if (col.pCollider->GetType() == Collider::Type::Sphere)
+	//			{
+	//				auto sphere = std::dynamic_pointer_cast<SphereCollider>(col.pCollider);
+	//				const Vector3 pos = sphere->GetTransform().pos + sphere->GetOffset();
+	//				const float radius = sphere->GetRadius();
 
-					auto result = MyLib::CheckHitLineSphere(pos, radius, start, end);
-					if (result.isHit)
-					{
-						Vector3 hitRayVec = result.hitPos - start;
-						float lengthSq = hitRayVec.SquaredLength();
-						if (lengthSq < nearestDistSq)
-						{
-							hitObj = obj.lock().get();
-							nearestDistSq = lengthSq;
-							shotInfo.isWeakPoint = col.isWeakPoint;
-						}
-					}
-				}
-			}
-		}
-	}
+	//				auto result = MyLib::CheckHitLineSphere(pos, radius, start, end);
+	//				if (result.isHit)
+	//				{
+	//					Vector3 hitRayVec = result.hitPos - start;
+	//					float lengthSq = hitRayVec.SquaredLength();
+	//					if (lengthSq < nearestDistSq)
+	//					{
+	//						hitObj = obj.lock().get();
+	//						nearestDistSq = lengthSq;
+	//						shotInfo.isWeakPoint = col.isWeakPoint;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
-	if (hitObj)
-	{
-		hitObj->OnWasShot(shotInfo);
-	}
-	else
-	{
-		printfDx(L"何にも当たらなかった\n");
-	}
+	//if (hitObj)
+	//{
+	//	hitObj->OnWasShot(shotInfo);
+	//}
+	//else
+	//{
+	//	printfDx(L"何にも当たらなかった\n");
+	//}
 }
 
 CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const Vector3& movedPos, const PolygonCollider& poly)

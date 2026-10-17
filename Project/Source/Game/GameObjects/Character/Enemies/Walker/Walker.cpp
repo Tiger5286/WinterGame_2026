@@ -17,6 +17,8 @@
 #include "Game/UI/EnemyHPUI.h"
 #include "System/UIManager.h"
 #include "State/WalkerStateDeath.h"
+#include "Components/Hitbox/HitboxSphere.h"
+#include "Components/Hitbox/HitboxCapsule.h"
 
 namespace
 {
@@ -69,15 +71,7 @@ void Walker::Init()
 	GetComponent<Hackable>()->SetInfo(hackableInfo);
 	GetComponent<Hackable>()->Init();
 
-	std::vector<Hitbox::Info> hitboxInfoArray;
-	Hitbox::Info hitboxInfo;
-	hitboxInfo.pCollider = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20, 155);
-	hitboxInfoArray.push_back(hitboxInfo);
-	hitboxInfo.pCollider = std::make_shared<SphereCollider>(*GetComponent<Transform>(), 15);
-	hitboxInfo.pCollider->SetOffset(Vector3(0, 165, 0));
-	hitboxInfo.isWeakPoint = true;
-	hitboxInfoArray.push_back(hitboxInfo);
-	GetComponent<Hitbox>()->Init(hitboxInfoArray);
+	SetHitbox();
 
 	m_hp = kMaxHp;
 	m_pHPUI = std::make_shared<EnemyHPUI>();
@@ -113,6 +107,8 @@ void Walker::Update()
 	info.nowHP = m_hp;
 	info.maxHP = kMaxHp;
 	m_pHPUI->SetInfo(info);
+
+	GetComponent<Hitbox>()->Update();
 }
 
 void Walker::Draw()
@@ -168,4 +164,91 @@ void Walker::RotToPlayer()
 
 	auto toPlayerVec = playerTrans->pos - transform->pos;
 	transform->rot.y = toPlayerVec.Angle();
+}
+
+void Walker::SetHitbox()
+{
+	// ヒットボックスの初期化
+	auto hitbox = GetComponent<Hitbox>();
+	// 頭
+	HitboxSphere::Info sphere;
+	sphere.frameName = L"mixamorig1:Head";
+	sphere.radius = 15.0f;
+	sphere.pModel = m_pModel.get();
+	sphere.localOffset = Vector3(0.0f, 10.0f, 0.0f);
+	sphere.isWeakPoint = true;
+	hitbox->AddCollider(sphere);
+	// 胴
+	HitboxCapsule::Info capsule;
+	capsule.bottomFrameName = L"mixamorig1:Hips";
+	capsule.topFrameName = L"mixamorig1:Spine2";
+	capsule.radius = 15.0f;
+	capsule.pModel = m_pModel.get();
+	hitbox->AddCollider(capsule);
+	// 右肩→腕
+	capsule.bottomFrameName = L"mixamorig1:RightShoulder";
+	capsule.topFrameName = L"mixamorig1:RightArm";
+	capsule.radius = 5.0f;
+	hitbox->AddCollider(capsule);
+	// 右腕→肘
+	capsule.bottomFrameName = L"mixamorig1:RightArm";
+	capsule.topFrameName = L"mixamorig1:RightForeArm";
+	hitbox->AddCollider(capsule);
+	// 右肘→手
+	capsule.bottomFrameName = L"mixamorig1:RightForeArm";
+	capsule.topFrameName = L"mixamorig1:RightHand";
+	hitbox->AddCollider(capsule);
+	// 右手
+	sphere.frameName = L"mixamorig1:RightHand";
+	sphere.localOffset = Vector3(0.0f, 10.0f, 0.0f);
+	sphere.radius = 7.0f;
+	sphere.isWeakPoint = false;
+	hitbox->AddCollider(sphere);
+	// 左型→腕
+	capsule.bottomFrameName = L"mixamorig1:LeftShoulder";
+	capsule.topFrameName = L"mixamorig1:LeftArm";
+	hitbox->AddCollider(capsule);
+	// 左腕→肘
+	capsule.bottomFrameName = L"mixamorig1:LeftArm";
+	capsule.topFrameName = L"mixamorig1:LeftForeArm";
+	hitbox->AddCollider(capsule);
+	// 左肘→手
+	capsule.bottomFrameName = L"mixamorig1:LeftForeArm";
+	capsule.topFrameName = L"mixamorig1:LeftHand";
+	hitbox->AddCollider(capsule);
+	// 左手
+	sphere.frameName = L"mixamorig1:LeftHand";
+	hitbox->AddCollider(sphere);
+	// 右脚→膝
+	capsule.bottomFrameName = L"mixamorig1:RightUpLeg";
+	capsule.topFrameName = L"mixamorig1:RightLeg";
+	capsule.radius = 8.0f;
+	hitbox->AddCollider(capsule);
+	// 右膝→足
+	capsule.bottomFrameName = L"mixamorig1:RightLeg";
+	capsule.topFrameName = L"mixamorig1:RightFoot";
+	capsule.radius = 6.0f;
+	hitbox->AddCollider(capsule);
+	// 右足→つま先
+	capsule.bottomFrameName = L"mixamorig1:RightFoot";
+	capsule.bottomLocalOffset = Vector3(0.0f, 0.0f, 5.0f);
+	capsule.topFrameName = L"mixamorig1:RightToeBase";
+	hitbox->AddCollider(capsule);
+	// 左脚→膝（右脚と同じ半径）
+	capsule.bottomFrameName = L"mixamorig1:LeftUpLeg";
+	capsule.topFrameName = L"mixamorig1:LeftLeg";
+	capsule.radius = 8.0f;
+	capsule.bottomLocalOffset = Vector3::Zero();
+	capsule.topLocalOffset = Vector3::Zero();
+	hitbox->AddCollider(capsule);
+	// 左膝→足（右脚と同じ半径）
+	capsule.bottomFrameName = L"mixamorig1:LeftLeg";
+	capsule.topFrameName = L"mixamorig1:LeftFoot";
+	capsule.radius = 6.0f;
+	hitbox->AddCollider(capsule);
+	// 左足→つま先（右足と同じ半径・オフセット）
+	capsule.bottomFrameName = L"mixamorig1:LeftFoot";
+	capsule.topFrameName = L"mixamorig1:LeftToeBase";
+	capsule.bottomLocalOffset = Vector3(0.0f, 0.0f, 5.0f);
+	hitbox->AddCollider(capsule);
 }

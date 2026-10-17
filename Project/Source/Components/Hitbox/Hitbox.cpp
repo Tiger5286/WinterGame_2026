@@ -1,5 +1,6 @@
 ﻿#include "Hitbox.h"
 #include "Components/Collider/Collider.h"
+#include "HitboxCollider.h"
 
 namespace
 {
@@ -15,23 +16,34 @@ Hitbox::~Hitbox()
 {
 }
 
-void Hitbox::Init(std::vector<Info> colDatas)
+void Hitbox::Update()
 {
-	m_colliders = colDatas;
+	for (auto& hitbox : m_hitboxes)
+	{
+		hitbox->Update();
+	}
 }
 
 void Hitbox::Draw()
 {
 #ifdef _DEBUG
-	for (const auto& col : m_colliders)
+	for (auto& hitbox : m_hitboxes)
 	{
-		unsigned int color = kHitboxColor;
-		if (col.isWeakPoint)
-		{
-			color = kWeakPointColor;
-		}
-
-		col.pCollider->Draw(color);
+		hitbox->Draw();
 	}
 #endif
+}
+
+void Hitbox::AddCollider(const HitboxSphere::Info& info)
+{
+	auto sphere = std::make_shared<HitboxSphere>();
+	sphere->SetInfo(info);
+	m_hitboxes.push_back(sphere);
+}
+
+void Hitbox::AddCollider(const HitboxCapsule::Info& info)
+{
+	auto capsule = std::make_shared<HitboxCapsule>();
+	capsule->SetInfo(info);
+	m_hitboxes.push_back(capsule);
 }

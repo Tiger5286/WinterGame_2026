@@ -54,14 +54,14 @@ void TestEnemy::Init()
 	animator->AddAnimation(kAnimName);
 	animator->Play(kAnimName);
 
-	std::vector<Hitbox::Info> hitboxInfos;
-	Hitbox::Info info;
+	//std::vector<Hitbox::Info> hitboxInfos;
+	//Hitbox::Info info;
 
-	auto capsule = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20.0f, 180.0f);
-	info.pCollider = capsule;
-	hitboxInfos.push_back(info);
+	//auto capsule = std::make_shared<CapsuleCollider>(*GetComponent<Transform>(), 20.0f, 180.0f);
+	//info.pCollider = capsule;
+	//hitboxInfos.push_back(info);
 
-	GetComponent<Hitbox>()->Init(hitboxInfos);
+	//GetComponent<Hitbox>()->Init(hitboxInfos);
 
 	GetComponent<Hackable>()->Init();
 	Hackable::Info hackableInfo;
