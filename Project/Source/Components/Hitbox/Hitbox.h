@@ -24,6 +24,8 @@ public:
     void AddCollider(const HitboxSphere::Info& info);
     void AddCollider(const HitboxCapsule::Info& info);
 
+    const std::vector<std::shared_ptr<HitboxCollider>>& GetHitboxes() const { return m_hitboxes; }
+
 private:
     std::vector<std::shared_ptr<HitboxCollider>> m_hitboxes;
 };

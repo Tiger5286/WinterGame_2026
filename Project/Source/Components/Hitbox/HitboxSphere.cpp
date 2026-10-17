@@ -30,8 +30,3 @@ void HitboxSphere::Draw()
 	DrawSphere3D(m_pos, m_info.radius, 16, color, 0xffffff, false);
 #endif
 }
-
-void HitboxSphere::SetInfo(const Info& info)
-{
-	m_info = info;
-}

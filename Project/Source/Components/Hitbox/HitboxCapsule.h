@@ -28,6 +28,13 @@ public:
     void Draw() override;
 
     void SetInfo(const Info& info) { m_info = info; }
+    const Info& GetInfo() const { return m_info; }
+
+    const Type GetType() const override { return Type::Capsule; }
+
+    const Vector3& GetBottom() const { return m_bottomPos; }
+    const Vector3& GetTop() const { return m_topPos; }
+
 private:
     Info m_info;
     Vector3 m_bottomPos;

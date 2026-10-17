@@ -25,7 +25,11 @@ public:
     void Update() override;
     void Draw() override;
 
-    void SetInfo(const Info& info);
+    void SetInfo(const Info& info) { m_info = info; }
+    const Info& GetInfo() const { return m_info; }
+
+    const Type GetType() const override { return Type::Sphere; }
+    const Vector3& GetPos() const { return m_pos; }
 
 private:
     Info m_info;

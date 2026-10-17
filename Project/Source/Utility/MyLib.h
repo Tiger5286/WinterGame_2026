@@ -9,6 +9,7 @@ public:
 	{
 		bool isHit = false;
 		Vector3 hitPos;
+		// 線分の最近点までの距離
 		float dist = 0.0f;
 	};
 
