@@ -25,6 +25,7 @@ public:
 		Fall,
 		Land,
 		Hover,
+		Dodge,
 		
 		Num
 	};
