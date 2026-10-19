@@ -4,6 +4,7 @@
 #include "PlayerStateIdle.h"
 #include "PlayerStateJump.h"
 #include "PlayerStateFall.h"
+#include "PlayerStateDodge.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Physics.h"
@@ -59,6 +60,13 @@ void PlayerStateMove::Update()
 	if (input.IsTriggerd(XINPUT_BUTTON_LEFT_THUMB))
 	{
 		SetIsRun(!IsRun());
+	}
+
+	// RBで回避
+	if (input.IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
+		return;
 	}
 
 	// 移動処理

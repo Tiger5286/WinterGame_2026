@@ -63,7 +63,8 @@ void Player::Init()
 	{
 		bool isLoop = true;
 		if (name == kAnimNames[static_cast<int>(Player::AnimationID::Jump)] ||
-			name == kAnimNames[static_cast<int>(Player::AnimationID::Land)])
+			name == kAnimNames[static_cast<int>(Player::AnimationID::Land)] ||
+			name == kAnimNames[static_cast<int>(Player::AnimationID::DodgeForward)])
 			isLoop = false;
 		animator->AddAnimation(name, 0.5f, isLoop);
 	}
@@ -330,6 +331,8 @@ void Player::UpdateAnimation()
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
 		}
 		break;
+	case PlayerState::ID::Dodge:
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::DodgeForward)]);
 	}
 	animator->Update();
 }

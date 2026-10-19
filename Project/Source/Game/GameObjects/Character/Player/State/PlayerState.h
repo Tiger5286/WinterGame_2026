@@ -45,6 +45,7 @@ public:
 
 protected:	// ステートが使っていいプレイヤーのメンバ
 	float GetCameraAngleY() const;
+	float GetAngle() const;
 	void SetAngle(float angle);
 
 	bool IsRun() const;

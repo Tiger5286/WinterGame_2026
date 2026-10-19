@@ -3,6 +3,7 @@
 #include "System/PadInput.h"
 #include "PlayerStateMove.h"
 #include "PlayerStateJump.h"
+#include "PlayerStateDodge.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
 #include "PlayerStateFall.h"
@@ -34,6 +35,12 @@ void PlayerStateIdle::Update()
 	if (pad.IsTriggerd(XINPUT_BUTTON_A) && !IsAim())
 	{
 		stateMachine->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
+		return;
+	}
+	// RBで回避
+	if (pad.IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
 		return;
 	}
 	// 接地していない場合は落下

@@ -12,6 +12,11 @@ float PlayerState::GetCameraAngleY() const
 	return m_owner.m_pCamera.lock()->GetComponent<Transform>()->rot.y;
 }
 
+float PlayerState::GetAngle() const
+{
+	return m_owner.m_angle;
+}
+
 void PlayerState::SetAngle(float angle)
 {
 	m_owner.m_angle = angle;
