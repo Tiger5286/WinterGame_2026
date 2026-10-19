@@ -80,6 +80,8 @@ private:	// プレイヤーだけが使う関数
 	std::shared_ptr<GameObject> FindNearestVisibleEnemy(Vector2& screenPos);
 
 private:
+	int m_frame = 0;
+
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
 	std::weak_ptr<HackingManager> m_pHackingManager;
@@ -96,6 +98,9 @@ private:
 	int m_haveGunFrameIndex = -1;
 
 	std::shared_ptr<HackingTargetUI> m_pHackingTargetUI = nullptr;
+
+	int m_shotIntervalFrame = 0;
+	bool m_isShooting = false;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する

@@ -29,8 +29,10 @@ namespace
 	// エイムしたときにカメラの向きに合わせるのにかかる時間
 	constexpr int kAimStartFrame = 10;
 
-	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:LeftHand";
+	constexpr const wchar_t* kHaveGunFrameName = L"mixamorig:RightHand";
 	constexpr float kGunScale = 0.25f;
+
+	constexpr int kShotInterval = 16;
 }
 
 Player::Player()
@@ -85,6 +87,8 @@ void Player::Init()
 
 void Player::Update()
 {
+	m_frame++;
+
 	auto& input = PadInput::GetInstance();
 
 	Transform& transform = *GetComponent<Transform>();
@@ -111,6 +115,11 @@ void Player::Update()
 		m_pHackingTargetUI->SetIsVisible(false);
 	}
 
+	if (m_shotIntervalFrame > 0)
+	{
+		m_shotIntervalFrame--;
+	}
+
 	// エイムしているときは向きをカメラの向きに固定する
 	if (m_isAim)
 	{
@@ -131,18 +140,28 @@ void Player::Update()
 		GetComponent<Animator>()->SetAimAngle(-cameraRotX);
 
 		// 射撃
-		if (input.IsTriggeredTrigger(PadInput::LR::Right))
+		if (input.IsPressedTrigger(PadInput::LR::Right))
 		{
-			const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
-			const Vector3& target = m_pCamera.lock()->GetTargetPos();
-			Vector3 vec = target - cameraPos;
-			vec.Normalize();
-			vec *= 2000;
-			Vector3 end = cameraPos + vec;
+			if (m_shotIntervalFrame == 0)
+			{
+				const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+				const Vector3& target = m_pCamera.lock()->GetTargetPos();
+				Vector3 vec = target - cameraPos;
+				vec.Normalize();
+				vec *= 2000;
+				Vector3 end = cameraPos + vec;
 
-			CollisionManager::ShotInfo shotInfo;
-			shotInfo.damage = 50;
-			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
+				CollisionManager::ShotInfo shotInfo;
+				shotInfo.damage = 50;
+				ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
+
+				m_shotIntervalFrame = kShotInterval;
+				m_isShooting = true;
+			}
+		}
+		else
+		{
+			m_isShooting = false;
 		}
 
 		// ハッキング対象があればハッキングマネージャーに渡す
@@ -184,12 +203,12 @@ void Player::Draw()
 	// エイムしているときのみ銃を描画
 	if (m_isAim)
 	{
-		const MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
+		MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
 
 		const MATRIX gunScale = MGetScale(VGet(kGunScale, kGunScale, kGunScale));
 		const MATRIX gunRotX = MGetRotX(DX_PI_F / 2);
-		const MATRIX gunRotY = MGetRotY(DX_PI_F);
-		const MATRIX gunRotZ = MGetRotZ(DX_PI_F / 4);
+		const MATRIX gunRotY = MGetRotY(DX_PI_F / 2);
+		const MATRIX gunRotZ = MGetRotZ(DX_PI_F / 180 * 10);
 		const MATRIX gunTrans = MGetTranslate(Vector3(0, 10, 0));
 
 		MATRIX gunLocal = gunScale;
@@ -255,7 +274,14 @@ void Player::UpdateAnimation()
 		// 全身は通常待機
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)],Animator::Layer::FullBody);
 		// 上下別アニメーションはエイム待機
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+		if (m_isShooting)
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
+		}
+		else
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+		}
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Move:
@@ -302,7 +328,14 @@ void Player::UpdateAnimation()
 			break;
 		}
 		animator->Play(kAnimNames[static_cast<int>(animation)], Animator::Layer::LowerBody);
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+		if (m_isShooting)
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
+		}
+		else
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+		}
 		break;
 	}
 	case PlayerState::ID::Jump:
@@ -321,7 +354,14 @@ void Player::UpdateAnimation()
 		if (m_isAim)	// ホバリング中にエイムしている場合は上下別アニメーションを再生
 		{
 			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			if (m_isShooting)
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
+			}
+			else
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			}
 			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
 		}
 		else	// ホバリング中にエイムしていない場合は全身アニメーションを再生
