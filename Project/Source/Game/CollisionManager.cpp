@@ -465,5 +465,6 @@ bool CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const PolygonC
 	bool isHit = false;
 	auto dxResult = MV1CollCheck_Capsule(polygon.GetModel()->GetHandle(), -1, capsule.GetBottom(), capsule.GetTop(), capsule.GetRadius());
 	isHit = dxResult.HitNum;
+	MV1CollResultPolyDimTerminate(dxResult);
 	return isHit;
 }
