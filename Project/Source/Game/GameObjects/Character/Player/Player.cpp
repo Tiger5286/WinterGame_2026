@@ -82,7 +82,7 @@ void Player::Init()
 
 	m_pHackingTargetUI = std::make_shared<HackingTargetUI>();
 	UIManager::GetInstance().AddUI(m_pHackingTargetUI);
-	
+
 }
 
 void Player::Update()
@@ -120,8 +120,33 @@ void Player::Update()
 		m_shotIntervalFrame--;
 	}
 
-	// エイムしているときは向きをカメラの向きに固定する
-	if (m_isAim)
+	// 射撃
+	if (input.IsPressedTrigger(PadInput::LR::Right))
+	{
+		if (m_shotIntervalFrame == 0)
+		{
+			const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+			const Vector3& target = m_pCamera.lock()->GetTargetPos();
+			Vector3 vec = target - cameraPos;
+			vec.Normalize();
+			vec *= 2000;
+			Vector3 end = cameraPos + vec;
+
+			CollisionManager::ShotInfo shotInfo;
+			shotInfo.damage = 50;
+			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
+
+			m_shotIntervalFrame = kShotInterval;
+			m_isShooting = true;
+		}
+	}
+	else
+	{
+		m_isShooting = false;
+	}
+
+	// エイムまたは射撃しているときは向きをカメラの向きに固定する
+	if (m_isAim || m_isShooting)
 	{
 		m_angle = m_pCamera.lock()->GetComponent<Transform>()->rot.y - DX_PI_F;
 		m_isRun = false;
@@ -138,31 +163,6 @@ void Player::Update()
 		// モデルの向きを更新
 		float cameraRotX = m_pCamera.lock()->GetComponent<Transform>()->rot.x;
 		GetComponent<Animator>()->SetAimAngle(-cameraRotX);
-
-		// 射撃
-		if (input.IsPressedTrigger(PadInput::LR::Right))
-		{
-			if (m_shotIntervalFrame == 0)
-			{
-				const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
-				const Vector3& target = m_pCamera.lock()->GetTargetPos();
-				Vector3 vec = target - cameraPos;
-				vec.Normalize();
-				vec *= 2000;
-				Vector3 end = cameraPos + vec;
-
-				CollisionManager::ShotInfo shotInfo;
-				shotInfo.damage = 50;
-				ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
-
-				m_shotIntervalFrame = kShotInterval;
-				m_isShooting = true;
-			}
-		}
-		else
-		{
-			m_isShooting = false;
-		}
 
 		// ハッキング対象があればハッキングマネージャーに渡す
 		m_pHackingManager.lock()->SetTarget(target);
@@ -201,7 +201,7 @@ void Player::Draw()
 	GetComponent<StateMachine<Player>>()->Draw();	// ステートに描画したい内容があったら描画
 
 	// エイムしているときのみ銃を描画
-	if (m_isAim)
+	if (m_isAim || m_isShooting)
 	{
 		MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
 
@@ -259,29 +259,34 @@ void Player::UpdateAnimation()
 	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();
 	auto animator = GetComponent<Animator>();
 	auto physics = GetComponent<Physics>();
-	// 上下別に再生可能なステートかどうか
-	bool canSplitBody =
-		stateID == PlayerState::ID::Idle ||
-		stateID == PlayerState::ID::Move ||
-		stateID == PlayerState::ID::Hover ||
-		stateID == PlayerState::ID::Land;
 	// 上下別に再生可能なステートかつエイム中のときだけ上下別アニメーションを再生する
-	animator->SetSplitBody(canSplitBody && m_isAim);
+	animator->SetSplitBody(m_isAim || m_isShooting);
+
+	std::function playShotAnim = [this, animator]() {
+		if (m_isAim)
+		{
+			if (m_isShooting)
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
+			}
+			else
+			{
+				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
+			}
+		}
+		else if (m_isShooting)
+		{
+			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
+		}
+		};
 
 	switch (stateID)
 	{
 	case PlayerState::ID::Idle:
 		// 全身は通常待機
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)],Animator::Layer::FullBody);
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Idle)], Animator::Layer::FullBody);
 		// 上下別アニメーションはエイム待機
-		if (m_isShooting)
-		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
-		}
-		else
-		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
-		}
+		playShotAnim();
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Move:
@@ -327,52 +332,48 @@ void Player::UpdateAnimation()
 		case PadInput::Direction8::None:
 			break;
 		}
+		playShotAnim();
 		animator->Play(kAnimNames[static_cast<int>(animation)], Animator::Layer::LowerBody);
-		if (m_isShooting)
-		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
-		}
-		else
-		{
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
-		}
 		break;
 	}
 	case PlayerState::ID::Jump:
-		// ジャンプは全身アニメーションのみ
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Jump)], Animator::Layer::FullBody);
+		playShotAnim();
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Jump)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Fall:
-		// 落下は全身アニメーションのみ
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Fall)], Animator::Layer::FullBody);
+		playShotAnim();
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Fall)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Land:
-		// 着地は全身アニメーションのみ
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::FullBody);
+		playShotAnim();
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Land)], Animator::Layer::LowerBody);
 		break;
 	case PlayerState::ID::Hover:
-		if (m_isAim)	// ホバリング中にエイムしている場合は上下別アニメーションを再生
-		{
-			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-			if (m_isShooting)
-			{
-				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimFire)], Animator::Layer::UpperBody);
-			}
-			else
-			{
-				animator->Play(kAnimNames[static_cast<int>(AnimationID::AimIdle)], Animator::Layer::UpperBody);
-			}
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
-		}
-		else	// ホバリング中にエイムしていない場合は全身アニメーションを再生
-		{
-			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-			animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
-			animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
-		}
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
+		playShotAnim();
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		//if (m_isAim || m_isShooting)	// ホバリング中にエイムしている場合は上下別アニメーションを再生
+		//{
+		//	playShotAnim();
+		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
+		//	animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		//}
+		//else	// ホバリング中にエイムしていない場合は全身アニメーションを再生
+		//{
+		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
+		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
+		//	animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
+		//}
 		break;
 	case PlayerState::ID::Dodge:
-		animator->Play(kAnimNames[static_cast<int>(AnimationID::DodgeForward)]);
+		// 全身
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::DodgeForward)],Animator::Layer::FullBody);
+		// 上下別
+		playShotAnim();
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::DodgeForward)], Animator::Layer::LowerBody);
 	}
 	animator->Update();
 }
@@ -404,7 +405,7 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy(Vector2& screenPos)
 
 	float nearestDistSq = FLT_MAX;
 
-	Vector2 centerPos = Vector2(Game::kScreenWidth / 2,Game::kScreenHeight / 2);
+	Vector2 centerPos = Vector2(Game::kScreenWidth / 2, Game::kScreenHeight / 2);
 
 	for (auto& weakEnemy : enemies)
 	{
