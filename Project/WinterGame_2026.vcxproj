@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\HackPoint.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDodge.cpp" />
     <ClCompile Include="Source\Components\Hitbox\HitboxCapsule.cpp" />
     <ClCompile Include="Source\Components\Hitbox\HitboxSphere.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateLand.cpp" />
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
+    <ClCompile Include="Source\System\EventManager.cpp" />
     <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
     <ClCompile Include="Source\Components\Collider\Collider.cpp" />
@@ -76,6 +78,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\HackPoint.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDodge.h" />
     <ClInclude Include="Source\Components\Hitbox\HitboxCapsule.h" />
     <ClInclude Include="Source\Components\Hitbox\HitboxSphere.h" />
@@ -93,6 +96,7 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateFall.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateLand.h" />
     <ClInclude Include="Source\Game\UI\UIBase.h" />
+    <ClInclude Include="Source\System\EventManager.h" />
     <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
     <ClInclude Include="Source\Components\Collider\Collider.h" />
