@@ -100,7 +100,7 @@ void Player::Update()
 
 	// 視界の中心に近い敵を保存
 	Vector2 screenPos;
-	auto target = FindNearestVisibleEnemy(screenPos);
+	auto target = FindNearestVisibleHackable(screenPos);
 
 	// ハッキング対象を示すUIを更新
 	if (target)
@@ -395,9 +395,9 @@ void Player::UpdateAim()
 	}
 }
 
-std::shared_ptr<GameObject> Player::FindNearestVisibleEnemy(Vector2& screenPos)
+std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPos)
 {
-	auto enemies = m_pGameObjectManager.lock()->GetEnemies();
+	auto enemies = m_pGameObjectManager.lock()->GetHackables();
 
 	if (enemies.empty()) return nullptr;
 

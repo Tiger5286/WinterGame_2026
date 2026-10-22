@@ -7,6 +7,8 @@
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "Game/GameObjects/Character/Enemies/TestEnemy.h"
 #include "Game/GameObjects/Stage/StaticStage.h"
+#include "Game/GameObjects/HackPoint.h"
+#include "Game/GameObjects/Stage/Barrier.h"
 #include "Game/CollisionManager.h"
 #include "Resource/ResourceManager.h"
 #include "System/ServiceLocator.h"
@@ -28,7 +30,8 @@ namespace
 		{ L"data/models/player/player.mv1", L"PlayerModel" },
 		{ L"data/models/gun/gun.mv1",L"GunModel" },
 		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
-		{ L"data/models/stage/test/StaticStageCol.mv1", L"TestStageModel" },
+		{ L"data/models/stage/stage1/Stage1StaticCol.mv1", L"StaticStageModel" },
+		{ L"data/models/stage/stage1/Barrier1.mv1",L"Barrier1"},
 		{ L"data/models/enemies/Walker.mv1", L"Walker" }
 	};
 
@@ -71,6 +74,11 @@ void SceneMain::Init()
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
+	m_pGameObjectManager->Add(std::make_shared<Barrier>());
+	auto hackPoint = std::make_shared<HackPoint>();
+	hackPoint->SetEvent(L"RemoveBarrier1");
+	hackPoint->GetComponent<Transform>()->pos = Vector3(4300, 500, 2300);
+	m_pGameObjectManager->Add(hackPoint);
 	// カメラを生成
 	auto pCamera = std::make_shared<Camera>();
 	m_pGameObjectManager->Add(pCamera);

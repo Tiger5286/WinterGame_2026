@@ -19,5 +19,5 @@ private:
 
 private:
     std::wstring m_eventName;
+    bool m_isRemovedHackable = false;
 };
-

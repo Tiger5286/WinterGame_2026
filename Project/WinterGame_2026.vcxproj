@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\Stage\Barrier.cpp" />
     <ClCompile Include="Source\Game\GameObjects\HackPoint.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDodge.cpp" />
     <ClCompile Include="Source\Components\Hitbox\HitboxCapsule.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\Stage\Barrier.h" />
     <ClInclude Include="Source\Game\GameObjects\HackPoint.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDodge.h" />
     <ClInclude Include="Source\Components\Hitbox\HitboxCapsule.h" />

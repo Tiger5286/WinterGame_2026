@@ -1,5 +1,6 @@
 ﻿#include "GameObject.h"
 #include "Components/Transform.h"
+#include "Components/Hackable.h"
 
 GameObject::GameObject()
 {
@@ -8,4 +9,11 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+}
+
+bool GameObject::IsHackable()
+{
+	auto hackable = GetComponent<Hackable>();
+	if (hackable) return true;
+	return false;
 }

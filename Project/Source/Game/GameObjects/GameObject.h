@@ -47,6 +47,23 @@ public:
 		return nullptr;
 	}
 
+	template<class T>
+	void RemoveComponent()
+	{
+		for (auto it = m_components.begin(); it != m_components.end(); ++it)
+		{
+			// unique_ptrから生ポインタを取り出し、型を確認する
+			if (dynamic_cast<T*>(it->get()) != nullptr)
+			{
+				// unique_ptrが削除され、コンポーネントも破棄される
+				m_components.erase(it);
+
+				// eraseでイテレータが無効になるため、そのまま終了する
+				return;
+			}
+		}
+	}
+
 	// 他オブジェクトと当たったときに呼ばれる関数
 	virtual void OnCollision(GameObject& other) {}
 
@@ -64,6 +81,8 @@ public:
 
 	// GameObject::SetId()はGameObjectManager::Add()でのみ使用する
 	void SetId(int id) { m_id = id; }
+
+	bool IsHackable();
 
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;

@@ -15,7 +15,7 @@ public:
 
 	void Add(std::shared_ptr<GameObject> gameObject);
 
-	std::list<std::weak_ptr<GameObject>> GetEnemies() const;
+	std::list<std::weak_ptr<GameObject>> GetHackables() const;
 
 private:
 	std::list<std::shared_ptr<GameObject>> m_gameObjects;

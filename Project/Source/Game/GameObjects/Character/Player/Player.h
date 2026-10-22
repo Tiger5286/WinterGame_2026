@@ -77,7 +77,7 @@ public:
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
-	std::shared_ptr<GameObject> FindNearestVisibleEnemy(Vector2& screenPos);
+	std::shared_ptr<GameObject> FindNearestVisibleHackable(Vector2& screenPos);
 
 private:
 	int m_frame = 0;

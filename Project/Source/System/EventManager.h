@@ -49,6 +49,7 @@ public:
 	/// <param name="handle">登録した関数の管理番号</param>
 	void UnRegister(int handle);
 
+private:
 	/// <summary>
 	/// 持っているイベントデータの持ち主が生きているか確認し、死んでいたら破棄する。
 	/// </summary>

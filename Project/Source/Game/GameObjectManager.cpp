@@ -34,17 +34,17 @@ void GameObjectManager::Add(std::shared_ptr<GameObject> gameObject)
 	m_newId++;
 }
 
-std::list<std::weak_ptr<GameObject>> GameObjectManager::GetEnemies() const
+std::list<std::weak_ptr<GameObject>> GameObjectManager::GetHackables() const
 {
-	std::list<std::weak_ptr<GameObject>> enemies;
+	std::list<std::weak_ptr<GameObject>> hackables;
 
 	for (auto& obj : m_gameObjects)
 	{
-		if (obj->GetTag() == GameObject::Tag::Enemy)
+		if (obj->IsHackable())
 		{
-			enemies.push_back(obj);
+			hackables.push_back(obj);
 		}
 	}
 
-	return enemies;
+	return hackables;
 }
