@@ -1,0 +1,85 @@
+00:03.625  reports          | ERROR Unable to pack file, source path 'C:\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Normal.png' not found
+Blender 5.1.0 (hash adfe2921d5f3 built 2026-03-17 01:37:32)
+00:03.625  reports          | ERROR Unable to pack file, source path 'C:\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Specular.png' not found
+ERROR: Image "C:\Users\SasakiTaiga\Downloads\..\..\..\..\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Normal.png" not available. Keeping packed image
+00:03.641  reports          | ERROR Unable to pack file, source path 'C:\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Glossiness.png' not found
+ERROR: Image "C:\Users\SasakiTaiga\Downloads\..\..\..\..\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Specular.png" not available. Keeping packed image
+00:07.141  render           | Saved: 'C:\Users\SasakiTaiga\Documents\GitHub\WinterGame_2026\素材\敵モデル\Walker\Walker_Cyber\preview.png'
+Extensions: writing cache failed ([WinError 5] アクセスが拒否されました。: 'C:\\Users\\SasakiTaiga\\AppData\\Roaming\\Blender Foundation\\Blender\\5.1\\extensions').
+FBX version: 7700
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+WARNING: User property type 'Short' is not supported
+INSPECT {"objects": [["Armature", "ARMATURE", 65], ["Ch36", "MESH", 14442]], "materials": [["Ch36_Body", [["Image Texture", "file2", "C:\\Users\\SasakiTaiga\\Downloads\\..\\..\\..\\..\\home\\app\\mixamo-mini\\tmp\\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\\Ch36_1001_Diffuse.png"], ["Image Texture.001", "file4", "C:\\Users\\SasakiTaiga\\Downloads\\..\\..\\..\\..\\home\\app\\mixamo-mini\\tmp\\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\\Ch36_1001_Normal.png"], ["Image Texture.002", "file5", "C:\\Users\\SasakiTaiga\\Downloads\\..\\..\\..\\..\\home\\app\\mixamo-mini\\tmp\\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\\Ch36_1001_Specular.png"], ["Image Texture.003", "file6", "C:\\Users\\SasakiTaiga\\Downloads\\..\\..\\..\\..\\home\\app\\mixamo-mini\\tmp\\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\\Ch36_1001_Glossiness.png"]]]], "actions": [["Armature|mixamo.com|Layer0", [1.0, 251.0]]]}
+
+FBX export starting... 'C:\\Users\\SasakiTaiga\\Documents\\GitHub\\WinterGame_2026\\素材\\敵モデル\\Walker\\Walker_Cyber\\Walker_Cyber.fbx'
+(bpy.data.armatures['Armature'], 'POSE')
+export finished in 0.4280 sec.
+Extensions: writing cache failed ([WinError 5] アクセスが拒否されました。: 'C:\\Users\\SasakiTaiga\\AppData\\Roaming\\Blender Foundation\\Blender\\5.1\\extensions').
+FBX version: 7400
+VERIFIED: texture bytes, 14442 vertices, 65 bones, 250-frame animation duration
+ERROR: Image "C:\Users\SasakiTaiga\Downloads\..\..\..\..\home\app\mixamo-mini\tmp\skins_3a34dfff-142a-48c1-8554-85712151687d.fbm\Ch36_1001_Glossiness.png" not available. Keeping packed image
+
+Blender quit
