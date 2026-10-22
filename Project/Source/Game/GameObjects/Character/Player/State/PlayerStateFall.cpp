@@ -5,6 +5,7 @@
 #include "Components/State/StateMachine.h"
 #include "System/PadInput.h"
 #include "PlayerStateHover.h"
+#include "PlayerStateDodge.h"
 
 PlayerStateFall::PlayerStateFall(Player& player) :
 	PlayerState(player)
@@ -30,6 +31,13 @@ void PlayerStateFall::Update()
 	if (IsAim() || PadInput::GetInstance().IsPressed(XINPUT_BUTTON_A))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
+		return;
+	}
+
+	// RB‚Å‰ñ”ð
+	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
 		return;
 	}
 }

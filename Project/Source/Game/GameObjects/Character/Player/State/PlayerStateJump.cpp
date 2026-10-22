@@ -6,6 +6,7 @@
 #include "PlayerStateHover.h"
 #include "System/PadInput.h"
 #include "Components/Physics.h"
+#include "PlayerStateDodge.h"
 
 namespace
 {
@@ -49,6 +50,13 @@ void PlayerStateJump::Update()
 			m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
 			return;
 		}
+	}
+
+	// RB‚Å‰ñ”ð
+	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
+		return;
 	}
 }
 

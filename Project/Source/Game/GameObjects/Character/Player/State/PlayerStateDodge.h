@@ -16,6 +16,9 @@ public:
     ID GetID() const override { return ID::Dodge; }
 
 private:
+    void KeepVelY();
+
+private:
     int m_frame = 0;
     Vector3 m_dir;
 };

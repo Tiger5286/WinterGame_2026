@@ -7,6 +7,7 @@
 #include "PlayerStateFall.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
+#include "PlayerStateDodge.h"
 #include <memory>
 
 namespace
@@ -61,6 +62,14 @@ void PlayerStateHover::Update()
 	else	// エイムもジャンプボタンも押していない場合は落下する
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
+		return;
+	}
+
+	// RBで回避
+	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
+		return;
 	}
 }
 
