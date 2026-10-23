@@ -17,6 +17,9 @@
 #include "Game/HackingManager.h"
 #include "System/UIManager.h"
 #include "Game/GameObjects/Character/Enemies/Walker/Walker.h"
+#include "SceneResult.h"
+#include "SceneManager.h"
+#include "System/PadInput.h"
 
 namespace
 {
@@ -106,6 +109,14 @@ void SceneMain::Update()
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
 	m_pHackingManager->Update();
+
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_Q))
+	{
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager));
+		return;
+	}
+#endif
 }
 
 void SceneMain::Draw() const
@@ -122,5 +133,6 @@ void SceneMain::Draw() const
 	DrawGrid();
 
 	DrawString(0, 0, L"SceneMain", 0xffffff);
+	DrawString(0, 16, L"Qキーでリザルトシーンへ", 0xffffff);
 #endif
 }
