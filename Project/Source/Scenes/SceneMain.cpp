@@ -53,6 +53,15 @@ SceneMain::~SceneMain()
 {
 	// CollisionManagerが消えるのでServiceLocatorの登録を解除
 	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
+	// SceneMainでしか使わないリソースを削除
+	for (auto& model : kLoadModelFiles)
+	{
+		ResourceManager::GetInstance().Delete(model.key);
+	}
+	for (auto& graph : kLoadGraphFiles)
+	{
+		ResourceManager::GetInstance().Delete(graph.key);
+	}
 }
 
 void SceneMain::Init()
