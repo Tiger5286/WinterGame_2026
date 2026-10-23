@@ -5,14 +5,15 @@
 #include <algorithm>
 #include "Components/Transform.h"
 #include <cmath>
+#include "Effekseer.h"
 
 namespace
 {
-	constexpr float kDefaultFov = DX_PI_F / 3;
-	constexpr float kAimFov = DX_PI_F / 4;
+	constexpr float kAimFov = DX_PI_F / 180 * 30;
 
-	constexpr float kDefaultDist = 150.0f;
-	const Vector3 kPosOffset = Vector3(70.0f, 150.0f,0.0f);
+	constexpr float kDefaultDist = 250.0f;
+	const Vector3 kPosOffset = Vector3(70.0f, 170.0f,0.0f);
+	const Vector3 kAimPosOffset = Vector3(0.0f, 0.0f, 0.0f);
 
 	constexpr float kSensitivity = DX_PI_F / 60;
 	constexpr float kAimSensitivity = DX_PI_F / 120;
@@ -59,14 +60,22 @@ void Camera::Update()
 	Matrix4x4 mat = rotXMat * rotYMat * transMat;
 	transform.pos = mat * rootVec;
 
+	// オフセットを設定
+	Vector3 offset = kPosOffset;
+	// エイムしていたら専用のオフセットを足す
+	if (m_pPlayer.lock()->IsAim())
+	{
+		offset += kAimPosOffset;
+	}
+
 	// Y位置オフセットを適用
-	m_targetPos.y += kPosOffset.y;
-	transform.pos.y += kPosOffset.y;
+	m_targetPos.y += offset.y;
+	transform.pos.y += offset.y;
 
 	// X位置オフセットを適用
 	Vector3 rightVec = Vector3::Up().Cross(m_targetPos - transform.pos).Normalized();
-	m_targetPos += rightVec * kPosOffset.x;
-	transform.pos += rightVec * kPosOffset.x;
+	m_targetPos += rightVec * offset.x;
+	transform.pos += rightVec * offset.x;
 
 	// ライトの方向をカメラの向きに合わせる
 	Vector3 lightDir = (m_targetPos - transform.pos).Normalized();
@@ -77,13 +86,14 @@ void Camera::Update()
 	// エイム時に視野角を狭める
 	if (m_pPlayer.lock()->IsAim())
 	{
-		m_fov = std::lerp(m_fov, kAimFov, 0.5f);
+		m_fov = std::lerp(m_fov, kAimFov, 0.15f);
 	}
 	else
 	{
-		m_fov = std::lerp(m_fov, kDefaultFov, 0.5f);
+		m_fov = std::lerp(m_fov, kDefaultFov, 0.05f);
 	}
 	SetupCamera_Perspective(m_fov);
+	
 
 	// DxLibのカメラに適用
 	SetCameraPositionAndTarget_UpVecY(transform.pos, m_targetPos);

@@ -8,7 +8,7 @@ class Camera :
     public GameObject
 {
 public:
-    static constexpr float kDefaultFov = 3.141592f / 3.0f;
+    static constexpr float kDefaultFov = 3.141592f / 180 * 60;
 
     Camera() = default;
     ~Camera() override = default;
