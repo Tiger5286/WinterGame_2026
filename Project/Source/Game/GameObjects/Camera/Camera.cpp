@@ -6,6 +6,8 @@
 #include "Components/Transform.h"
 #include <cmath>
 #include "Effekseer.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
 
 namespace
 {
@@ -76,6 +78,13 @@ void Camera::Update()
 	Vector3 rightVec = Vector3::Up().Cross(m_targetPos - transform.pos).Normalized();
 	m_targetPos += rightVec * offset.x;
 	transform.pos += rightVec * offset.x;
+
+	// カメラと地形の当たり判定
+	auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(m_targetPos, transform.pos);
+	if (result.isHit)
+	{
+		transform.pos = result.hitPos;
+	}
 
 	// ライトの方向をカメラの向きに合わせる
 	Vector3 lightDir = (m_targetPos - transform.pos).Normalized();
