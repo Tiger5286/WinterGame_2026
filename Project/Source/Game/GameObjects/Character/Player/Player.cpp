@@ -33,6 +33,9 @@ namespace
 	constexpr float kGunScale = 0.25f;
 
 	constexpr int kShotInterval = 16;
+
+	// ハッキング可能距離
+	constexpr float kCanHackingDist = 1500.0f;
 }
 
 Player::Player()
@@ -419,14 +422,19 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 		targetPos += enemy->GetComponent<Hackable>()->GetHackLocalPos();
 		// 視界の外にいる敵を除外
 		if (CheckCameraViewClip(targetPos)) continue;
+
+		// 一定距離より遠い敵は除外
+		float distSq = (GetComponent<Transform>()->pos - targetPos).SquaredLength();
+		if (distSq > kCanHackingDist * kCanHackingDist) continue;
+
 		// ワールド座標をスクリーン座標に変換する
 		Vector3 screenPos3d = Vector3::FromDxLib(ConvWorldPosToScreenPos(targetPos));
 		Vector2 screenPos2d = { screenPos3d.x,screenPos3d.y };
 		// 画面中央からの距離の2乗
-		float distSq = (screenPos2d - centerPos).SquaredLength();
-		if (distSq < nearestDistSq)
+		float screenDistSq = (screenPos2d - centerPos).SquaredLength();
+		if (screenDistSq < nearestDistSq)
 		{
-			nearestDistSq = distSq;
+			nearestDistSq = screenDistSq;
 			nearestEnemy = enemy;
 			screenPos = screenPos2d;
 		}
