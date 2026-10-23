@@ -43,9 +43,6 @@ int EventManager::Register(const std::wstring& eventName, std::function<void()> 
 
 void EventManager::UnRegister(int handle)
 {
-	// 処理の前に関数の持ち主が生きているかどうかチェック
-	CheckExpired();
-
 	// ハンドルが一致するイベントを削除
 	for (auto& data : m_eventDatas)
 	{
