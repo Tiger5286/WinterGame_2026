@@ -3,7 +3,7 @@
 #include "EffekseerForDXLib.h"
 #include "Game.h"
 #include "Scenes/SceneManager.h"
-#include "Scenes/SceneMain.h"
+#include "Scenes/SceneTitle.h"
 #include "System/PadInput.h"
 
 #include <memory>
@@ -68,7 +68,7 @@ void Application::Run()
 	SetUseLighting(true);
 
 	SceneManager sceneManager;
-	sceneManager.ChangeScene(std::make_shared<SceneMain>(sceneManager));
+	sceneManager.ChangeScene(std::make_shared<SceneTitle>(sceneManager));
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
