@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.cpp" />
     <ClCompile Include="Source\Scenes\SceneResult.cpp" />
     <ClCompile Include="Source\Scenes\SceneTitle.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Stage\Barrier.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.h" />
     <ClInclude Include="Source\Scenes\SceneResult.h" />
     <ClInclude Include="Source\Scenes\SceneTitle.h" />
     <ClInclude Include="Source\Game\GameObjects\Stage\Barrier.h" />
