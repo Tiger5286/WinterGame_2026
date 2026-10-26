@@ -17,6 +17,7 @@
 #include "Game/HackingManager.h"
 #include "System/UIManager.h"
 #include "Game/GameObjects/Character/Enemies/Walker/Walker.h"
+#include "Game/GameObjects/Character/Enemies/Mutant/Mutant.h"
 #include "SceneResult.h"
 #include "SceneManager.h"
 #include "System/PadInput.h"
@@ -35,7 +36,8 @@ namespace
 		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
 		{ L"data/models/stage/stage1/Stage1StaticCol.mv1", L"StaticStageModel" },
 		{ L"data/models/stage/stage1/Barrier1.mv1",L"Barrier1"},
-		{ L"data/models/enemies/Walker.mv1", L"Walker" }
+		{ L"data/models/enemies/Walker.mv1", L"Walker" },
+		{ L"data/models/enemies/Mutant.mv1", L"Mutant"}
 	};
 
 	const LoadData kLoadGraphFiles[] = {
@@ -107,7 +109,7 @@ void SceneMain::Init()
 	pPlayer->SetHackingManager(m_pHackingManager);
 	pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	std::shared_ptr<GameObject> pEnemy = std::make_shared<Walker>(pPlayer);
+	std::shared_ptr<GameObject> pEnemy = std::make_shared<Mutant>(pPlayer);
 	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 0, 300);
 	m_pGameObjectManager->Add(pEnemy);
 }
