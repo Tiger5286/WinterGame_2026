@@ -110,7 +110,7 @@ void SceneMain::Init()
 	pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
 	std::shared_ptr<GameObject> pEnemy = std::make_shared<Mutant>(pPlayer);
-	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 0, 300);
+	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 300);
 	m_pGameObjectManager->Add(pEnemy);
 }
 
