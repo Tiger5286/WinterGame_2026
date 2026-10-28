@@ -16,8 +16,8 @@ public:
 	float GetHeight() const { return m_height; }
 	void SetHeight(float height);
 
-	const Vector3& GetBottom() const;
-	const Vector3& GetTop() const;
+	Vector3 GetBottom() const;
+	Vector3 GetTop() const;
 
 	void Draw(const unsigned int color = 0x00ff00) override;
 

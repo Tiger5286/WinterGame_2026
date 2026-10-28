@@ -93,12 +93,12 @@ void SceneMain::Init()
 	hackPoint->SetEvent(L"RemoveBarrier1");
 	hackPoint->GetComponent<Transform>()->pos = Vector3(4300, 500, 2300);
 	m_pGameObjectManager->Add(hackPoint);
-	// カメラを生成
-	auto pCamera = std::make_shared<Camera>();
-	m_pGameObjectManager->Add(pCamera);
 	// プレイヤーを生成
 	auto pPlayer = std::make_shared<Player>();
 	m_pGameObjectManager->Add(pPlayer);
+	// カメラを生成(プレイヤーの移動後に追従させるため、プレイヤーより後に追加する)
+	auto pCamera = std::make_shared<Camera>();
+	m_pGameObjectManager->Add(pCamera);
 	// ハッキングマネージャーを生成
 	m_pHackingManager = std::make_shared<HackingManager>();
 	m_pHackingManager->Init(pPlayer);
@@ -111,6 +111,9 @@ void SceneMain::Init()
 	// 敵を生成
 	std::shared_ptr<GameObject> pEnemy = std::make_shared<Mutant>(pPlayer);
 	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 300);
+	m_pGameObjectManager->Add(pEnemy);
+	pEnemy = std::make_shared<Walker>(pPlayer);
+	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 1000);
 	m_pGameObjectManager->Add(pEnemy);
 }
 

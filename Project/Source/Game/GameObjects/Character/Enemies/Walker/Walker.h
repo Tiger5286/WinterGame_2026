@@ -22,6 +22,9 @@ public:
 
     void OnWasShot(const CollisionManager::ShotInfo& info) override;
 
+    // 死亡ステート中かどうか
+    bool IsDying();
+
 private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();

@@ -86,7 +86,11 @@ void Walker::Update()
 	m_attackCooltime--;
 	if (m_attackCooltime < 0) m_attackCooltime = 0;
 
-	GetComponent<Physics>()->Update();
+	// 死亡中はコライダーが無効で床と押し戻しされないため、物理を止める
+	if (!IsDying())
+	{
+		GetComponent<Physics>()->Update();
+	}
 
 	auto hackable = GetComponent<Hackable>();
 	hackable->Update();
@@ -123,6 +127,9 @@ void Walker::Draw()
 
 void Walker::OnWasShot(const CollisionManager::ShotInfo& info)
 {
+	// 死亡中は撃たれても何もしない(死亡ステートに入り直さない)
+	if (IsDying()) return;
+
 	printfDx(L"Walkerに当たった\n");
 	if (GetComponent<Hackable>()->IsHacked())
 	{
@@ -146,6 +153,11 @@ void Walker::OnWasShot(const CollisionManager::ShotInfo& info)
 		m_hp = 0;
 		GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateDeath>(*this));
 	}
+}
+
+bool Walker::IsDying()
+{
+	return GetComponent<StateMachine<Walker>>()->GetState<WalkerStateDeath>() != nullptr;
 }
 
 void Walker::OnHacked(Hackable::HackedData data)

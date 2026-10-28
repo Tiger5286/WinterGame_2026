@@ -34,12 +34,12 @@ void CollisionManager::Update()
 		}
 	}
 	// OnCollision()を呼ぶために全てのオブジェクトで当たり判定を行う
-	for (auto& obj1weak : m_pObjects)
+	for (auto it1 = m_pObjects.begin(); it1 != m_pObjects.end(); it1++)
 	{
-		for (auto& obj2weak : m_pObjects)
+		for (auto it2 = std::next(it1); it2!=m_pObjects.end();it2++)
 		{
-			auto obj1 = obj1weak.lock();
-			auto obj2 = obj2weak.lock();
+			auto obj1 = it1->lock();
+			auto obj2 = it2->lock();
 			// オブジェクトがnullなら次へ
 			if (!obj1 || !obj2) continue;
 			// 同じオブジェクトなら次へ
@@ -214,7 +214,7 @@ CollisionManager::HitInfo CollisionManager::CheckCollision(const Collider& movin
 	return result;
 }
 
-CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const Vector3& end)
+CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const Vector3& end, bool isPolygonOnly)
 {
 	RayInfo result;
 
@@ -248,6 +248,8 @@ CollisionManager::RayInfo CollisionManager::RayCast(const Vector3& start, const 
 			result.isHit = true;
 			result.hitPos = hitPos;
 		}
+		// ポリゴンのみ判定する場合はカプセルを無視する
+		if (isPolygonOnly) continue;
 		// カプセルの当たり判定
 		auto* capsule = dynamic_cast<CapsuleCollider*>(other);
 		if (capsule)
@@ -273,9 +275,11 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, S
 
 	GameObject* hitObj = nullptr;
 
-	for (auto& obj : m_pObjects)
+	for (auto& weakObj : m_pObjects)
 	{
-		auto polygon = obj.lock()->GetComponent<PolygonCollider>();
+		auto obj = weakObj.lock();
+		if (obj == nullptr) continue;
+		auto polygon = obj->GetComponent<PolygonCollider>();
 		if (polygon)
 		{
 			const auto dxResult = MV1CollCheck_Line(polygon->GetModel()->GetHandle(), -1, start, end);
@@ -284,13 +288,14 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, S
 			const float distSq = (hitPos - start).SquaredLength();
 			if (distSq < nearestDistSq)
 			{
-				hitObj = obj.lock().get();
+				shotInfo.isWeakPoint = false;
+				hitObj = obj.get();
 				nearestDistSq = distSq;
 			}
 		}
 		else
 		{
-			auto hitBox = obj.lock()->GetComponent<Hitbox>();
+			auto hitBox = obj->GetComponent<Hitbox>();
 			if (!hitBox) continue;
 
 			for (auto& col : hitBox->GetHitboxes())
@@ -304,7 +309,7 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, S
 						float sqLen = (result.hitPos - start).SquaredLength();
 						if (sqLen < nearestDistSq)
 						{
-							hitObj = obj.lock().get();
+							hitObj = obj.get();
 							nearestDistSq = sqLen;
 							shotInfo.isWeakPoint = sphere->GetInfo().isWeakPoint;
 						}
@@ -319,7 +324,7 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, S
 						float sqLen = (result.hitPos - start).SquaredLength();
 						if (sqLen < nearestDistSq)
 						{
-							hitObj = obj.lock().get();
+							hitObj = obj.get();
 							nearestDistSq = sqLen;
 							shotInfo.isWeakPoint = capsule->GetInfo().isWeakPoint;
 						}

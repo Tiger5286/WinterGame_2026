@@ -22,6 +22,9 @@ namespace
 
 	constexpr float kRotXLimit = DX_PI_F / 2 - 0.01f;
 	constexpr float kRotXLimitAim = DX_PI_F / 4;
+
+	// 地形に当たったとき、壁からどれだけ手前にカメラを置くか
+	constexpr float kWallMargin = 15.0f;
 }
 
 void Camera::Init()
@@ -80,10 +83,15 @@ void Camera::Update()
 	transform.pos += rightVec * offset.x;
 
 	// カメラと地形の当たり判定
-	auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(m_targetPos, transform.pos);
+	// 敵などのカプセルには反応させず、地形(ポリゴン)とだけ判定する
+	auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(m_targetPos, transform.pos, true);
 	if (result.isHit)
 	{
-		transform.pos = result.hitPos;
+		Vector3 toCamera = result.hitPos - m_targetPos;
+		float dist = toCamera.Length();
+		// 壁から少し手前に置く(注視点を通り越さないように最低距離を残す)
+		float newDist = (std::max)(dist - kWallMargin, 1.0f);
+		transform.pos = m_targetPos + toCamera.Normalized() * newDist;
 	}
 
 	// ライトの方向をカメラの向きに合わせる

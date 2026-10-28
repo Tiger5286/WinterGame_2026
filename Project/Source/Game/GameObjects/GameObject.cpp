@@ -14,6 +14,6 @@ GameObject::~GameObject()
 bool GameObject::IsHackable()
 {
 	auto hackable = GetComponent<Hackable>();
-	if (hackable) return true;
-	return false;
+	// 無効化されているものはハッキング対象にしない
+	return hackable && hackable->IsEnable();
 }

@@ -41,6 +41,10 @@ public:
 
     const Vector3& GetHackLocalPos() const { return m_info.hackLocalPos; }
 
+    // 無効にするとハッキング対象から外れる
+    void SetEnable(bool isEnable) { m_isEnable = isEnable; }
+    bool IsEnable() const { return m_isEnable; }
+
 private:
     void Move();
 
@@ -49,5 +53,6 @@ private:
     std::vector<Vector2Int> m_pos;
     int m_hackFrame = 0;
     Info m_info;
+    bool m_isEnable = true;
 };
 

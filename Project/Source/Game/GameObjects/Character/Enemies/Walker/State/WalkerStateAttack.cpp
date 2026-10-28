@@ -43,7 +43,7 @@ void WalkerStateAttack::Update()
 	{
 		m_pAtk = std::make_shared<Attack>();
 		CollisionManager::AttackInfo info = {
-			info.damage = 50
+			.damage = 50
 		};
 		Attack::Data data = {
 			.info = info,

@@ -19,7 +19,7 @@ void HackingManager::Update()
 {
 	if (!m_pHackingObject.lock()) return;
 	auto hackable = m_pHackingObject.lock()->GetComponent<Hackable>();
-	if (!hackable) return;
+	if (!hackable || !hackable->IsEnable()) return;
 	hackable->UpdateHacking();
 }
 
@@ -27,6 +27,6 @@ void HackingManager::Draw()
 {
 	if (!m_pHackingObject.lock()) return;
 	auto hackable = m_pHackingObject.lock()->GetComponent<Hackable>();
-	if (!hackable) return;
+	if (!hackable || !hackable->IsEnable()) return;
 	hackable->Draw();
 }

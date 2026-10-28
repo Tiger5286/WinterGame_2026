@@ -23,7 +23,7 @@ void Attack::Init()
 {
 	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
 
-	AddComponent<SphereCollider>(*GetComponent<Transform>(),m_radius);
+	AddComponent<SphereCollider>(*GetComponent<Transform>(),m_data.colRadius);
 }
 
 void Attack::Update()
@@ -39,12 +39,13 @@ void Attack::Draw()
 
 void Attack::SetData(const Data& data)
 {
-	m_info = data.info;
-	m_radius = data.colRadius;
+	m_data = data;
 }
 
 void Attack::OnCollision(GameObject& other)
 {
+	// 対象のタグ以外には当たらない
+	if (m_data.hitObjTag != Tag::None && other.GetTag() != m_data.hitObjTag) return;
 	// 一度当たったオブジェクトには当たらない
 	for (const auto& id : m_hitObjectIds)
 	{
@@ -53,5 +54,5 @@ void Attack::OnCollision(GameObject& other)
 	// 当たったオブジェクトのIDを覚える
 	m_hitObjectIds.push_back(other.GetId());
 	// 攻撃に当たった関数を呼ぶ
-	other.OnHitAttack(m_info);
+	other.OnHitAttack(m_data.info);
 }

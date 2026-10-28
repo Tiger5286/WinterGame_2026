@@ -71,7 +71,8 @@ public:
 	/// <param name="start">レイの始点となる3次元座標。</param>
 	/// <param name="end">レイの終点となる3次元座標（投射方向と長さを定義）。</param>
 	/// <returns>レイキャストの結果を表すRayInfoオブジェクト。ヒットの有無や、衝突が発生した場合は衝突位置、法線、距離などの情報を含みます。</returns>
-	RayInfo RayCast(const Vector3& start, const Vector3& end);
+	/// <param name="isPolygonOnly">trueならポリゴン(地形)とだけ判定する</param>
+	RayInfo RayCast(const Vector3& start, const Vector3& end, bool isPolygonOnly = false);
 
 	/// <summary>
 	/// プレイヤーの射撃専用の当たり判定関数

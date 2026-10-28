@@ -30,6 +30,5 @@ public:
 
 private:
     std::vector<int> m_hitObjectIds;
-    CollisionManager::AttackInfo m_info;
-    float m_radius = 0.0f;
+    Data m_data;
 };

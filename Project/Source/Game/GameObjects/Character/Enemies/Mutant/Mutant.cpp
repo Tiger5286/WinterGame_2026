@@ -16,7 +16,7 @@ Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
 
 Mutant::~Mutant()
 {
-}
+} 
 
 void Mutant::Init()
 {

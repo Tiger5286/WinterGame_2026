@@ -23,12 +23,12 @@ void CapsuleCollider::SetHeight(float height)
 	m_height = (std::max)(height, m_radius * 2.0f);
 }
 
-const Vector3& CapsuleCollider::GetBottom() const
+Vector3 CapsuleCollider::GetBottom() const
 {
 	return m_transform.pos + Vector3::Up() * m_radius;
 }
 
-const Vector3& CapsuleCollider::GetTop() const
+Vector3 CapsuleCollider::GetTop() const
 {
 	return m_transform.pos + Vector3::Up() * m_height + Vector3::Down() * m_radius;
 }

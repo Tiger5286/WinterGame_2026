@@ -254,6 +254,7 @@ void Player::Draw()
 
 void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 {
+	//if (info.damage)
 	printfDx(L"攻撃を喰らった！\n");
 }
 
