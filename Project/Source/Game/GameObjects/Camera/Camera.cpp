@@ -24,7 +24,10 @@ namespace
 	constexpr float kRotXLimitAim = DX_PI_F / 4;
 
 	// 地形に当たったとき、壁からどれだけ手前にカメラを置くか
-	constexpr float kWallMargin = 15.0f;
+	constexpr float kWallMargin = 30.0f;
+
+	constexpr float kNear = 5.0f;
+	constexpr float kFar = 20000.0f;
 }
 
 void Camera::Init()
@@ -33,6 +36,7 @@ void Camera::Init()
 	transform.pos = Vector3(0, 0, 0);
 	SetCameraPositionAndTarget_UpVecY(transform.pos, m_targetPos);
 	SetupCamera_Perspective(kDefaultFov);
+	SetCameraNearFar(kNear, kFar);
 }
 
 void Camera::Update()
