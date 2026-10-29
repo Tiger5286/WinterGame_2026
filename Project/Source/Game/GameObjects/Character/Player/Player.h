@@ -32,6 +32,8 @@ public:
 		AimWalkForwardRight,
 		AimWalkBackwardLeft,
 		AimWalkBackwardRight,
+		Hit,
+		Death,
 
 		Num
 	};
@@ -54,7 +56,9 @@ public:
 		L"Player|AimWalkForwardLeft",
 		L"Player|AimWalkForwardRight",
 		L"Player|AimWalkBackwardLeft",
-		L"Player|AimWalkBackwardRight"
+		L"Player|AimWalkBackwardRight",
+		L"Player|HitReact",
+		L"Player|Death"
 	};
 
 public:

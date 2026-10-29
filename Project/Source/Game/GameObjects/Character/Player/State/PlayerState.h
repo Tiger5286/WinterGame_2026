@@ -26,6 +26,8 @@ public:
 		Land,
 		Hover,
 		Dodge,
+		Hit,
+		Death,
 		
 		Num
 	};
@@ -42,6 +44,12 @@ public:
 	virtual void Exit() override abstract;
 
 	virtual ID GetID() const abstract;
+
+	/// <summary>
+	/// このステートで使用するアニメーションが上下別再生するかどうか
+	/// </summary>
+	/// <returns>true:上下別再生する / false:乗別再生しない</returns>
+	virtual bool CanSplitBody() const { return true; }
 
 protected:	// ステートが使っていいプレイヤーのメンバ
 	float GetCameraAngleY() const;

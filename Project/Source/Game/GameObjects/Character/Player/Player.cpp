@@ -4,6 +4,7 @@
 #include "Game/GameObjects/Camera/Camera.h"
 #include "Utility/MyLib.h"
 #include "State/PlayerStateIdle.h"
+#include "State/PlayerStateHit.h"
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
@@ -36,6 +37,8 @@ namespace
 
 	// ハッキング可能距離
 	constexpr float kCanHackingDist = 1500.0f;
+
+	constexpr int kMaxHp = 1000;
 }
 
 Player::Player()
@@ -69,7 +72,9 @@ void Player::Init()
 		bool isLoop = true;
 		if (name == kAnimNames[static_cast<int>(Player::AnimationID::Jump)] ||
 			name == kAnimNames[static_cast<int>(Player::AnimationID::Land)] ||
-			name == kAnimNames[static_cast<int>(Player::AnimationID::DodgeForward)])
+			name == kAnimNames[static_cast<int>(Player::AnimationID::DodgeForward)] ||
+			name == kAnimNames[static_cast<int>(Player::AnimationID::Hit)] ||
+			name == kAnimNames[static_cast<int>(Player::AnimationID::Death)])
 			isLoop = false;
 		animator->AddAnimation(name, 0.5f, isLoop);
 	}
@@ -86,6 +91,8 @@ void Player::Init()
 	m_pHackingTargetUI = std::make_shared<HackingTargetUI>();
 	UIManager::GetInstance().AddUI(m_pHackingTargetUI);
 
+	// HPを初期化
+	m_hp = kMaxHp;
 }
 
 void Player::Update()
@@ -254,17 +261,37 @@ void Player::Draw()
 
 void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 {
-	//if (info.damage)
-	printfDx(L"攻撃を喰らった！\n");
+	// HPが0なら処理しない
+	if (m_hp <= 0) return;
+
+	auto stateMachine = GetComponent<StateMachine<Player>>();
+
+	// 被弾中は処理しない
+	if (stateMachine->GetState<PlayerStateHit>()) return;
+
+	m_hp -= info.damage;
+
+	if (m_hp <= 0)
+	{
+		m_hp = 0;
+		printfDx(L"死亡");
+	}
+	else
+	{
+		printfDx(L"被弾");
+		stateMachine->ChangeState(std::make_unique<PlayerStateHit>(*this));
+	}
 }
 
 void Player::UpdateAnimation()
 {
+	auto state = GetComponent<StateMachine<Player>>()->GetState<PlayerState>();
 	PlayerState::ID stateID = GetComponent<StateMachine<Player>>()->GetState<PlayerState>()->GetID();
 	auto animator = GetComponent<Animator>();
 	auto physics = GetComponent<Physics>();
 	// 上下別に再生可能なステートかつエイム中のときだけ上下別アニメーションを再生する
-	animator->SetSplitBody(m_isAim || m_isShooting);
+	const bool canSplitBody = (m_isAim || m_isShooting) && state->CanSplitBody();
+	animator->SetSplitBody(canSplitBody);
 
 	std::function playShotAnim = [this, animator]() {
 		if (m_isAim)
@@ -359,18 +386,6 @@ void Player::UpdateAnimation()
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody);
 		playShotAnim();
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
-		//if (m_isAim || m_isShooting)	// ホバリング中にエイムしている場合は上下別アニメーションを再生
-		//{
-		//	playShotAnim();
-		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-		//	animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
-		//}
-		//else	// ホバリング中にエイムしていない場合は全身アニメーションを再生
-		//{
-		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::LowerBody);
-		//	animator->PlaySynced(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::FullBody, Animator::Layer::UpperBody);
-		//	animator->Play(kAnimNames[static_cast<int>(AnimationID::Hover)], Animator::Layer::LowerBody);
-		//}
 		break;
 	case PlayerState::ID::Dodge:
 		// 全身
@@ -378,6 +393,10 @@ void Player::UpdateAnimation()
 		// 上下別
 		playShotAnim();
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::DodgeForward)], Animator::Layer::LowerBody);
+		break;
+	case PlayerState::ID::Hit:
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hit)], Animator::Layer::FullBody);
+		break;
 	}
 	animator->Update();
 }
