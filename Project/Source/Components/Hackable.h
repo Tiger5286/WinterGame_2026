@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Component.h"
 #include <vector>
 #include "Utility/Vector2Int.h"

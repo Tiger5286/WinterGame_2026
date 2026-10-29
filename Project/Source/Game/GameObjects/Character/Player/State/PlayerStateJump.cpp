@@ -1,4 +1,4 @@
-#include "PlayerStateJump.h"
+ï»¿#include "PlayerStateJump.h"
 #include "../Player.h"
 #include "Components/Physics.h"
 #include "PlayerStateFall.h"
@@ -28,21 +28,21 @@ void PlayerStateJump::Update()
 {
 	auto physics = m_owner.GetComponent<Physics>();
 
-	// —‚¿n‚ß‚½‚ç—‰ºƒXƒe[ƒg‚É‘JˆÚ
+	// è½ã¡å§‹ã‚ãŸã‚‰è½ä¸‹ã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»
 	if (physics->m_vel.y < 0.0f)
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
 		return;
 	}
 
-	// ƒGƒCƒ€‚µ‚½‚çƒzƒo[‚É‘JˆÚ
+	// ã‚¨ã‚¤ãƒ ã—ãŸã‚‰ãƒ›ãƒãƒ¼ã«é·ç§»
 	if (IsAim())
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
 		return;
 	}
 
-	// ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚àƒzƒo[‚É‘JˆÚ
+	// ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã‚‚ãƒ›ãƒãƒ¼ã«é·ç§»
 	if (PadInput::GetInstance().IsPressed(XINPUT_BUTTON_A))
 	{
 		if (m_owner.GetComponent<Physics>()->m_vel.y < 0.5f)
@@ -52,7 +52,7 @@ void PlayerStateJump::Update()
 		}
 	}
 
-	// RB‚Å‰ñ”ğ
+	// RBã§å›é¿
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));

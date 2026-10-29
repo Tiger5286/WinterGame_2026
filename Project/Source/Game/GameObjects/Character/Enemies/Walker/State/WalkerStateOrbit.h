@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "WalkerState.h"
 class WalkerStateOrbit :
     public WalkerState

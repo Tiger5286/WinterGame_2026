@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "UIBase.h"
 #include "Utility/Vector2.h"
 class HackingTargetUI :

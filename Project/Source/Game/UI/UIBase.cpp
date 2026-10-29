@@ -1,4 +1,4 @@
-#include "UIBase.h"
+﻿#include "UIBase.h"
 
 UIBase::UIBase(int layer) : 
 	m_layer(layer)

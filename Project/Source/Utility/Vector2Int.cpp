@@ -1,4 +1,4 @@
-#include "Vector2Int.h"
+﻿#include "Vector2Int.h"
 
 Vector2Int::Vector2Int() :
 	x(0),

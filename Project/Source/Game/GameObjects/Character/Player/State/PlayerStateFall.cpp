@@ -1,4 +1,4 @@
-#include "PlayerStateFall.h"
+ï»¿#include "PlayerStateFall.h"
 #include "PlayerStateLand.h"
 #include "../Player.h"
 #include "Components/Physics.h"
@@ -19,7 +19,7 @@ void PlayerStateFall::Enter()
 
 void PlayerStateFall::Update()
 {
-	// ’…’n‚µ‚½‚ç’…’nƒXƒe[ƒg‚É‘JˆÚ‚·‚é
+	// ç€åœ°ã—ãŸã‚‰ç€åœ°ã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹
 	if (m_owner.GetComponent<Physics>()->IsGrounded())
 	{
 		m_owner.GetComponent<Physics>()->SetDrag(Physics::kDefaultDrag);
@@ -27,14 +27,14 @@ void PlayerStateFall::Update()
 		return;
 	}
 
-	// ƒGƒCƒ€‚µ‚Ä‚¢‚éA‚à‚µ‚­‚ÍƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éê‡‚Íƒzƒo[‚·‚é
+	// ã‚¨ã‚¤ãƒ ã—ã¦ã„ã‚‹ã€ã‚‚ã—ãã¯ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ãƒ›ãƒãƒ¼ã™ã‚‹
 	if (IsAim() || PadInput::GetInstance().IsPressed(XINPUT_BUTTON_A))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
 		return;
 	}
 
-	// RB‚Å‰ñ”ğ
+	// RBã§å›é¿
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));

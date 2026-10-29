@@ -1,4 +1,4 @@
-#include "Barrier.h"
+﻿#include "Barrier.h"
 #include "Resource/ResourceManager.h"
 #include "Components/Collider/PolygonCollider.h"
 #include "System/ServiceLocator.h"

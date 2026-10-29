@@ -1,4 +1,4 @@
-#include "WalkerState.h"
+﻿#include "WalkerState.h"
 #include "../Walker.h"
 
 WalkerState::WalkerState(Walker& walker) :

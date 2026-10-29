@@ -1,4 +1,4 @@
-#include "PlayerStateHover.h"
+ï»¿#include "PlayerStateHover.h"
 #include "System/PadInput.h"
 #include "../Player.h"
 #include "Components/Physics.h"
@@ -12,8 +12,8 @@
 
 namespace
 {
-	constexpr float kHoverVelY = -0.5f;	// ƒzƒoƒŠƒ“ƒO’†‚Ì–Ú•WY‘¬“x
-	constexpr float kHoverAccelY = 0.2f;	// ƒzƒoƒŠƒ“ƒO’†‚É–Ú•WY‘¬“x‚É‹ß‚Ã‚¯‚é‚½‚ß‚Ì‰Á‘¬“x
+	constexpr float kHoverVelY = -0.5f;	// ãƒ›ãƒãƒªãƒ³ã‚°ä¸­ã®ç›®æ¨™Yé€Ÿåº¦
+	constexpr float kHoverAccelY = 0.2f;	// ãƒ›ãƒãƒªãƒ³ã‚°ä¸­ã«ç›®æ¨™Yé€Ÿåº¦ã«è¿‘ã¥ã‘ã‚‹ãŸã‚ã®åŠ é€Ÿåº¦
 }
 
 void PlayerStateHover::Enter()
@@ -26,16 +26,16 @@ void PlayerStateHover::Update()
 {
 	auto& input = PadInput::GetInstance();
 
-	// ˆÚ“®‚Å‚«‚é‚æ‚¤‚É‚·‚é
+	// ç§»å‹•ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
 	UpdateMove(kHoverAccel, kMaxHoverSpeed);
 
-	// ’n–Ê‚É’…’n‚µ‚½‚ç’…’nƒXƒe[ƒg‚É‘JˆÚ‚·‚é
+	// åœ°é¢ã«ç€åœ°ã—ãŸã‚‰ç€åœ°ã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹
 	if (m_owner.GetComponent<Physics>()->IsGrounded())
 	{
-		// ƒGƒCƒ€‚µ‚Ä‚¢‚éê‡‚Í’…’nƒXƒe[ƒg‚É‘JˆÚ‚µ‚È‚¢
+		// ã‚¨ã‚¤ãƒ ã—ã¦ã„ã‚‹å ´åˆã¯ç€åœ°ã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã—ãªã„
 		if (IsAim())
 		{
-			// ˆÚ“®‚µ‚Ä‚¢‚½‚çMove, ‚»‚¤‚Å‚È‚¯‚ê‚ÎIdle‚É‘JˆÚ‚·‚é
+			// ç§»å‹•ã—ã¦ã„ãŸã‚‰Move, ãã†ã§ãªã‘ã‚Œã°Idleã«é·ç§»ã™ã‚‹
 			if (input.GetStickInput(PadInput::LR::Left).SquaredLength() > 0.0f)
 			{
 				m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateMove>(m_owner));
@@ -54,18 +54,18 @@ void PlayerStateHover::Update()
 		}
 	}
 
-	// ƒGƒCƒ€‚µ‚Ä‚¢‚éA‚à‚µ‚­‚ÍƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚¢‚éŠÔ‚ÍƒzƒoƒŠƒ“ƒO‚·‚é
+	// ã‚¨ã‚¤ãƒ ã—ã¦ã„ã‚‹ã€ã‚‚ã—ãã¯ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã„ã‚‹é–“ã¯ãƒ›ãƒãƒªãƒ³ã‚°ã™ã‚‹
 	if (IsAim() || input.IsPressed(XINPUT_BUTTON_A))
 	{
 		KeepVelY();
 	}
-	else	// ƒGƒCƒ€‚àƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚à‰Ÿ‚µ‚Ä‚¢‚È‚¢ê‡‚Í—‰º‚·‚é
+	else	// ã‚¨ã‚¤ãƒ ã‚‚ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ã‚‚æŠ¼ã—ã¦ã„ãªã„å ´åˆã¯è½ä¸‹ã™ã‚‹
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
 		return;
 	}
 
-	// RB‚Å‰ñ”ğ
+	// RBã§å›é¿
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
@@ -83,10 +83,10 @@ void PlayerStateHover::KeepVelY()
 {
 	auto physics = m_owner.GetComponent<Physics>();
 
-	// –Ú•W‘¬“x‚Æ‚Ì·‚ğ‹‚ß‚é
+	// ç›®æ¨™é€Ÿåº¦ã¨ã®å·®ã‚’æ±‚ã‚ã‚‹
 	float velocityChange = kHoverVelY - physics->m_vel.y;
 
-	// 1ƒtƒŒ[ƒ€‚Ì‘¬“x•Ï‰»—Ê‚ğã‰ºŒÀ‚Éû‚ßA–Ú•W‚ğs‚«‰ß‚¬‚È‚¢‚æ‚¤‚É‚·‚é
+	// 1ãƒ•ãƒ¬ãƒ¼ãƒ ã®é€Ÿåº¦å¤‰åŒ–é‡ã‚’ä¸Šä¸‹é™ã«åã‚ã€ç›®æ¨™ã‚’è¡Œãéããªã„ã‚ˆã†ã«ã™ã‚‹
 	if (velocityChange > kHoverAccelY)
 	{
 		velocityChange = kHoverAccelY;
@@ -96,6 +96,6 @@ void PlayerStateHover::KeepVelY()
 		velocityChange = -kHoverAccelY;
 	}
 
-	// Physics‚ÅŒã‚©‚ç‰Á‚í‚éd—Í‚ğ·‚µˆø‚­
+	// Physicsã§å¾Œã‹ã‚‰åŠ ã‚ã‚‹é‡åŠ›ã‚’å·®ã—å¼•ã
 	physics->m_accel.y = velocityChange - physics->GetGravity();
 }

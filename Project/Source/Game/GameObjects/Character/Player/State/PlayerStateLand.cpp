@@ -1,4 +1,4 @@
-#include "PlayerStateLand.h"
+ï»¿#include "PlayerStateLand.h"
 #include "PlayerStateIdle.h"
 #include "PlayerStateMove.h"
 #include "PlayerStateJump.h"
@@ -27,7 +27,7 @@ void PlayerStateLand::Update()
 {
 	m_frame++;
 
-	// ˆÚ“®ˆ—
+	// ç§»å‹•å‡¦ç†
 	float accel = kJogAccel;
 	float maxSpeed = kMaxJogSpeed;
 	if (IsRun())
@@ -39,7 +39,7 @@ void PlayerStateLand::Update()
 
 	const bool isInputStick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left).SquaredLength() > 0.0f;
 
-	// ƒGƒCƒ€‚µ‚Ä‚¢‚½‚çLandƒXƒe[ƒg‚ğI‚í‚é
+	// ã‚¨ã‚¤ãƒ ã—ã¦ã„ãŸã‚‰Landã‚¹ãƒ†ãƒ¼ãƒˆã‚’çµ‚ã‚ã‚‹
 	if (IsAim())
 	{
 		if (isInputStick)
@@ -54,21 +54,21 @@ void PlayerStateLand::Update()
 		}
 	}
 
-	// ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚çƒWƒƒƒ“ƒv‚·‚é
+	// ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã‚‰ã‚¸ãƒ£ãƒ³ãƒ—ã™ã‚‹
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_A))
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateJump>(m_owner));
 		return;
 	}
 
-	// ˆê’èƒtƒŒ[ƒ€Œo‰ßŒã‚ÉƒXƒeƒBƒbƒN“ü—Í‚ª‚ ‚Á‚½‚çMoveƒXƒe[ƒg‚É‘JˆÚ‚·‚é
+	// ä¸€å®šãƒ•ãƒ¬ãƒ¼ãƒ çµŒéå¾Œã«ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›ãŒã‚ã£ãŸã‚‰Moveã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹
 	if (m_frame > kMinFrame && isInputStick)
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateMove>(m_owner));
 		return;
 	}
 
-	// ’…’nƒAƒjƒ[ƒVƒ‡ƒ“‚ªI‚í‚Á‚½‚çIdleƒXƒe[ƒg‚É‘JˆÚ‚·‚é
+	// ç€åœ°ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚ã‚ã£ãŸã‚‰Idleã‚¹ãƒ†ãƒ¼ãƒˆã«é·ç§»ã™ã‚‹
 	if (m_owner.GetComponent<Animator>()->IsEnd())
 	{
 		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateIdle>(m_owner));

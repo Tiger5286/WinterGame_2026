@@ -1,4 +1,4 @@
-#include "Hackable.h"
+ï»¿#include "Hackable.h"
 #include "Game.h"
 #include "DxLib.h"
 #include "System/PadInput.h"
@@ -6,16 +6,16 @@
 
 namespace
 {
-	// ƒ{[ƒh‚ÌƒTƒCƒY
+	// ãƒœãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º
 	const Vector2Int kBoardSize = { 4,4 };
-	// ƒS[ƒ‹‚ÌˆÊ’u
+	// ã‚´ãƒ¼ãƒ«ã®ä½ç½®
 	const Vector2Int kGoalPos = { 2,2 };
 
-	// •`‰æ‚·‚é‚Æ‚«‚Ì1ƒ}ƒX‚ÌƒTƒCƒY
+	// æç”»ã™ã‚‹ã¨ãã®1ãƒã‚¹ã®ã‚µã‚¤ã‚º
 	constexpr int kNodeSize = 70;
-	// ƒI[ƒvƒ“ƒm[ƒh‚Ì”
+	// ã‚ªãƒ¼ãƒ—ãƒ³ãƒãƒ¼ãƒ‰ã®æ•°
 	constexpr int kOpenNodeNum = 2;
-	// Å‘åƒnƒbƒLƒ“ƒOŠÔ
+	// æœ€å¤§ãƒãƒƒã‚­ãƒ³ã‚°æ™‚é–“
 	constexpr int kMaxHackingFrame = 60 * 20;
 	
 	constexpr int kMinHackFrame = 60 * 3;
@@ -109,7 +109,7 @@ void Hackable::UpdateHacking()
 
 void Hackable::Draw()
 {
-	// ƒ}ƒX‚Ì•`‰æ
+	// ãƒã‚¹ã®æç”»
 	const Vector2Int leftTop = { 800,200 };
 	for (int y = 0; y < m_board.size(); y++)
 	{
@@ -126,7 +126,7 @@ void Hackable::Draw()
 			{
 				color = 0x0000ff;
 			}
-			// ’Ê‚Á‚½ˆÊ’u‚Í”’‚­‚·‚é
+			// é€šã£ãŸä½ç½®ã¯ç™½ãã™ã‚‹
 			for (auto& pos : m_pos)
 			{
 				if (y == pos.y && x == pos.x)
@@ -145,7 +145,7 @@ void Hackable::Draw()
 			DrawBox(x1, y1, x2 - 2, y2 - 2, color, true);
 		}
 	}
-	// ƒnƒbƒLƒ“ƒOc‚èŠÔ‚Ì•`‰æ
+	// ãƒãƒƒã‚­ãƒ³ã‚°æ®‹ã‚Šæ™‚é–“ã®æç”»
 	float rate = static_cast<float>(m_hackFrame) / static_cast<float>(kMaxHackingFrame);
 	int x1, y1, x2, y2;
 	x1 = leftTop.x - 50;
@@ -165,12 +165,12 @@ void Hackable::Move()
 		nextPos.y++;
 
 		if (m_pos.size() > 1 && nextPos == m_pos[m_pos.size() - 2])
-		{	// ˆÚ“®æ‚ª‚Ğ‚Æ‚Â‘O‚Ìƒ}ƒX‚È‚ç–ß‚é
+		{	// ç§»å‹•å…ˆãŒã²ã¨ã¤å‰ã®ãƒã‚¹ãªã‚‰æˆ»ã‚‹
 			m_pos.pop_back();
 		}
 		else if (nextPos.y < m_board.size())
 		{
-			// ˆÚ“®æ‚ğ‚à‚¤’Ê‚Á‚½‚©‚Ç‚¤‚©Šm”F
+			// ç§»å‹•å…ˆã‚’ã‚‚ã†é€šã£ãŸã‹ã©ã†ã‹ç¢ºèª
 			bool isPassed = false;
 			for (const auto& pos : m_pos)
 			{
@@ -179,10 +179,10 @@ void Hackable::Move()
 					isPassed = true;
 				}
 			}
-			// ’Ê‚Á‚Ä‚È‚¢‚È‚çˆÚ“®
+			// é€šã£ã¦ãªã„ãªã‚‰ç§»å‹•
 			if (!isPassed)
 			{
-				// ˆÚ“®æ‚ªƒ{[ƒh‚Ì”ÍˆÍ“à‚È‚çˆÚ“®
+				// ç§»å‹•å…ˆãŒãƒœãƒ¼ãƒ‰ã®ç¯„å›²å†…ãªã‚‰ç§»å‹•
 				m_pos.push_back(nextPos);
 			}
 		}
@@ -193,12 +193,12 @@ void Hackable::Move()
 		nextPos.x++;
 
 		if (m_pos.size() > 1 && nextPos == m_pos[m_pos.size() - 2])
-		{	// ˆÚ“®æ‚ª‚Ğ‚Æ‚Â‘O‚Ìƒ}ƒX‚È‚ç–ß‚é
+		{	// ç§»å‹•å…ˆãŒã²ã¨ã¤å‰ã®ãƒã‚¹ãªã‚‰æˆ»ã‚‹
 			m_pos.pop_back();
 		}
 		else if (nextPos.x < m_board[m_pos.back().y].size())
 		{
-			// ˆÚ“®æ‚ğ‚à‚¤’Ê‚Á‚½‚©‚Ç‚¤‚©Šm”F
+			// ç§»å‹•å…ˆã‚’ã‚‚ã†é€šã£ãŸã‹ã©ã†ã‹ç¢ºèª
 			bool isPassed = false;
 			for (const auto& pos : m_pos)
 			{
@@ -207,10 +207,10 @@ void Hackable::Move()
 					isPassed = true;
 				}
 			}
-			// ’Ê‚Á‚Ä‚È‚¢‚È‚çˆÚ“®
+			// é€šã£ã¦ãªã„ãªã‚‰ç§»å‹•
 			if (!isPassed)
 			{
-				// ˆÚ“®æ‚ªƒ{[ƒh‚Ì”ÍˆÍ“à‚È‚çˆÚ“®
+				// ç§»å‹•å…ˆãŒãƒœãƒ¼ãƒ‰ã®ç¯„å›²å†…ãªã‚‰ç§»å‹•
 				m_pos.push_back(nextPos);
 			}
 		}
@@ -221,12 +221,12 @@ void Hackable::Move()
 		nextPos.x--;
 
 		if (m_pos.size() > 1 && nextPos == m_pos[m_pos.size() - 2])
-		{	// ˆÚ“®æ‚ª‚Ğ‚Æ‚Â‘O‚Ìƒ}ƒX‚È‚ç–ß‚é
+		{	// ç§»å‹•å…ˆãŒã²ã¨ã¤å‰ã®ãƒã‚¹ãªã‚‰æˆ»ã‚‹
 			m_pos.pop_back();
 		}
 		else if (nextPos.x >= 0)
 		{
-			// ˆÚ“®æ‚ğ‚à‚¤’Ê‚Á‚½‚©‚Ç‚¤‚©Šm”F
+			// ç§»å‹•å…ˆã‚’ã‚‚ã†é€šã£ãŸã‹ã©ã†ã‹ç¢ºèª
 			bool isPassed = false;
 			for (const auto& pos : m_pos)
 			{
@@ -235,10 +235,10 @@ void Hackable::Move()
 					isPassed = true;
 				}
 			}
-			// ’Ê‚Á‚Ä‚È‚¢‚È‚çˆÚ“®
+			// é€šã£ã¦ãªã„ãªã‚‰ç§»å‹•
 			if (!isPassed)
 			{
-				// ˆÚ“®æ‚ªƒ{[ƒh‚Ì”ÍˆÍ“à‚È‚çˆÚ“®
+				// ç§»å‹•å…ˆãŒãƒœãƒ¼ãƒ‰ã®ç¯„å›²å†…ãªã‚‰ç§»å‹•
 				m_pos.push_back(nextPos);
 			}
 		}
@@ -249,12 +249,12 @@ void Hackable::Move()
 		nextPos.y--;
 
 		if (m_pos.size() > 1 && nextPos == m_pos[m_pos.size() - 2])
-		{	// ˆÚ“®æ‚ª‚Ğ‚Æ‚Â‘O‚Ìƒ}ƒX‚È‚ç–ß‚é
+		{	// ç§»å‹•å…ˆãŒã²ã¨ã¤å‰ã®ãƒã‚¹ãªã‚‰æˆ»ã‚‹
 			m_pos.pop_back();
 		}
 		else if (nextPos.y >= 0)
 		{
-			// ˆÚ“®æ‚ğ‚à‚¤’Ê‚Á‚½‚©‚Ç‚¤‚©Šm”F
+			// ç§»å‹•å…ˆã‚’ã‚‚ã†é€šã£ãŸã‹ã©ã†ã‹ç¢ºèª
 			bool isPassed = false;
 			for (const auto& pos : m_pos)
 			{
@@ -263,10 +263,10 @@ void Hackable::Move()
 					isPassed = true;
 				}
 			}
-			// ’Ê‚Á‚Ä‚È‚¢‚È‚çˆÚ“®
+			// é€šã£ã¦ãªã„ãªã‚‰ç§»å‹•
 			if (!isPassed)
 			{
-				// ˆÚ“®æ‚ªƒ{[ƒh‚Ì”ÍˆÍ“à‚È‚çˆÚ“®
+				// ç§»å‹•å…ˆãŒãƒœãƒ¼ãƒ‰ã®ç¯„å›²å†…ãªã‚‰ç§»å‹•
 				m_pos.push_back(nextPos);
 			}
 		}
