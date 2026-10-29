@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.cpp" />
     <ClCompile Include="Source\Scenes\SceneResult.cpp" />
     <ClCompile Include="Source\Scenes\SceneTitle.cpp" />
@@ -84,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.h" />
     <ClInclude Include="Source\Scenes\SceneResult.h" />
     <ClInclude Include="Source\Scenes\SceneTitle.h" />

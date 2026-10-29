@@ -201,6 +201,9 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -411,6 +414,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

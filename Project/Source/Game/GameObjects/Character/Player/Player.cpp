@@ -5,6 +5,7 @@
 #include "Utility/MyLib.h"
 #include "State/PlayerStateIdle.h"
 #include "State/PlayerStateHit.h"
+#include "State/PlayerStateDeath.h"
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
@@ -105,12 +106,24 @@ void Player::Update()
 
 	UpdateAim();
 
+#ifdef _DEBUG
+	// Hキーで HPを1にする(死亡中は復活させない)
+	if (CheckHitKey(KEY_INPUT_H) && m_hp > 0)
+	{
+		m_hp = 1;
+	}
+#endif
+
 	// ステートを更新
 	GetComponent<StateMachine<Player>>()->Update();
 
-	// 視界の中心に近い敵を保存
+	// 視界の中心に近い敵を保存(行動できないときは対象なし)
 	Vector2 screenPos;
-	auto target = FindNearestVisibleHackable(screenPos);
+	std::shared_ptr<GameObject> target = nullptr;
+	if (CanAction())
+	{
+		target = FindNearestVisibleHackable(screenPos);
+	}
 
 	// ハッキング対象を示すUIを更新
 	if (target)
@@ -131,7 +144,7 @@ void Player::Update()
 	}
 
 	// 射撃
-	if (input.IsPressedTrigger(PadInput::LR::Right))
+	if (CanAction() && input.IsPressedTrigger(PadInput::LR::Right))
 	{
 		if (m_shotIntervalFrame == 0)
 		{
@@ -256,6 +269,7 @@ void Player::Draw()
 	DrawFormatString(100, 100, 0xff0000, L"Player:vel x:%.1f,y:%.1f,z:%.1f", vel.x, vel.y, vel.z);
 	DrawFormatString(100, 100 + 16, 0xff0000, L"Player:acc x:%.1f,y:%.1f,z:%.1f", acc.x, acc.y, acc.z);
 	DrawFormatString(100, 100 + 16 * 2, 0xff0000, L"Direction8:%d", static_cast<int>(PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left)));
+	DrawFormatString(100, 100 + 16 * 3, 0xff0000, L"Player:HP %d/%d (Hキーで1にする)", m_hp, kMaxHp);
 #endif
 }
 
@@ -274,11 +288,10 @@ void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 	if (m_hp <= 0)
 	{
 		m_hp = 0;
-		printfDx(L"死亡");
+		stateMachine->ChangeState(std::make_unique<PlayerStateDeath>(*this));
 	}
 	else
 	{
-		printfDx(L"被弾");
 		stateMachine->ChangeState(std::make_unique<PlayerStateHit>(*this));
 	}
 }
@@ -397,6 +410,9 @@ void Player::UpdateAnimation()
 	case PlayerState::ID::Hit:
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Hit)], Animator::Layer::FullBody);
 		break;
+	case PlayerState::ID::Death:
+		animator->Play(kAnimNames[static_cast<int>(AnimationID::Death)], Animator::Layer::FullBody);
+		break;
 	}
 	animator->Update();
 }
@@ -404,6 +420,12 @@ void Player::UpdateAnimation()
 void Player::UpdateAim()
 {
 	auto& input = PadInput::GetInstance();
+	// 行動できないときはエイムしない
+	if (!CanAction())
+	{
+		m_isAim = false;
+		return;
+	}
 	if (input.IsTriggeredTrigger(PadInput::LR::Left))
 	{
 		m_aimStartAngle = m_angle;
@@ -416,6 +438,14 @@ void Player::UpdateAim()
 	{
 		m_isAim = false;
 	}
+}
+
+bool Player::CanAction()
+{
+	auto state = GetComponent<StateMachine<Player>>()->GetState<PlayerState>();
+	if (!state) return true;
+	const PlayerState::ID stateID = state->GetID();
+	return stateID != PlayerState::ID::Hit && stateID != PlayerState::ID::Death;
 }
 
 std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPos)

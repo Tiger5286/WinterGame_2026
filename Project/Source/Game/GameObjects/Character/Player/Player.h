@@ -81,6 +81,8 @@ public:
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
+	// エイム・射撃・ハッキングができる状態か(被弾中・死亡中はできない)
+	bool CanAction();
 	std::shared_ptr<GameObject> FindNearestVisibleHackable(Vector2& screenPos);
 
 private:
