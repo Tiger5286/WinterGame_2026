@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <cassert>
+#include <fstream>
+#include <sstream>
 
 float MyLib::GetAngleDiff(float angle1, float angle2)
 {
@@ -176,4 +179,82 @@ MyLib::RayCapsuleResult MyLib::CheckHitLineSphere(const Vector3& pos, const floa
         result.hitPos = start + line * hitT;
     }
     return result;
+}
+
+std::vector<std::vector<std::wstring>> MyLib::LoadCSV(const std::wstring& filePath)
+{
+    std::vector<std::vector<std::wstring>> table;
+
+    // DXAアーカイブからも読めるようにDxLibの関数でファイルを丸ごと読む
+    const int handle = FileRead_open(filePath.c_str());
+    if (handle == 0 || handle == -1)
+    {
+        assert(false && "MyLib::LoadCSV() : ファイルを開けませんでした");
+        return table;
+    }
+    const LONGLONG size = FileRead_size_handle(handle);
+    std::string bytes(static_cast<size_t>(size), '\0');
+    if (size > 0)
+    {
+        FileRead_read(bytes.data(), static_cast<int>(size), handle);
+    }
+    FileRead_close(handle);
+
+    // 先頭のBOM(UTF-8)を取り除く
+    if (bytes.size() >= 3 &&
+        static_cast<unsigned char>(bytes[0]) == 0xEF &&
+        static_cast<unsigned char>(bytes[1]) == 0xBB &&
+        static_cast<unsigned char>(bytes[2]) == 0xBF)
+    {
+        bytes.erase(0, 3);
+    }
+
+    // UTF-8としてワイド文字列に変換する(英数字だけならShift-JISでも同じ結果になる)
+    std::wstring text;
+    if (!bytes.empty())
+    {
+        const int length = MultiByteToWideChar(CP_UTF8, 0, bytes.data(), static_cast<int>(bytes.size()), nullptr, 0);
+        text.resize(length);
+        MultiByteToWideChar(CP_UTF8, 0, bytes.data(), static_cast<int>(bytes.size()), text.data(), length);
+    }
+
+    // 1行ずつ取り出してカンマで分割する
+    size_t lineStart = 0;
+    while (lineStart < text.size())
+    {
+        size_t lineEnd = text.find(L'\n', lineStart);
+        if (lineEnd == std::wstring::npos) lineEnd = text.size();
+        std::wstring line = text.substr(lineStart, lineEnd - lineStart);
+        lineStart = lineEnd + 1;
+
+        // 行末の\rを取り除く
+        if (!line.empty() && line.back() == L'\r') line.pop_back();
+
+        // 空行と"//"で始まるコメント行は読み飛ばす
+        if (line.empty() || line.starts_with(L"//")) continue;
+
+        std::vector<std::wstring> row;
+        size_t cellStart = 0;
+        while (true)
+        {
+            const size_t cellEnd = line.find(L',', cellStart);
+            if (cellEnd == std::wstring::npos)
+            {
+                row.push_back(line.substr(cellStart));
+                break;
+            }
+            row.push_back(line.substr(cellStart, cellEnd - cellStart));
+            cellStart = cellEnd + 1;
+        }
+
+        // 行末に続く空のセルを削る(Excelで保存すると列数に合わせて空セルが付くため)
+        while (!row.empty() && row.back().empty()) row.pop_back();
+
+        // カンマだけの行も空行として扱う
+        if (row.empty()) continue;
+
+        table.push_back(row);
+    }
+
+    return table;
 }
