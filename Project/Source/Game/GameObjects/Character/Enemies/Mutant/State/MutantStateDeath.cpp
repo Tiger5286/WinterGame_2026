@@ -3,6 +3,7 @@
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/Collider/CapsuleCollider.h"
+#include "Components/Hackable.h"
 
 MutantStateDeath::MutantStateDeath(Mutant& mutant) :
 	MutantState(mutant)
@@ -19,6 +20,7 @@ void MutantStateDeath::Enter()
 	physics->m_accel = Vector3::Zero();
 	physics->m_vel = Vector3::Zero();
 	// コンポーネントは削除せず無効化する(削除すると参照している箇所が壊れるため)
+	m_owner.GetComponent<Hackable>()->SetEnable(false);			// ハッキング対象から外す
 	m_owner.GetComponent<CapsuleCollider>()->SetEnable(false);	// プレイヤーがすり抜けられるようにする
 	m_owner.GetComponent<Animator>()->Play(L"Mutant|Death");
 }

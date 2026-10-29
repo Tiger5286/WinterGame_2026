@@ -43,6 +43,8 @@ namespace
 	const LoadData kLoadGraphFiles[] = {
 		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber.png", L"NormalWalkerTex" },
 		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber_Open.png", L"HackedWalkerTex" },
+		{ L"data/models/enemies/Mutant.fbm/Mutant_diffuse.png", L"NormalMutantTex" },
+		{ L"data/models/enemies/Mutant.fbm/Mutant_diffuse_open.png", L"HackedMutantTex" },
 	};
 }
 

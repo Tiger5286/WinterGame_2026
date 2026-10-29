@@ -26,6 +26,7 @@ namespace
 	constexpr float kColliderHeight = 180.0f;
 
 	const Vector3 kHackLocalPos = { 0.0f,100.0f,0.0f };
+	constexpr const wchar_t* kHackBoardPath = L"data/hackBoard/walkerBoard.csv";
 
 	const Vector3 kHPUIOffset = { 0.0f,200.0f,0.0f };
 }
@@ -69,6 +70,7 @@ void Walker::Init()
 	hackableInfo.func = [this](Hackable::HackedData data) { OnHacked(data); };
 	hackableInfo.hackLocalPos = kHackLocalPos;
 	GetComponent<Hackable>()->SetInfo(hackableInfo);
+	GetComponent<Hackable>()->LoadData(kHackBoardPath);
 	GetComponent<Hackable>()->Init();
 
 	SetHitbox();

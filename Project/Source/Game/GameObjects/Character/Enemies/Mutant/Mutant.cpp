@@ -1,6 +1,7 @@
 ﻿#include "Mutant.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Model.h"
+#include "Resource/Graph.h"
 #include "Components/Physics.h"
 #include "Components/Collider/CapsuleCollider.h"
 #include "Components/Animator/Animator.h"
@@ -16,6 +17,7 @@
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "State/MutantStateApproach.h"
 #include "State/MutantStateDeath.h"
+#include <string>
 
 namespace
 {
@@ -25,6 +27,9 @@ namespace
 	constexpr float kModelScale = 2.5f;
 
 	const Vector3 kHPUIOffset = { 0.0f,450.0f,0.0f };
+
+	const Vector3 kHackLocalPos = { 0.0f,250.0f,0.0f };
+	constexpr const wchar_t* kHackBoardPath = L"data/hackBoard/mutantBoard.csv";
 }
 
 Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
@@ -33,6 +38,7 @@ Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
 	AddComponent<Physics>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);
 	AddComponent<Hitbox>();
+	AddComponent<Hackable>();
 	AddComponent<StateMachine<Mutant>>(*this);
 	AddComponent<Animator>();
 	m_tag = Tag::Enemy;
@@ -63,6 +69,24 @@ void Mutant::Init()
 	auto stateMachine = GetComponent<StateMachine<Mutant>>();
 	stateMachine->ChangeState(std::make_unique<MutantStateApproach>(*this));
 
+	Hackable::Info hackableInfo;
+	hackableInfo.func = [this](Hackable::HackedData data) { OnHacked(data); };
+	hackableInfo.hackLocalPos = kHackLocalPos;
+	GetComponent<Hackable>()->SetInfo(hackableInfo);
+	GetComponent<Hackable>()->LoadData(kHackBoardPath);
+	GetComponent<Hackable>()->Init();
+
+	// 差し替えるテクスチャ(名前にdiffuseを含むもの)の番号を探す
+	for (int i = 0; i < MV1GetTextureNum(m_pModel->GetHandle()); i++)
+	{
+		const std::wstring texName = MV1GetTextureName(m_pModel->GetHandle(), i);
+		if (texName.find(L"diffuse") != std::wstring::npos)
+		{
+			m_diffuseTexIndex = i;
+			break;
+		}
+	}
+
 	SetHitbox();
 
 	m_hp = kMaxHp;
@@ -80,6 +104,15 @@ void Mutant::Update()
 	if (!IsDying())
 	{
 		GetComponent<Physics>()->Update();
+	}
+
+	auto hackable = GetComponent<Hackable>();
+	hackable->Update();
+	if (!hackable->IsHacked())
+	{
+		// テクスチャを通常に戻す
+		MV1SetTextureGraphHandle(m_pModel->GetHandle(), m_diffuseTexIndex, ResourceManager::GetInstance().GetGraph(L"NormalMutantTex")->GetHandle(), false);
+		MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
 	auto transform = GetComponent<Transform>();
@@ -111,13 +144,21 @@ void Mutant::OnWasShot(const CollisionManager::ShotInfo& info)
 	// 死亡中は撃たれても何もしない(死亡ステートに入り直さない)
 	if (IsDying()) return;
 
-	if (info.isWeakPoint)
+	// ハッキングしていないときはダメージが1/10になる(Walkerと同じ)
+	if (GetComponent<Hackable>()->IsHacked())
 	{
-		m_hp -= info.damage * 1.5f;
+		if (info.isWeakPoint)
+		{
+			m_hp -= info.damage * 1.5f;
+		}
+		else
+		{
+			m_hp -= info.damage;
+		}
 	}
 	else
 	{
-		m_hp -= info.damage;
+		m_hp -= info.damage / 10;
 	}
 
 	if (m_hp <= 0)
@@ -130,6 +171,13 @@ void Mutant::OnWasShot(const CollisionManager::ShotInfo& info)
 bool Mutant::IsDying()
 {
 	return GetComponent<StateMachine<Mutant>>()->GetState<MutantStateDeath>() != nullptr;
+}
+
+void Mutant::OnHacked(Hackable::HackedData data)
+{
+	// テクスチャをハックされたものに変える
+	MV1SetTextureGraphHandle(m_pModel->GetHandle(), m_diffuseTexIndex, ResourceManager::GetInstance().GetGraph(L"HackedMutantTex")->GetHandle(), false);
+	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f, 0.5f, 0.5f, 1.0f));
 }
 
 void Mutant::RotToPlayer()
