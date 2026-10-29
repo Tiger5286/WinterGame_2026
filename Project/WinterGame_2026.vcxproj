@@ -22,6 +22,11 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.cpp" />
     <ClCompile Include="Source\Scenes\SceneResult.cpp" />
     <ClCompile Include="Source\Scenes\SceneTitle.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Stage\Barrier.cpp" />
@@ -87,6 +92,11 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.h" />
     <ClInclude Include="Source\Scenes\SceneResult.h" />
     <ClInclude Include="Source\Scenes\SceneTitle.h" />
     <ClInclude Include="Source\Game\GameObjects\Stage\Barrier.h" />

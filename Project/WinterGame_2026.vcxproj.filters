@@ -198,6 +198,21 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -411,6 +426,21 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\Mutant.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.h">
