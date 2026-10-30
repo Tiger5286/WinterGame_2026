@@ -4,7 +4,7 @@ class SceneResult :
     public SceneBase
 {
 public:
-    SceneResult(SceneManager& sceneManager);
+    SceneResult(SceneManager& sceneManager, bool isClear);
     ~SceneResult();
 
     void Init() override;
@@ -12,6 +12,6 @@ public:
     void Draw() const override;
 
 private:
-
+    bool m_isClear;
 };
 

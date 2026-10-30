@@ -1,5 +1,6 @@
 ﻿#include "PlayerStateDeath.h"
 #include "Components/Physics.h"
+#include "Components/Animator/Animator.h"
 #include "../Player.h"
 
 PlayerStateDeath::PlayerStateDeath(Player& player) :
@@ -23,7 +24,11 @@ void PlayerStateDeath::Enter()
 
 void PlayerStateDeath::Update()
 {
-	// 死亡後はどこにも遷移しない
+	// アニメーションが終わったら死ぬ
+	if (m_owner.GetComponent<Animator>()->IsEnd())
+	{
+		Die();
+	}
 }
 
 void PlayerStateDeath::Exit()

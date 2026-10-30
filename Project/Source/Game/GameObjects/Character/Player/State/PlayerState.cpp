@@ -60,3 +60,8 @@ void PlayerState::UpdateMove(float accel, float maxSpeed)
 		SetAngle(angle);
 	}
 }
+
+void PlayerState::Die()
+{
+	m_owner.m_isDead = true;
+}

@@ -4,8 +4,9 @@
 #include "SceneTitle.h"
 #include "SceneManager.h"
 
-SceneResult::SceneResult(SceneManager& sceneManager) :
-	SceneBase(sceneManager)
+SceneResult::SceneResult(SceneManager& sceneManager, bool isClear) :
+	SceneBase(sceneManager),
+	m_isClear(isClear)
 {
 }
 
@@ -31,5 +32,13 @@ void SceneResult::Draw() const
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneResult", 0xffffff);
 	DrawString(0, 16, L"AボタンでSceneTitle", 0xffffff);
+	if (m_isClear)
+	{
+		DrawString(0, 32, L"クリアした", 0xffffff);
+	}
+	else
+	{
+		DrawString(0, 32, L"ゲームオーバーした", 0xffffff);
+	}
 #endif
 }

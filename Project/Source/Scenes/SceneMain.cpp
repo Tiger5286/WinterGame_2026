@@ -66,6 +66,7 @@ SceneMain::~SceneMain()
 	{
 		ResourceManager::GetInstance().Delete(graph.key);
 	}
+	clsDx();
 }
 
 void SceneMain::Init()
@@ -96,25 +97,25 @@ void SceneMain::Init()
 	hackPoint->GetComponent<Transform>()->pos = Vector3(4300, 500, 2300);
 	m_pGameObjectManager->Add(hackPoint);
 	// プレイヤーを生成
-	auto pPlayer = std::make_shared<Player>();
-	m_pGameObjectManager->Add(pPlayer);
+	m_pPlayer = std::make_shared<Player>();
+	m_pGameObjectManager->Add(m_pPlayer);
 	// カメラを生成(プレイヤーの移動後に追従させるため、プレイヤーより後に追加する)
 	auto pCamera = std::make_shared<Camera>();
 	m_pGameObjectManager->Add(pCamera);
 	// ハッキングマネージャーを生成
 	m_pHackingManager = std::make_shared<HackingManager>();
-	m_pHackingManager->Init(pPlayer);
+	m_pHackingManager->Init(m_pPlayer);
 	// カメラとプレイヤーにお互いの弱参照を渡す
-	pPlayer->SetCamera(pCamera);
-	pCamera->SetPlayer(pPlayer);
+	m_pPlayer->SetCamera(pCamera);
+	pCamera->SetPlayer(m_pPlayer);
 	// プレイヤーにマネージャーを渡す
-	pPlayer->SetHackingManager(m_pHackingManager);
-	pPlayer->SetGameObjectManager(m_pGameObjectManager);
+	m_pPlayer->SetHackingManager(m_pHackingManager);
+	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	std::shared_ptr<GameObject> pEnemy = std::make_shared<Mutant>(pPlayer);
-	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 300);
-	m_pGameObjectManager->Add(pEnemy);
-	pEnemy = std::make_shared<Walker>(pPlayer);
+	m_pBoss = std::make_shared<Mutant>(m_pPlayer);
+	m_pBoss->GetComponent<Transform>()->pos = Vector3(0, 100, 300);
+	m_pGameObjectManager->Add(m_pBoss);
+	auto pEnemy = std::make_shared<Walker>(m_pPlayer);
 	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 1000);
 	m_pGameObjectManager->Add(pEnemy);
 }
@@ -126,10 +127,27 @@ void SceneMain::Update()
 	m_pGameObjectManager->Update();
 	m_pHackingManager->Update();
 
+	// プレイヤーが死んだらゲームオーバー
+	if (m_pPlayer->IsDead())
+	{
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, false));
+		return;
+	}
+	// ボスが死んだらクリア
+	if (m_pBoss != nullptr)
+	{
+		if (m_pBoss->IsDead())
+		{
+			m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
+			return;
+		}
+	}
+
 #ifdef _DEBUG
+	// Qキーでクリア
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
-		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager));
+		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
 		return;
 	}
 #endif
@@ -149,6 +167,6 @@ void SceneMain::Draw() const
 	DrawGrid();
 
 	DrawString(0, 0, L"SceneMain", 0xffffff);
-	DrawString(0, 16, L"Qキーでリザルトシーンへ", 0xffffff);
+	DrawString(0, 16, L"Qキーでクリアする", 0xffffff);
 #endif
 }

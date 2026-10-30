@@ -63,5 +63,7 @@ protected:	// ステートが使っていいプレイヤーのメンバ
 
 	// State共通で使う処理
 	void UpdateMove(float accel, float maxSpeed);
+
+	void Die();
 };
 

@@ -6,6 +6,7 @@ class CollisionManager;
 class HackingManager;
 class Camera;
 class Player;
+class EnemyBase;
 
 class SceneMain :
     public SceneBase
@@ -22,5 +23,8 @@ private:
     std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
     std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
+
+    std::shared_ptr<Player> m_pPlayer = nullptr;
+    std::shared_ptr<EnemyBase> m_pBoss = nullptr;
 };
 
