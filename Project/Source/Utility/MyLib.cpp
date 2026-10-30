@@ -183,78 +183,65 @@ MyLib::RayCapsuleResult MyLib::CheckHitLineSphere(const Vector3& pos, const floa
 
 std::vector<std::vector<std::wstring>> MyLib::LoadCSV(const std::wstring& filePath)
 {
+    // 読み込んだ値を入れておく変数を準備
     std::vector<std::vector<std::wstring>> table;
 
-    // DXAアーカイブからも読めるようにDxLibの関数でファイルを丸ごと読む
+    // ファイルを開く
     const int handle = FileRead_open(filePath.c_str());
-    if (handle == 0 || handle == -1)
+    if (handle == 0 || handle == -1)    // 正しくファイルが開けなかったら終了
     {
-        assert(false && "MyLib::LoadCSV() : ファイルを開けませんでした");
+        assert(false && "LoadCSV() : ファイルが正しく開けませんでした");
         return table;
     }
-    const LONGLONG size = FileRead_size_handle(handle);
-    std::string bytes(static_cast<size_t>(size), '\0');
-    if (size > 0)
+
+    // 文字コードをUTF8に設定する
+    FileRead_set_format(handle, DX_CHARCODEFORMAT_UTF8);
+
+    // 準備した変数に読み込んだ値を格納する
+    // 行ごとの配列
+    std::vector<std::wstring> lines;
+    // 読み終わるまでループする
+    while (FileRead_eof(handle) == 0)
     {
-        FileRead_read(bytes.data(), static_cast<int>(size), handle);
+        // 行を一時的に保存しておく変数
+        wchar_t buffer[1024];
+        // 1行読み込む
+        FileRead_gets(buffer, 1024, handle);
+        // 行の配列に入れる
+        lines.push_back(buffer);
     }
-    FileRead_close(handle);
-
-    // 先頭のBOM(UTF-8)を取り除く
-    if (bytes.size() >= 3 &&
-        static_cast<unsigned char>(bytes[0]) == 0xEF &&
-        static_cast<unsigned char>(bytes[1]) == 0xBB &&
-        static_cast<unsigned char>(bytes[2]) == 0xBF)
+    // BOMをチェックしてあったら消す
+    if (!lines.empty() && lines[0][0] == L'\uFEFF')
     {
-        bytes.erase(0, 3);
+        lines[0].erase(0, 1);
     }
-
-    // UTF-8としてワイド文字列に変換する(英数字だけならShift-JISでも同じ結果になる)
-    std::wstring text;
-    if (!bytes.empty())
+    // 1行ずつ取り出してカンマを分ける
+    for (const std::wstring& line : lines)
     {
-        const int length = MultiByteToWideChar(CP_UTF8, 0, bytes.data(), static_cast<int>(bytes.size()), nullptr, 0);
-        text.resize(length);
-        MultiByteToWideChar(CP_UTF8, 0, bytes.data(), static_cast<int>(bytes.size()), text.data(), length);
-    }
+        // 行に何もないなら飛ばす
+        if (line.empty()) continue;
 
-    // 1行ずつ取り出してカンマで分割する
-    size_t lineStart = 0;
-    while (lineStart < text.size())
-    {
-        size_t lineEnd = text.find(L'\n', lineStart);
-        if (lineEnd == std::wstring::npos) lineEnd = text.size();
-        std::wstring line = text.substr(lineStart, lineEnd - lineStart);
-        lineStart = lineEnd + 1;
-
-        // 行末の\rを取り除く
-        if (!line.empty() && line.back() == L'\r') line.pop_back();
-
-        // 空行と"//"で始まるコメント行は読み飛ばす
-        if (line.empty() || line.starts_with(L"//")) continue;
-
+        std::wstringstream ss(line);
+        std::wstring cell;
         std::vector<std::wstring> row;
-        size_t cellStart = 0;
-        while (true)
+        // カンマ区切りで取り出す
+        while (std::getline(ss, cell, L','))
         {
-            const size_t cellEnd = line.find(L',', cellStart);
-            if (cellEnd == std::wstring::npos)
-            {
-                row.push_back(line.substr(cellStart));
-                break;
-            }
-            row.push_back(line.substr(cellStart, cellEnd - cellStart));
-            cellStart = cellEnd + 1;
+            row.push_back(cell);
         }
-
-        // 行末に続く空のセルを削る(Excelで保存すると列数に合わせて空セルが付くため)
-        while (!row.empty() && row.back().empty()) row.pop_back();
-
-        // カンマだけの行も空行として扱う
+        // 最後のセルが空白なら空白じゃなくなるまで後ろから消す
+        while (!row.empty() && row.back().empty())
+        {
+            row.pop_back();
+        }
+        // 行が空なら追加しない
         if (row.empty()) continue;
-
+        // 変数に追加する
         table.push_back(row);
     }
+
+    // ファイルを閉じる
+    FileRead_close(handle);
 
     return table;
 }
