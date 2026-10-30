@@ -30,24 +30,35 @@ void Hackable::Init()
 	const BoardData& data = m_boardData;
 
 	// 盤面をすべて何もないマスで作り直す
-	m_board.assign(data.size.y, std::vector<NodeType>(data.size.x, NodeType::None));
+	m_board.resize(m_boardData.size.y);
+	for (auto& line : m_board)
+	{
+		line.resize(m_boardData.size.x);
+		for (auto& cell : line)
+		{
+			cell = NodeType::None;
+		}
+	}
+	// ゴール位置を設定
 	m_board[data.goalPos.y][data.goalPos.x] = NodeType::Goal;
 
 	// 開始位置に戻す
 	m_pos.resize(1);
 	m_pos.back() = data.startPos;
 
-	// 候補をシャッフルして、先頭からnum個のマスを指定の種類にする
-	// (空いているマスが足りずに無限ループすることがないように、候補のリストから選ぶ)
-	auto placeRandom = [this](std::vector<Vector2Int> candidates, int num, NodeType type)
+	// ランダムにノードを配置する関数　引数(候補の座標、配置するノードの数、配置するノードの種類)
+	std::function placeRandom = [this](std::vector<Vector2Int> candidates, int num, NodeType type)
 	{
-		for (int i = static_cast<int>(candidates.size()) - 1; i > 0; i--)
+		// 候補の配列をランダムに入れ替える(Fisher-Yatesシャッフル)
+		for (int i = candidates.size() - 1; i > 0; i--)
 		{
-			std::swap(candidates[i], candidates[GetRand(i)]);
+			int j = GetRand(i);
+			std::swap(candidates[i], candidates[j]);
 		}
-		for (int i = 0; i < num && i < static_cast<int>(candidates.size()); i++)
+		// 配置する数分、ランダムにした配列の順番にノードを置いていく
+		for (int i = 0; i < num; i++)
 		{
-			m_board[candidates[i].y][candidates[i].x] = type;
+			m_board[candidates[i].x][candidates[i].y] = type;
 		}
 	};
 
@@ -60,12 +71,17 @@ void Hackable::Init()
 	{
 		for (int x = 0; x < data.size.x; x++)
 		{
+			// 調べる位置
 			const Vector2Int pos(x, y);
+			// スタート、ゴール位置なら飛ばす
 			if (pos == data.startPos || pos == data.goalPos) continue;
+			// 赤マスが出る可能性のある位置なら飛ばす
 			if (std::find(data.redCandidates.begin(), data.redCandidates.end(), pos) != data.redCandidates.end()) continue;
+			// 青マスの候補の配列に追加する
 			blueCandidates.push_back(pos);
 		}
 	}
+	// 青マスを配置する
 	placeRandom(blueCandidates, data.blueNum, NodeType::Open);
 }
 
@@ -172,111 +188,61 @@ void Hackable::Draw()
 
 bool Hackable::LoadData(const std::wstring& filePath)
 {
-	const auto table = MyLib::LoadCSV(filePath);
-	if (table.empty())
+	auto boardData = MyLib::LoadCSV(filePath);
+
+	// 青マスの数を取得
+	if (boardData[0][0] == L"blueNum")
 	{
-		assert(false && "Hackable::LoadData() : CSVが空か読み込めませんでした");
+		m_boardData.blueNum = std::stoi(boardData[0][1]);
+	}
+	else
+	{
+		assert(false && "1行目がblueNumではありませんでした");
 		return false;
 	}
-
-	BoardData data;
-	bool hasStart = false;
-	bool hasGoal = false;
-	int normalNum = 0;	// 青マスを置ける普通のマスの数
-
-	// 盤面の行は設定の行の後に並んでいるので、盤面だけのy座標を別で数える
-	int y = 0;
-	for (const auto& row : table)
+	// 赤マスの数を取得
+	if (boardData[1][0] == L"redNum")
 	{
-		// 設定の行("blueNum,2"のように1列目が名前、2列目が値)
-		if (row[0] == L"blueNum" || row[0] == L"redNum")
+		m_boardData.redNum = std::stoi(boardData[1][1]);
+	}
+	else
+	{
+		assert(false && "2行目がredNumではありませんでした");
+		return false;
+	}
+	// ボードをfor文で見る
+	int x = 0; int y = 0;
+	for (y = 0; y < boardData.size() - 2; y++)
+	{
+		for (x = 0; x < boardData[2].size(); x++)
 		{
-			if (row.size() < 2)
+			std::wstring node = boardData[y + 2][x];
+			if (node == L".")
 			{
-				assert(false && "Hackable::LoadData() : 設定の値がありません");
-				return false;
+				// 何もしない
 			}
-			const int value = std::stoi(row[1]);
-			if (row[0] == L"blueNum") data.blueNum = value;
-			else data.redNum = value;
-			continue;
-		}
-
-		// 盤面の行。すべての行の長さがそろっているか確認する
-		if (y == 0)
-		{
-			data.size.x = static_cast<int>(row.size());
-		}
-		else if (static_cast<int>(row.size()) != data.size.x)
-		{
-			assert(false && "Hackable::LoadData() : 盤面の行の長さがそろっていません");
-			return false;
-		}
-
-		for (int x = 0; x < static_cast<int>(row.size()); x++)
-		{
-			const std::wstring& cell = row[x];
-			if (cell == L"S")
+			else if (node == L"S")
 			{
-				if (hasStart)
-				{
-					assert(false && "Hackable::LoadData() : 開始位置(S)が複数あります");
-					return false;
-				}
-				data.startPos = Vector2Int(x, y);
-				hasStart = true;
+				m_boardData.startPos = { x, y };
 			}
-			else if (cell == L"G")
+			else if (node == L"G")
 			{
-				if (hasGoal)
-				{
-					assert(false && "Hackable::LoadData() : ゴール(G)が複数あります");
-					return false;
-				}
-				data.goalPos = Vector2Int(x, y);
-				hasGoal = true;
+				m_boardData.goalPos = { x,y };
 			}
-			else if (cell == L"r")
+			else if (node == L"r")
 			{
-				data.redCandidates.push_back(Vector2Int(x, y));
-			}
-			else if (cell == L".")
-			{
-				normalNum++;
+				m_boardData.redCandidates.push_back(Vector2Int(x, y));
 			}
 			else
 			{
-				assert(false && "Hackable::LoadData() : 盤面に知らない記号があります");
+				assert(false && "ボードの中に不明な記号があります");
 				return false;
 			}
 		}
-		y++;
 	}
-	data.size.y = y;
+	m_boardData.size.x = x;
+	m_boardData.size.y = y;
 
-	// 読み込んだ内容のチェック
-	if (data.size.x == 0 || data.size.y == 0)
-	{
-		assert(false && "Hackable::LoadData() : 盤面がありません");
-		return false;
-	}
-	if (!hasStart || !hasGoal)
-	{
-		assert(false && "Hackable::LoadData() : 開始位置(S)かゴール(G)がありません");
-		return false;
-	}
-	if (data.blueNum < 0 || data.blueNum > normalNum)
-	{
-		assert(false && "Hackable::LoadData() : 青マスの数が普通のマス(.)の数より多いです");
-		return false;
-	}
-	if (data.redNum < 0 || data.redNum > static_cast<int>(data.redCandidates.size()))
-	{
-		assert(false && "Hackable::LoadData() : 赤マスの数が候補(r)の数より多いです");
-		return false;
-	}
-
-	m_boardData = data;
 	return true;
 }
 
