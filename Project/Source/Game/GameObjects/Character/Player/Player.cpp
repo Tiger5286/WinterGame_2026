@@ -6,12 +6,13 @@
 #include "State/PlayerStateIdle.h"
 #include "State/PlayerStateHit.h"
 #include "State/PlayerStateDeath.h"
+#include "State/PlayerStateMove.h"
+#include "State/PlayerStateDodge.h"
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Transform.h"
 #include "Components/Collider/CapsuleCollider.h"
-#include "State/PlayerStateMove.h"
 #include "Resource/Model.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
@@ -280,6 +281,8 @@ void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 
 	auto stateMachine = GetComponent<StateMachine<Player>>();
 
+	// 回避中は処理しない
+	if (stateMachine->GetState<PlayerStateDodge>()) return;
 	// 被弾中は処理しない
 	if (stateMachine->GetState<PlayerStateHit>()) return;
 
