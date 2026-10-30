@@ -14,8 +14,8 @@ namespace
 {
 	// 当たり判定を出すフレーム(アニメーションのフレーム×2)
 	// TODO: Mutant|Attackの腕が当たるフレームに合わせて調整する
-	constexpr int kStartColFrame = 30 * 2;
-	constexpr int kEndColFrame = 40 * 2;
+	constexpr int kStartColFrame = 38 * 2;
+	constexpr int kEndColFrame = 42 * 2;
 
 	// 攻撃を振り始めるまではプレイヤーの方を向き続ける
 	constexpr int kEndRotFrame = 20 * 2;
