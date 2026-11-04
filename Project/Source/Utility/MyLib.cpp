@@ -220,6 +220,8 @@ std::vector<std::vector<std::wstring>> MyLib::LoadCSV(const std::wstring& filePa
     {
         // 行に何もないなら飛ばす
         if (line.empty()) continue;
+        // 行の頭が#なら飛ばす
+        if (line[0] == '#') continue;
 
         std::wstringstream ss(line);
         std::wstring cell;
