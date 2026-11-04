@@ -21,6 +21,7 @@
 #include "SceneResult.h"
 #include "SceneManager.h"
 #include "System/PadInput.h"
+#include "Game/EnemyPlacer.h"
 
 namespace
 {
@@ -112,12 +113,10 @@ void SceneMain::Init()
 	m_pPlayer->SetHackingManager(m_pHackingManager);
 	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	m_pBoss = std::make_shared<Mutant>(m_pPlayer);
-	m_pBoss->GetComponent<Transform>()->pos = Vector3(6900, 100, 300);
-	m_pGameObjectManager->Add(m_pBoss);
-	auto pEnemy = std::make_shared<Walker>(m_pPlayer);
-	pEnemy->GetComponent<Transform>()->pos = Vector3(0, 100, 1000);
-	m_pGameObjectManager->Add(pEnemy);
+	EnemyPlacer::Info enemyPlacerInfo;
+	enemyPlacerInfo.pGameObjectManager = m_pGameObjectManager;
+	enemyPlacerInfo.pPlayer = m_pPlayer;
+	EnemyPlacer::Place(enemyPlacerInfo, L"data/stages/stage1/enemyPlaceData.csv");
 }
 
 void SceneMain::Update()

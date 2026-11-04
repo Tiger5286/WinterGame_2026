@@ -228,7 +228,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyPlacer.cpp">
+    <ClCompile Include="Source\Game\EnemyPlacer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -470,7 +470,7 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyPlacer.h">
+    <ClInclude Include="Source\Game\EnemyPlacer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
