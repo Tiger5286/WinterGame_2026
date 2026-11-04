@@ -22,6 +22,10 @@ public:
         Attack,
         Interval,
         Death,
+        Charge,
+        Missile,
+        Orbit,
+        BackStep,
 
         Num
     };
