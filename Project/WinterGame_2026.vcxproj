@@ -25,7 +25,6 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.cpp" />
-    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateCharge.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMissile.cpp" />
@@ -99,7 +98,6 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantState.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateApproach.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateAttack.h" />
-    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateInterval.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateDeath.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateCharge.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMissile.h" />

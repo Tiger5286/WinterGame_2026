@@ -20,7 +20,6 @@ public:
     {
         Approach,
         Attack,
-        Interval,
         Death,
         Charge,
         Missile,
