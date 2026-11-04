@@ -34,8 +34,8 @@ namespace
 		{ L"data/models/player/player.mv1", L"PlayerModel" },
 		{ L"data/models/gun/gun.mv1",L"GunModel" },
 		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
-		{ L"data/models/stage/stage1/Stage1StaticCol.mv1", L"StaticStageModel" },
-		{ L"data/models/stage/stage1/Barrier1.mv1",L"Barrier1"},
+		{ L"data/stages/stage1/Stage1StaticCol.mv1", L"StaticStageModel" },
+		{ L"data/stages/stage1/Barrier1.mv1",L"Barrier1"},
 		{ L"data/models/enemies/Walker.mv1", L"Walker" },
 		{ L"data/models/enemies/Mutant.mv1", L"Mutant"}
 	};
