@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\EnemyFactory.cpp" />
     <ClCompile Include="Source\Game\EnemyPlacer.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\EnemyFactory.h" />
     <ClInclude Include="Source\Game\EnemyPlacer.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateHit.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Player\State\PlayerStateDeath.h" />
