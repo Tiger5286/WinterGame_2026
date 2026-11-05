@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include <string>
 #include <memory>
+#include <vector>
 
 class GameObjectManager;
 class Player;
+class EnemyBase;
 
 namespace EnemyPlacer
 {
@@ -15,8 +17,10 @@ namespace EnemyPlacer
 	};
 
 	/// <summary>
-	/// 配置処理。csvファイルを読み込み敵を配置する。
+	/// 敵の配置処理。csvファイルを読み込み、敵を生成して配置する
 	/// </summary>
-	/// <param name="filePath">敵配置情報のファイルパス</param>
-	void Place(const Info& info, const std::wstring& filePath);
+	/// <param name="info">敵を配置するために必要な情報を持った構造体Info</param>
+	/// <param name="filePath">csvファイルのパス</param>
+	/// <returns>配置した敵の配列</returns>
+	std::vector<std::shared_ptr<EnemyBase>> Place(const Info& info, const std::wstring& filePath);
 }
