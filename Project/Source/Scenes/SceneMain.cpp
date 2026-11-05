@@ -90,6 +90,8 @@ void SceneMain::Init()
 	// BoxTriggerを生成
 	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
 	m_pGameObjectManager->Add(boxTrigger);
+	boxTrigger = std::make_shared<BoxTrigger>(Vector3(5600, 600, -100), Vector3(5900, 100, 600), m_pPlayer, L"BossAreaEnter");
+	m_pGameObjectManager->Add(boxTrigger);
 	// BattleAreaを生成
 	BattleArea::Info battleAreaInfo = {
 		.startEventName = L"BattleArea1Enter",
