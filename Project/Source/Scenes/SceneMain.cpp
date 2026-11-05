@@ -25,6 +25,7 @@
 #include "Game/GameObjects/BoxTrigger.h"
 #include "Game/BarrierPlacer.h"
 #include "Game/GameObjects/BattleArea.h"
+#include "System/EventManager.h"
 
 namespace
 {
@@ -52,6 +53,9 @@ void SceneMain::Init()
 	// CollisionManagerを生成し、ServiceLocatorに登録
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 	ServiceLocator::GetInstance().ProvideCollisionManager(m_pCollisionManager.get());
+
+	// クリア時の処理をEventManagerに登録
+	EventManager::GetInstance().Register(L"DefeatedBoss", [this]() { StageClear(); }, shared_from_this());
 
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
@@ -101,6 +105,16 @@ void SceneMain::Init()
 		.pPlayer = m_pPlayer
 	};
 	auto battleArea = std::make_shared<BattleArea>(battleAreaInfo);
+	// 二つ目のBattleAreaを生成
+	m_pGameObjectManager->Add(battleArea);
+	battleAreaInfo = {
+		.startEventName = L"BossAreaEnter",
+		.endEventName = L"DefeatedBoss",
+		.csvFilePath = L"data/stages/stage1/BossAreaEnemyPlaceData.csv",
+		.pGameObjectManager = m_pGameObjectManager,
+		.pPlayer = m_pPlayer
+	};
+	battleArea = std::make_shared<BattleArea>(battleAreaInfo);
 	m_pGameObjectManager->Add(battleArea);
 }
 
@@ -118,14 +132,14 @@ void SceneMain::Update()
 		return;
 	}
 	// ボスが死んだらクリア
-	if (m_pBoss != nullptr)
+	/*if (m_pBoss != nullptr)
 	{
 		if (m_pBoss->IsDead())
 		{
 			m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
 			return;
 		}
-	}
+	}*/
 
 #ifdef _DEBUG
 	// Qキーでクリア
@@ -153,4 +167,9 @@ void SceneMain::Draw() const
 	DrawString(0, 0, L"SceneMain", 0xffffff);
 	DrawString(0, 16, L"Qキーでクリアする", 0xffffff);
 #endif
+}
+
+void SceneMain::StageClear()
+{
+	m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
 }

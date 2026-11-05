@@ -20,6 +20,9 @@ public:
     void Draw() const override;
 
 private:
+	void StageClear();
+
+private:
     std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
     std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
