@@ -2,13 +2,15 @@
 #include "Character/Player/Player.h"
 #include "Components/Transform.h"
 #include "System/EventManager.h"
+#include <algorithm>
 
-BoxTrigger::BoxTrigger(const Vector3& pos, const Vector3& size, const std::shared_ptr<Player>& pPlayer, const std::wstring& eventName) :
-	m_size(size),
+BoxTrigger::BoxTrigger(const Vector3& pos, const Vector3& pos2, const std::shared_ptr<Player>& pPlayer, const std::wstring& eventName) :
+	m_pos2(pos2),
 	m_pPlayer(pPlayer),
 	m_enterEventName(eventName)
 {
-	GetComponent<Transform>()->pos = pos;
+	m_minPos = Vector3((std::min)(pos.x, m_pos2.x), (std::min)(pos.y, m_pos2.y), (std::min)(pos.z, m_pos2.z));
+	m_maxPos = Vector3((std::max)(pos.x, m_pos2.x), (std::max)(pos.y, m_pos2.y), (std::max)(pos.z, m_pos2.z));
 }
 
 BoxTrigger::~BoxTrigger()
@@ -21,12 +23,19 @@ void BoxTrigger::Init()
 
 void BoxTrigger::Update()
 {
-	const Vector3& playerPos = m_pPlayer.lock()->GetComponent<Transform>()->pos;
+	auto player = m_pPlayer.lock();
+	if (!player)
+	{
+		assert(false && "BoxTrigger::Update() : プレイヤーが存在しません");
+		return;
+	}
+
+	const Vector3& playerPos = player->GetComponent<Transform>()->pos;
 	const Vector3& pos = GetComponent<Transform>()->pos;
 
-	bool isPlayerInX = playerPos.x >= pos.x && playerPos.x <= pos.x + m_size.x;
-	bool isPlayerInY = playerPos.y >= pos.y && playerPos.y <= pos.y + m_size.y;
-	bool isPlayerInZ = playerPos.z >= pos.z && playerPos.z <= pos.z + m_size.z;
+	bool isPlayerInX = playerPos.x >= m_minPos.x && playerPos.x <= m_maxPos.x;
+	bool isPlayerInY = playerPos.y >= m_minPos.y && playerPos.y <= m_maxPos.y;
+	bool isPlayerInZ = playerPos.z >= m_minPos.z && playerPos.z <= m_maxPos.z;
 
 	if (isPlayerInX && isPlayerInY && isPlayerInZ)
 	{
@@ -45,20 +54,22 @@ void BoxTrigger::Draw()
 #ifdef _DEBUG
 	Vector3 pos = GetComponent<Transform>()->pos;
 
+	Vector3 size = m_pos2 - pos;
+
 	// 底面の線
-	DrawLine3D(pos, pos + Vector3(m_size.x, 0, 0), 0xff0000);
-	DrawLine3D(pos, pos + Vector3(0, 0, m_size.z), 0xff0000);
-	DrawLine3D(pos + Vector3(m_size.x, 0, 0), pos + Vector3(m_size.x, 0, m_size.z), 0xff0000);
-	DrawLine3D(pos + Vector3(0, 0, m_size.z), pos + Vector3(m_size.x, 0, m_size.z), 0xff0000);
+	DrawLine3D(pos, pos + Vector3(size.x, 0, 0), 0xff0000);
+	DrawLine3D(pos, pos + Vector3(0, 0, size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(size.x, 0, 0), pos + Vector3(size.x, 0, size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(0, 0, size.z), pos + Vector3(size.x, 0, size.z), 0xff0000);
 	// 上面の線
-	DrawLine3D(pos + Vector3(0, m_size.y, 0), pos + Vector3(m_size.x, m_size.y, 0), 0xff0000);
-	DrawLine3D(pos + Vector3(0, m_size.y, 0), pos + Vector3(0, m_size.y, m_size.z), 0xff0000);
-	DrawLine3D(pos + Vector3(m_size.x, m_size.y, 0), pos + Vector3(m_size.x, m_size.y, m_size.z), 0xff0000);
-	DrawLine3D(pos + Vector3(0, m_size.y, m_size.z), pos + Vector3(m_size.x, m_size.y, m_size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(0, size.y, 0), pos + Vector3(size.x, size.y, 0), 0xff0000);
+	DrawLine3D(pos + Vector3(0, size.y, 0), pos + Vector3(0, size.y, size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(size.x, size.y, 0), pos + Vector3(size.x, size.y, size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(0, size.y, size.z), pos + Vector3(size.x, size.y, size.z), 0xff0000);
 	// 縦の線
-	DrawLine3D(pos, pos + Vector3(0, m_size.y, 0), 0xff0000);
-	DrawLine3D(pos + Vector3(m_size.x, 0, 0), pos + Vector3(m_size.x, m_size.y, 0), 0xff0000);
-	DrawLine3D(pos + Vector3(0, 0, m_size.z), pos + Vector3(0, m_size.y, m_size.z), 0xff0000);
-	DrawLine3D(pos + Vector3(m_size.x, 0, m_size.z), pos + Vector3(m_size.x, m_size.y, m_size.z), 0xff0000);
+	DrawLine3D(pos, pos + Vector3(0, size.y, 0), 0xff0000);
+	DrawLine3D(pos + Vector3(size.x, 0, 0), pos + Vector3(size.x, size.y, 0), 0xff0000);
+	DrawLine3D(pos + Vector3(0, 0, size.z), pos + Vector3(0, size.y, size.z), 0xff0000);
+	DrawLine3D(pos + Vector3(size.x, 0, size.z), pos + Vector3(size.x, size.y, size.z), 0xff0000);
 #endif
 }
