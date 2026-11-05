@@ -52,9 +52,8 @@ void BoxTrigger::Update()
 void BoxTrigger::Draw()
 {
 #ifdef _DEBUG
-	Vector3 pos = GetComponent<Transform>()->pos;
-
-	Vector3 size = m_pos2 - pos;
+	Vector3 pos = m_minPos;
+	Vector3 size = m_maxPos - m_minPos;
 
 	// 底面の線
 	DrawLine3D(pos, pos + Vector3(size.x, 0, 0), 0xff0000);
