@@ -16,8 +16,6 @@
 #include "Components/Transform.h"
 #include "Game/HackingManager.h"
 #include "System/UIManager.h"
-#include "Game/GameObjects/Character/Enemies/Walker/Walker.h"
-#include "Game/GameObjects/Character/Enemies/Mutant/Mutant.h"
 #include "SceneResult.h"
 #include "SceneManager.h"
 #include "System/PadInput.h"
@@ -91,9 +89,10 @@ void SceneMain::Init()
 	enemyPlacerInfo.pGameObjectManager = m_pGameObjectManager;
 	enemyPlacerInfo.pPlayer = m_pPlayer;
 	EnemyPlacer::Place(enemyPlacerInfo, L"data/stages/stage1/enemyPlaceData.csv");
-	// BoxTriggerを生成
+	// BoxTriggerを生成(戦闘エリアの入り口)
 	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
 	m_pGameObjectManager->Add(boxTrigger);
+	// 二つ目のBoxTriggerを生成(ボス部屋の入り口)
 	boxTrigger = std::make_shared<BoxTrigger>(Vector3(5600, 600, -100), Vector3(5900, 100, 600), m_pPlayer, L"BossAreaEnter");
 	m_pGameObjectManager->Add(boxTrigger);
 	// BattleAreaを生成
@@ -105,8 +104,8 @@ void SceneMain::Init()
 		.pPlayer = m_pPlayer
 	};
 	auto battleArea = std::make_shared<BattleArea>(battleAreaInfo);
-	// 二つ目のBattleAreaを生成
 	m_pGameObjectManager->Add(battleArea);
+	// 二つ目のBattleAreaを生成
 	battleAreaInfo = {
 		.startEventName = L"BossAreaEnter",
 		.endEventName = L"DefeatedBoss",
@@ -131,15 +130,6 @@ void SceneMain::Update()
 		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, false));
 		return;
 	}
-	// ボスが死んだらクリア
-	/*if (m_pBoss != nullptr)
-	{
-		if (m_pBoss->IsDead())
-		{
-			m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
-			return;
-		}
-	}*/
 
 #ifdef _DEBUG
 	// Qキーでクリア
