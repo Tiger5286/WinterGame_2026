@@ -26,28 +26,7 @@
 
 namespace
 {
-	struct LoadData
-	{
-		const std::wstring filePath;
-		const std::wstring key;
-	};
-
-	const LoadData kLoadModelFiles[] = {
-		{ L"data/models/player/player.mv1", L"PlayerModel" },
-		{ L"data/models/gun/gun.mv1",L"GunModel" },
-		{ L"data/models/enemies/testEnemy.mv1", L"TestEnemyModel"},
-		{ L"data/stages/stage1/Stage1StaticCol.mv1", L"StaticStageModel" },
-		{ L"data/stages/stage1/Barrier1.mv1",L"Barrier1"},
-		{ L"data/models/enemies/Walker.mv1", L"Walker" },
-		{ L"data/models/enemies/Mutant.mv1", L"Mutant"}
-	};
-
-	const LoadData kLoadGraphFiles[] = {
-		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber.png", L"NormalWalkerTex" },
-		{ L"data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber_Open.png", L"HackedWalkerTex" },
-		{ L"data/models/enemies/Mutant.fbm/Mutant_diffuse.png", L"NormalMutantTex" },
-		{ L"data/models/enemies/Mutant.fbm/Mutant_diffuse_open.png", L"HackedMutantTex" },
-	};
+	const std::wstring kResourceFilePath = L"data/loadData.csv";
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager):
@@ -60,14 +39,7 @@ SceneMain::~SceneMain()
 	// CollisionManagerが消えるのでServiceLocatorの登録を解除
 	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
 	// SceneMainでしか使わないリソースを削除
-	for (auto& model : kLoadModelFiles)
-	{
-		ResourceManager::GetInstance().Delete(model.key);
-	}
-	for (auto& graph : kLoadGraphFiles)
-	{
-		ResourceManager::GetInstance().Delete(graph.key);
-	}
+	ResourceManager::GetInstance().DeleteFromCSV(kResourceFilePath);
 	clsDx();
 }
 
@@ -81,14 +53,7 @@ void SceneMain::Init()
 
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
-	for (const auto& file : kLoadModelFiles)
-	{
-		resourceManager.LoadModel(file.filePath, file.key);
-	}
-	for (const auto& file : kLoadGraphFiles)
-	{
-		resourceManager.LoadGraph(file.filePath, file.key);
-	}
+	resourceManager.LoadFromCSV(kResourceFilePath);
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成

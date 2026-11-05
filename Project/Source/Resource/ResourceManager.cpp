@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "Model.h"
 #include "Graph.h"
+#include "Utility/MyLib.h"
 
 ResourceManager& ResourceManager::GetInstance()
 {
@@ -18,7 +19,7 @@ ResourceManager::~ResourceManager()
 void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring& key)
 {
 	// キーが重複していたらエラー
-	if (m_Resources.find(key) != m_Resources.end())
+	if (m_resources.find(key) != m_resources.end())
 	{
 		assert(false && "ResourceManager::LoadModel() : すでに登録済みのキーを登録しようとしています");
 		return;
@@ -32,13 +33,13 @@ void ResourceManager::LoadModel(const std::wstring& filePath, const std::wstring
 		return;
 	}
 	// modelクラスを生成してmapに保存
-	m_Resources[key] = std::make_unique<Model>(handle);
+	m_resources[key] = std::make_unique<Model>(handle);
 }
 
 void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring& key)
 {
 	// キーが重複していたらエラー
-	if (m_Resources.find(key) != m_Resources.end())
+	if (m_resources.find(key) != m_resources.end())
 	{
 		assert(false && "ResourceManager::LoadGraph() : すでに登録済みのキーを登録しようとしています");
 		return;
@@ -49,23 +50,24 @@ void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring
 		assert(false && "ResourceManager::LoadGraph() : 画像のロードが正しく行われませんでした");
 		return;
 	}
-	m_Resources[key] = std::make_unique<Graph>(handle);
+	m_resources[key] = std::make_unique<Graph>(handle);
 }
 
 void ResourceManager::Delete(const std::wstring& key)
 {
-	m_Resources.erase(key);
+	m_resources.erase(key);
 }
 
 void ResourceManager::DeleteAll()
 {
-	m_Resources.clear();
+	m_resources.clear();
+	m_csvResourceMap.clear();
 }
 
 Model* ResourceManager::GetModel(const std::wstring& key)
 {
-	auto it = m_Resources.find(key);
-	if (it == m_Resources.end())
+	auto it = m_resources.find(key);
+	if (it == m_resources.end())
 	{
 		assert(false && "ResourceManager::GetModel() : キーに対応したリソースが見つかりませんでした");
 		return nullptr;
@@ -78,8 +80,8 @@ Model* ResourceManager::GetModel(const std::wstring& key)
 
 std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 {
-	auto it = m_Resources.find(key);
-	if (it == m_Resources.end())
+	auto it = m_resources.find(key);
+	if (it == m_resources.end())
 	{
 		assert(false && "ResourceManager::DuplicateModel() : キーに対応したリソースが見つかりませんでした");
 		return nullptr;
@@ -98,8 +100,8 @@ std::unique_ptr<Model> ResourceManager::DuplicateModel(const std::wstring& key)
 
 Graph* ResourceManager::GetGraph(const std::wstring& key)
 {
-	auto it = m_Resources.find(key);
-	if (it == m_Resources.end())
+	auto it = m_resources.find(key);
+	if (it == m_resources.end())
 	{
 		assert(false && "ResourceManager::GetGraph() : キーに対応したリソースが見つかりませんでした");
 		return nullptr;
@@ -108,4 +110,48 @@ Graph* ResourceManager::GetGraph(const std::wstring& key)
 	auto* pGraph = dynamic_cast<Graph*>(it->second.get());
 	assert(pGraph && "ResourceManager::GetGraph() : キーに登録されているリソースはGraphではありません");
 	return pGraph;
+}
+
+void ResourceManager::LoadFromCSV(const std::wstring& filePath)
+{
+	auto csvData = MyLib::LoadCSV(filePath);
+	for (const auto& row : csvData)
+	{
+		const auto& type = row[0];
+		const auto& key = row[1];
+		const auto& path = row[2];
+
+		if (type == L"model")
+		{
+			LoadModel(path, key);
+			m_csvResourceMap[filePath].push_back(key);
+		}
+		else if (type == L"graph")
+		{
+			LoadGraph(path, key);
+			m_csvResourceMap[filePath].push_back(key);
+		}
+		else
+		{
+			assert(false && "ResourceManager::LoadFromCSV() : CSVのResourceTypeが正しくありません");
+			continue;
+		}
+	}
+}
+
+void ResourceManager::DeleteFromCSV(const std::wstring& filePath)
+{
+	auto it = m_csvResourceMap.find(filePath);
+	if (it != m_csvResourceMap.end())
+	{
+		for (const auto& key : it->second)
+		{
+			Delete(key);
+		}
+		m_csvResourceMap.erase(filePath);
+	}
+	else
+	{
+		assert(false && "ResourceManager::DeleteFromCSV() : CSVのリソースが見つかりませんでした");
+	}
 }

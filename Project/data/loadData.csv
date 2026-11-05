@@ -1,0 +1,11 @@
+﻿#resourceType,#key,#filePath
+model,PlayerModel,data/models/player/player.mv1
+model,GunModel,data/models/gun/gun.mv1
+model,StaticStageModel,data/stages/stage1/Stage1StaticCol.mv1
+model,Barrier1,data/stages/stage1/Barrier1.mv1
+model,Walker,data/models/enemies/Walker.mv1
+model,Mutant,data/models/enemies/Mutant.mv1
+graph,NormalWalkerTex,data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber.png
+graph,HackedWalkerTex,data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber_Open.png
+graph,NormalMutantTex,data/models/enemies/Mutant.fbm/Mutant_diffuse.png
+graph,HackedMutantTex,data/models/enemies/Mutant.fbm/Mutant_diffuse_open.png

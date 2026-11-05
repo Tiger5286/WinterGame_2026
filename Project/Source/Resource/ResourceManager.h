@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <vector>
 
 class Resource;
 class Model;
@@ -60,6 +61,19 @@ public:
 	/// <returns>画像のハンドル</returns>
 	Graph* GetGraph(const std::wstring& key);
 
+	/// <summary>
+	/// リソースをCSVからロードする。この関数でロードしたリソースはファイルパスと紐づけられ、DeleteFromCSV()でまとめて削除できる
+	/// </summary>
+	/// <param name="filePath">csvファイルのパス</param>
+	void LoadFromCSV(const std::wstring& filePath);
+
+	/// <summary>
+	/// LoadFromCSV()でロードしたリソースをまとめて削除する
+	/// </summary>
+	/// <param name="filePath">csvファイルのパス</param>
+	void DeleteFromCSV(const std::wstring& filePath);
+
 private:
-	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_Resources;
+	std::unordered_map<std::wstring,std::unique_ptr<Resource>> m_resources;
+	std::unordered_map<std::wstring, std::vector<std::wstring>> m_csvResourceMap;
 };
