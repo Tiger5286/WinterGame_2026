@@ -93,7 +93,14 @@ void SceneMain::Init()
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
-	m_pGameObjectManager->Add(std::make_shared<Barrier>());
+	// バリアを生成
+	auto barrier = std::make_shared<Barrier>(L"Barrier1", Barrier::ActionType::Enable);
+	Barrier::ActionInfo barrierActionInfo;
+	barrierActionInfo.eventName = L"RemoveBarrier1";
+	barrierActionInfo.actionType = Barrier::ActionType::Destroy;
+	barrier->AddEvent(barrierActionInfo);
+	m_pGameObjectManager->Add(barrier);
+	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");
 	hackPoint->GetComponent<Transform>()->pos = Vector3(4300, 500, 2300);
