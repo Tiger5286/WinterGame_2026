@@ -24,6 +24,7 @@
 #include "Game/EnemyPlacer.h"
 #include "Game/GameObjects/BoxTrigger.h"
 #include "Game/BarrierPlacer.h"
+#include "Game/GameObjects/BattleArea.h"
 
 namespace
 {
@@ -61,12 +62,6 @@ void SceneMain::Init()
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// バリアを生成
 	BarrierPlacer::Place(m_pGameObjectManager, L"data/stages/stage1/barrierData.csv");
-	//auto barrier = std::make_shared<Barrier>(L"Barrier1", Barrier::ActionType::Enable);
-	//Barrier::ActionInfo barrierActionInfo;
-	//barrierActionInfo.eventName = L"RemoveBarrier1";
-	//barrierActionInfo.actionType = Barrier::ActionType::Destroy;
-	//barrier->AddEvent(barrierActionInfo);
-	//m_pGameObjectManager->Add(barrier);
 	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");
@@ -95,6 +90,16 @@ void SceneMain::Init()
 	// BoxTriggerを生成
 	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
 	m_pGameObjectManager->Add(boxTrigger);
+	// BattleAreaを生成
+	BattleArea::Info battleAreaInfo = {
+		.startEventName = L"BattleArea1Enter",
+		.endEventName = L"BattleArea1Clear",
+		.csvFilePath = L"data/stages/stage1/battleArea1EnemyPlaceData.csv",
+		.pGameObjectManager = m_pGameObjectManager,
+		.pPlayer = m_pPlayer
+	};
+	auto battleArea = std::make_shared<BattleArea>(battleAreaInfo);
+	m_pGameObjectManager->Add(battleArea);
 }
 
 void SceneMain::Update()
