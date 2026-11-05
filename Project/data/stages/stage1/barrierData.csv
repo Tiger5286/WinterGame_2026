@@ -1,0 +1,4 @@
+﻿#name,defaultActionType,event,actiontype,event,actiontype,…
+Barrier1,Enable,RemoveBarrier1,Destroy,,,
+Barrier2,Disable,BattleArea1Enter,Enable,BattleArea1Clear,Destroy,
+#Barrier3,Disable,BossAreaEnter,Enable,,,

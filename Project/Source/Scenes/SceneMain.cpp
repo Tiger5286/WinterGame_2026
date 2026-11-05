@@ -23,6 +23,7 @@
 #include "System/PadInput.h"
 #include "Game/EnemyPlacer.h"
 #include "Game/GameObjects/BoxTrigger.h"
+#include "Game/BarrierPlacer.h"
 
 namespace
 {
@@ -59,12 +60,13 @@ void SceneMain::Init()
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// バリアを生成
-	auto barrier = std::make_shared<Barrier>(L"Barrier1", Barrier::ActionType::Enable);
-	Barrier::ActionInfo barrierActionInfo;
-	barrierActionInfo.eventName = L"RemoveBarrier1";
-	barrierActionInfo.actionType = Barrier::ActionType::Destroy;
-	barrier->AddEvent(barrierActionInfo);
-	m_pGameObjectManager->Add(barrier);
+	BarrierPlacer::Place(m_pGameObjectManager, L"data/stages/stage1/barrierData.csv");
+	//auto barrier = std::make_shared<Barrier>(L"Barrier1", Barrier::ActionType::Enable);
+	//Barrier::ActionInfo barrierActionInfo;
+	//barrierActionInfo.eventName = L"RemoveBarrier1";
+	//barrierActionInfo.actionType = Barrier::ActionType::Destroy;
+	//barrier->AddEvent(barrierActionInfo);
+	//m_pGameObjectManager->Add(barrier);
 	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\BarrierPlacer.cpp" />
     <ClCompile Include="Source\Game\GameObjects\BoxTrigger.cpp" />
     <ClCompile Include="Source\Game\EnemyFactory.cpp" />
     <ClCompile Include="Source\Game\EnemyPlacer.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\BarrierPlacer.h" />
     <ClInclude Include="Source\Game\GameObjects\BoxTrigger.h" />
     <ClInclude Include="Source\Game\EnemyFactory.h" />
     <ClInclude Include="Source\Game\EnemyPlacer.h" />
