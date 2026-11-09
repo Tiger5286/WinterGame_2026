@@ -138,6 +138,11 @@ void SceneMain::Update()
 		m_sceneManager.ChangeSceneWithFade(std::make_shared<SceneResult>(m_sceneManager, true));
 		return;
 	}
+	// Wキーでボス部屋にテレポート
+	if (CheckHitKey(KEY_INPUT_W))
+	{
+		m_pPlayer->GetComponent<Transform>()->pos = Vector3(5700, 100, 200);
+	}
 #endif
 }
 
