@@ -18,6 +18,14 @@
 #include "State/MutantStateApproach.h"
 #include "State/MutantStateDeath.h"
 #include <string>
+#ifdef _DEBUG
+#include "Game.h"
+#include "State/MutantStateAttack.h"
+#include "State/MutantStateBackStep.h"
+#include "State/MutantStateCharge.h"
+#include "State/MutantStateMissile.h"
+#include "State/MutantStateOrbit.h"
+#endif
 
 namespace
 {
@@ -30,6 +38,47 @@ namespace
 
 	const Vector3 kHackLocalPos = { 0.0f,250.0f,0.0f };
 	constexpr const wchar_t* kHackBoardPath = L"data/hackBoard/mutantBoard.csv";
+
+#ifdef _DEBUG
+	// デバッグ用のステート切り替えに必要な情報
+	struct DebugStateData
+	{
+		int key;
+		const wchar_t* keyName;
+		const wchar_t* stateName;
+		MutantState::ID id;
+		std::unique_ptr<State<Mutant>>(*create)(Mutant&);
+	};
+
+	template<class T>
+	std::unique_ptr<State<Mutant>> CreateDebugState(Mutant& mutant)
+	{
+		return std::make_unique<T>(mutant);
+	}
+
+	const DebugStateData kDebugStates[] = {
+		{ KEY_INPUT_1, L"1", L"接近", MutantState::ID::Approach, CreateDebugState<MutantStateApproach> },
+		{ KEY_INPUT_2, L"2", L"通常攻撃", MutantState::ID::Attack, CreateDebugState<MutantStateAttack> },
+		{ KEY_INPUT_3, L"3", L"警戒", MutantState::ID::Orbit, CreateDebugState<MutantStateOrbit> },
+		{ KEY_INPUT_4, L"4", L"バックステップ", MutantState::ID::BackStep, CreateDebugState<MutantStateBackStep> },
+		{ KEY_INPUT_5, L"5", L"突進", MutantState::ID::Charge, CreateDebugState<MutantStateCharge> },
+		{ KEY_INPUT_6, L"6", L"ミサイル", MutantState::ID::Missile, CreateDebugState<MutantStateMissile> },
+		{ KEY_INPUT_7, L"7", L"死亡", MutantState::ID::Death, CreateDebugState<MutantStateDeath> },
+	};
+
+	// 警戒はクールタイムが0だとすぐ終わるので、デバッグで切り替えたときはこの時間だけ続ける
+	constexpr int kDebugOrbitCooltime = 180;
+
+	const Vector3 kDebugStateNameOffset = { 0.0f,520.0f,0.0f };
+
+	constexpr int kDebugPanelWidth = 220;
+	constexpr int kDebugPanelMargin = 10;
+	constexpr int kDebugPanelPadding = 8;
+	constexpr int kDebugLineHeight = 18;
+	constexpr int kDebugPanelAlpha = 160;
+	constexpr unsigned int kDebugTextColor = 0xffffff;
+	constexpr unsigned int kDebugCurrentColor = 0xffff00;
+#endif
 }
 
 Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
@@ -96,6 +145,9 @@ void Mutant::Init()
 
 void Mutant::Update()
 {
+#ifdef _DEBUG
+	DebugChangeState();
+#endif
 	GetComponent<StateMachine<Mutant>>()->Update();
 	m_attackCooltime--;
 	if (m_attackCooltime < 0) m_attackCooltime = 0;
@@ -136,6 +188,7 @@ void Mutant::Draw()
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
 	GetComponent<Hitbox>()->Draw();
+	DebugDraw();
 #endif
 }
 
@@ -245,3 +298,86 @@ void Mutant::SetHitbox()
 	capsule.radius = 25.0f;
 	hitbox->AddCollider(capsule);
 }
+
+#ifdef _DEBUG
+void Mutant::DebugChangeState()
+{
+	// 押されているキーを探す
+	const DebugStateData* pPressed = nullptr;
+	for (const auto& data : kDebugStates)
+	{
+		if (CheckHitKey(data.key))
+		{
+			pPressed = &data;
+			break;
+		}
+	}
+
+	// 押した瞬間だけ切り替える
+	const int key = pPressed ? pPressed->key : -1;
+	const bool isTrigger = key != m_debugPrevKey;
+	m_debugPrevKey = key;
+	if (!pPressed || !isTrigger) return;
+
+	// 死亡ステートではコライダーなどを無効にしているので、他のステートに戻さない
+	if (IsDying()) return;
+
+	GetComponent<StateMachine<Mutant>>()->ChangeState(pPressed->create(*this));
+
+	// 前のステートのExit()でクールタイムが上書きされるので、切り替えの後で設定する
+	if (pPressed->id == MutantState::ID::Orbit)
+	{
+		m_attackCooltime = kDebugOrbitCooltime;
+	}
+}
+
+void Mutant::DebugDraw()
+{
+	// 現在のステートの名前を探す
+	const MutantState* pState = GetComponent<StateMachine<Mutant>>()->GetState<MutantState>();
+	std::wstring currentName = L"なし";
+	for (const auto& data : kDebugStates)
+	{
+		if (pState && pState->GetID() == data.id)
+		{
+			currentName = data.stateName;
+			break;
+		}
+	}
+
+	// ボスの頭上にステートの名前を描画
+	const Vector3 namePos = GetComponent<Transform>()->pos + kDebugStateNameOffset;
+	if (!CheckCameraViewClip(namePos))
+	{
+		const Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(namePos));
+		const int width = GetDrawStringWidth(currentName.c_str(), static_cast<int>(currentName.size()));
+		DrawString(static_cast<int>(screenPos.x) - width / 2, static_cast<int>(screenPos.y), currentName.c_str(), kDebugCurrentColor);
+	}
+
+	// 画面右上に半透明のパネルを描画(タイトル、現在のステート、クールタイム + ステートの一覧)
+	const int stateNum = static_cast<int>(std::size(kDebugStates));
+	const int panelLeft = Game::kScreenWidth - kDebugPanelWidth - kDebugPanelMargin;
+	const int panelTop = kDebugPanelMargin;
+	const int panelBottom = panelTop + kDebugPanelPadding * 2 + kDebugLineHeight * (3 + stateNum);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kDebugPanelAlpha);
+	DrawBox(panelLeft, panelTop, panelLeft + kDebugPanelWidth, panelBottom, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	const int textX = panelLeft + kDebugPanelPadding;
+	int textY = panelTop + kDebugPanelPadding;
+	DrawString(textX, textY, L"Mutant ステート切り替え", kDebugTextColor);
+	textY += kDebugLineHeight;
+	DrawFormatString(textX, textY, kDebugTextColor, L"現在 : %s", currentName.c_str());
+	textY += kDebugLineHeight;
+	DrawFormatString(textX, textY, kDebugTextColor, L"クールタイム : %d", m_attackCooltime);
+	textY += kDebugLineHeight;
+
+	// 現在のステートの行は色を変える
+	for (const auto& data : kDebugStates)
+	{
+		const bool isCurrent = pState && pState->GetID() == data.id;
+		DrawFormatString(textX, textY, isCurrent ? kDebugCurrentColor : kDebugTextColor, L"%s%s : %s", isCurrent ? L"> " : L"  ", data.keyName, data.stateName);
+		textY += kDebugLineHeight;
+	}
+}
+#endif
