@@ -18,6 +18,8 @@ namespace
 	constexpr float kDistanceGain = 0.05f;		// 距離を戻す強さ
 	constexpr float kMaxCorrectSpeed = 0.5f;	// 距離補正の最高速度
 	constexpr float kVelocityGain = 0.2f;		// 目標速度へ近づく強さ
+
+	constexpr int kAttackCooltime = 180;	// 攻撃のクールタイム
 }
 
 MutantStateOrbit::MutantStateOrbit(Mutant& mutant) :
@@ -34,26 +36,21 @@ void MutantStateOrbit::Enter()
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
 	// 横歩きのアニメーションがないため仮で前歩きを使う
 	m_owner.GetComponent<Animator>()->Play(L"Mutant|WalkForward");
+	m_attackCooltime = kAttackCooltime;
 }
 
 void MutantStateOrbit::Update()
 {
 	RotToPlayer();
+	m_attackCooltime--;
 
 	auto stateMachine = m_owner.GetComponent<StateMachine<Mutant>>();
 	const Vector3 toPlayerXZ = GetToPlayerXZ();
 
-	// 攻撃のクールタイムが終わったら、距離に応じて攻撃か接近をする
-	if (GetAttackCooltime() <= 0)
+	// 攻撃のクールタイムが終わったら、ランダムで攻撃行動に移る
+	if (m_attackCooltime <= 0)
 	{
-		if (toPlayerXZ.SquaredLength() < kAttackDist * kAttackDist)
-		{
-			stateMachine->ChangeState(std::make_unique<MutantStateAttack>(m_owner));
-		}
-		else
-		{
-			stateMachine->ChangeState(std::make_unique<MutantStateApproach>(m_owner));
-		}
+		ChangeAttackStateRandom();
 		return;
 	}
 

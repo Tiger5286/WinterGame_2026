@@ -11,6 +11,16 @@ class Mutant :
 public:
     static constexpr int kMaxHp = 3000;
 
+    enum class AttackType
+    {
+        None,
+        Normal,
+        Missile,
+        Charge,
+
+        Num
+    };
+
 public:
     Mutant(std::shared_ptr<Player> pPlayer);
     ~Mutant();
@@ -28,6 +38,8 @@ private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();
     void SetHitbox();
+    AttackType SelectAttackType();
+	void ChangeAttackState(AttackType type);
 #ifdef _DEBUG
     // 数字キーでステートを切り替える
     void DebugChangeState();
@@ -38,11 +50,11 @@ private:
 private:
     std::unique_ptr<Model> m_pModel;
     int m_diffuseTexIndex = 0;  // ハッキング時に差し替えるテクスチャの番号
-    int m_attackCooltime = 0;
     std::shared_ptr<EnemyHPUI> m_pHPUI = nullptr;
 #ifdef _DEBUG
     int m_debugPrevKey = -1;    // 前のフレームで押されていたキー(押しっぱなしで切り替え直さないため)
 #endif
+    AttackType m_lastAttack = AttackType::None;
 
     friend class MutantState;
 };

@@ -17,16 +17,6 @@ std::shared_ptr<Player> MutantState::GetPlayer() const
 	return m_owner.m_pPlayer.lock();
 }
 
-int MutantState::GetAttackCooltime() const
-{
-	return m_owner.m_attackCooltime;
-}
-
-void MutantState::SetAttackCooltime(int coolTime)
-{
-	m_owner.m_attackCooltime = coolTime;
-}
-
 void MutantState::Die()
 {
 	m_owner.m_isDead = true;
@@ -35,6 +25,12 @@ void MutantState::Die()
 void MutantState::RotToPlayer()
 {
 	m_owner.RotToPlayer();
+}
+
+void MutantState::ChangeAttackStateRandom()
+{
+	auto selectedType = m_owner.SelectAttackType();
+	m_owner.ChangeAttackState(selectedType);
 }
 
 Vector3 MutantState::GetToPlayerXZ() const

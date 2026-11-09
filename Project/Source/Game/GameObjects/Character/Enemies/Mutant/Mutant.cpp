@@ -18,14 +18,15 @@
 #include "State/MutantStateApproach.h"
 #include "State/MutantStateDeath.h"
 #include <string>
-#ifdef _DEBUG
+#include "State/MutantStateOrbit.h"
 #include "Game.h"
 #include "State/MutantStateAttack.h"
 #include "State/MutantStateBackStep.h"
 #include "State/MutantStateCharge.h"
 #include "State/MutantStateMissile.h"
-#include "State/MutantStateOrbit.h"
-#endif
+#include <vector>
+#include <unordered_map>
+#include <functional>
 
 namespace
 {
@@ -38,6 +39,13 @@ namespace
 
 	const Vector3 kHackLocalPos = { 0.0f,250.0f,0.0f };
 	constexpr const wchar_t* kHackBoardPath = L"data/hackBoard/mutantBoard.csv";
+
+	// 攻撃ステートの対応表
+	const std::unordered_map<Mutant::AttackType,std::function<void(Mutant&)>> kAttackStateTable = {
+		{ Mutant::AttackType::Normal, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateApproach>(mutant)); } },
+		{ Mutant::AttackType::Missile, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateMissile>(mutant)); } },
+		{ Mutant::AttackType::Charge, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateCharge>(mutant)); } },
+	};
 
 #ifdef _DEBUG
 	// デバッグ用のステート切り替えに必要な情報
@@ -112,11 +120,14 @@ void Mutant::Init()
 	animator->Init(m_pModel.get());
 	animator->AddAnimation(L"Mutant|Idle");
 	animator->AddAnimation(L"Mutant|WalkForward");
+	animator->AddAnimation(L"Mutant|WalkRight");
+	animator->AddAnimation(L"Mutant|Run");
+	animator->AddAnimation(L"Mutant|Power");
 	animator->AddAnimation(L"Mutant|Attack", 0.5f, false);
 	animator->AddAnimation(L"Mutant|Death", 0.5f, false);
 
 	auto stateMachine = GetComponent<StateMachine<Mutant>>();
-	stateMachine->ChangeState(std::make_unique<MutantStateApproach>(*this));
+	stateMachine->ChangeState(std::make_unique<MutantStateOrbit>(*this));
 
 	Hackable::Info hackableInfo;
 	hackableInfo.func = [this](Hackable::HackedData data) { OnHacked(data); };
@@ -149,8 +160,6 @@ void Mutant::Update()
 	DebugChangeState();
 #endif
 	GetComponent<StateMachine<Mutant>>()->Update();
-	m_attackCooltime--;
-	if (m_attackCooltime < 0) m_attackCooltime = 0;
 
 	// 死亡中はコライダーが無効で床と押し戻しされないため、物理を止める
 	if (!IsDying())
@@ -299,6 +308,41 @@ void Mutant::SetHitbox()
 	hitbox->AddCollider(capsule);
 }
 
+Mutant::AttackType Mutant::SelectAttackType()
+{
+	// 選択される可能性のある攻撃タイプのテーブルを作る
+	std::vector<AttackType> attackTypeTable;
+	// テーブルに攻撃タイプを追加していく
+	for (int i = 0; i < static_cast<int>(AttackType::Num); i++)
+	{
+		// 追加する攻撃タイプ
+		AttackType attackType = static_cast<AttackType>(i);
+		// 前回と同じ攻撃タイプは選ばない
+		if (attackType == m_lastAttack) continue;
+		// 攻撃タイプがNoneのときは選ばない
+		if (attackType == AttackType::None) continue;
+		// 追加
+		attackTypeTable.push_back(static_cast<AttackType>(i));
+	}
+	// テーブルからランダムに選んで返す
+	int rand = GetRand(attackTypeTable.size() - 1);
+	return attackTypeTable[rand];
+}
+
+void Mutant::ChangeAttackState(AttackType type)
+{
+	auto it = kAttackStateTable.find(type);
+	if (it != kAttackStateTable.end())
+	{
+		it->second(*this);
+		m_lastAttack = type;
+	}
+	else
+	{
+		assert(false && "Mutant::ChangeStateAttack() : 対応する攻撃ステートが見つかりませんでした");
+	}
+}
+
 #ifdef _DEBUG
 void Mutant::DebugChangeState()
 {
@@ -323,12 +367,6 @@ void Mutant::DebugChangeState()
 	if (IsDying()) return;
 
 	GetComponent<StateMachine<Mutant>>()->ChangeState(pPressed->create(*this));
-
-	// 前のステートのExit()でクールタイムが上書きされるので、切り替えの後で設定する
-	if (pPressed->id == MutantState::ID::Orbit)
-	{
-		m_attackCooltime = kDebugOrbitCooltime;
-	}
 }
 
 void Mutant::DebugDraw()
@@ -368,8 +406,6 @@ void Mutant::DebugDraw()
 	DrawString(textX, textY, L"Mutant ステート切り替え", kDebugTextColor);
 	textY += kDebugLineHeight;
 	DrawFormatString(textX, textY, kDebugTextColor, L"現在 : %s", currentName.c_str());
-	textY += kDebugLineHeight;
-	DrawFormatString(textX, textY, kDebugTextColor, L"クールタイム : %d", m_attackCooltime);
 	textY += kDebugLineHeight;
 
 	// 現在のステートの行は色を変える

@@ -41,10 +41,9 @@ public:
 
 protected:
     std::shared_ptr<Player> GetPlayer() const;
-    int GetAttackCooltime() const;
-    void SetAttackCooltime(int coolTime);
     void Die();
     void RotToPlayer();
+	void ChangeAttackStateRandom();
 
     // プレイヤーとの水平方向のベクトル
     Vector3 GetToPlayerXZ() const;

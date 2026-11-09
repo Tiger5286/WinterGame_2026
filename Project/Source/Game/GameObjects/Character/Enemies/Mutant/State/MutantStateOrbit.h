@@ -16,5 +16,5 @@ public:
     ID GetID() const override { return ID::Orbit; }
 
 private:
-
+    int m_orbitCooltime = 0;
 };

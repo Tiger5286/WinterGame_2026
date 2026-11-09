@@ -23,8 +23,6 @@ namespace
 	const Vector3 kAttackOffset = { 0.0f,150.0f,-200.0f };
 	constexpr float kAttackRadius = 150.0f;
 	constexpr int kAttackDamage = 100;
-
-	constexpr int kAttackCooltime = 120;
 }
 
 MutantStateAttack::MutantStateAttack(Mutant& mutant) :
@@ -82,7 +80,6 @@ void MutantStateAttack::Update()
 void MutantStateAttack::Exit()
 {
 	m_pAtk = nullptr;
-	SetAttackCooltime(kAttackCooltime);
 }
 
 void MutantStateAttack::Draw()
