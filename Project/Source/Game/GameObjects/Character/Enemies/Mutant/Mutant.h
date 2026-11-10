@@ -4,6 +4,7 @@
 
 class Model;
 class EnemyHPUI;
+class GameObjectManager;
 
 class Mutant :
     public EnemyBase
@@ -34,6 +35,9 @@ public:
     // 死亡ステート中かどうか
     bool IsDying();
 
+	// ミサイルを生成するためにGameObjectManagerのポインタを保持しておく
+	void SetGameObjectManager(const std::shared_ptr<GameObjectManager>& gameObjectManager) { m_pGameObjectManager = gameObjectManager; }
+
 private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();
@@ -54,12 +58,17 @@ private:
     std::unique_ptr<Model> m_pModel;
     int m_diffuseTexIndex = 0;  // ハッキング時に差し替えるテクスチャの番号
     std::shared_ptr<EnemyHPUI> m_pHPUI = nullptr;
+
+    // 最後の攻撃行動を記憶しておく
+    // これを使って同じ攻撃行動が連続しないようにする
+    AttackType m_lastAttack = AttackType::None;
+
+	// ミサイルを生成するためにGameObjectManagerのポインタを保持しておく
+	std::weak_ptr<GameObjectManager> m_pGameObjectManager;
+
 #ifdef _DEBUG
     int m_debugPrevKey = -1;    // 前のフレームで押されていたキー(押しっぱなしで切り替え直さないため)
 #endif
-    // 最後の攻撃行動を記憶しておく
-	// これを使って同じ攻撃行動が連続しないようにする
-    AttackType m_lastAttack = AttackType::None;
 
     friend class MutantState;
 };

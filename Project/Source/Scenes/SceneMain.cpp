@@ -85,10 +85,10 @@ void SceneMain::Init()
 	m_pPlayer->SetHackingManager(m_pHackingManager);
 	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// 敵を生成
-	EnemyPlacer::Info enemyPlacerInfo;
-	enemyPlacerInfo.pGameObjectManager = m_pGameObjectManager;
-	enemyPlacerInfo.pPlayer = m_pPlayer;
-	EnemyPlacer::Place(enemyPlacerInfo, L"data/stages/stage1/enemyPlaceData.csv");
+	EnemyFactory::Info enemyFactoryInfo;
+	enemyFactoryInfo.pGameObjectManager = m_pGameObjectManager;
+	enemyFactoryInfo.pPlayer = m_pPlayer;
+	EnemyPlacer::Place(enemyFactoryInfo, L"data/stages/stage1/enemyPlaceData.csv");
 	// BoxTriggerを生成(戦闘エリアの入り口)
 	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
 	m_pGameObjectManager->Add(boxTrigger);

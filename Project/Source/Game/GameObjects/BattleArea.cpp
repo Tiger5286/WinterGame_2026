@@ -73,7 +73,7 @@ void BattleArea::StartBattle()
 	// 戦闘開始フラグを立て、敵の監視を開始する
 	m_isStarted = true;
 	// 敵を配置するための情報を準備
-	EnemyPlacer::Info info;
+	EnemyFactory::Info info;
 	info.pGameObjectManager = gameObjectManager;
 	info.pPlayer = player;
 	// 敵を配置する

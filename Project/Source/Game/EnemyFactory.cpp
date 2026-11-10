@@ -7,19 +7,22 @@
 
 namespace
 {
-	const std::unordered_map<std::wstring, std::function<std::shared_ptr<EnemyBase>(const std::shared_ptr<Player>&)>> kEnemyNameMap =
+	const std::unordered_map<std::wstring, std::function<std::shared_ptr<EnemyBase>(const EnemyFactory::Info&)>> kEnemyNameMap =
 	{
-		{L"Walker",[](const std::shared_ptr<Player>& player) { return std::make_shared<Walker>(player); }},
-		{L"Mutant",[](const std::shared_ptr<Player>& player) { return std::make_shared<Mutant>(player); }},
+		{L"Walker",[](const EnemyFactory::Info& info) { return std::make_shared<Walker>(info.pPlayer); }},
+		{L"Mutant",[](const EnemyFactory::Info& info) {
+			auto mutant = std::make_shared<Mutant>(info.pPlayer);
+			mutant->SetGameObjectManager(info.pGameObjectManager);
+			return mutant; }},
 	};
 }
 
-std::shared_ptr<EnemyBase> EnemyFactory::Create(const std::wstring& name, const std::shared_ptr<Player>& player)
+std::shared_ptr<EnemyBase> EnemyFactory::Create(const std::wstring& name, const Info& info)
 {
 	auto it = kEnemyNameMap.find(name);
 	if (it != kEnemyNameMap.end())
 	{
-		return it->second(player);
+		return it->second(info);
 	}
 	assert(false && "EnemyFactory::Create() : 指定の敵が生成できませんでした");
 	return nullptr;
