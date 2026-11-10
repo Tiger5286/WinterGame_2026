@@ -1,9 +1,7 @@
 ﻿#include "MutantStateOrbit.h"
 #include "../Mutant.h"
-#include "MutantStateApproach.h"
 #include "MutantStateAttack.h"
 #include "Components/Physics.h"
-#include "Components/State/StateMachine.h"
 #include "Components/Animator/Animator.h"
 
 namespace
@@ -19,7 +17,7 @@ namespace
 	constexpr float kMaxCorrectSpeed = 0.5f;	// 距離補正の最高速度
 	constexpr float kVelocityGain = 0.2f;		// 目標速度へ近づく強さ
 
-	constexpr int kAttackCooltime = 180;	// 攻撃のクールタイム
+	constexpr int kOrbitCoolTime = 180;	// 待機時間
 }
 
 MutantStateOrbit::MutantStateOrbit(Mutant& mutant) :
@@ -36,7 +34,7 @@ void MutantStateOrbit::Enter()
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
 	// 横歩きのアニメーションがないため仮で前歩きを使う
 	m_owner.GetComponent<Animator>()->Play(L"Mutant|WalkForward");
-	m_orbitCooltime = kAttackCooltime;
+	m_orbitCooltime = kOrbitCoolTime;
 }
 
 void MutantStateOrbit::Update()
@@ -44,7 +42,6 @@ void MutantStateOrbit::Update()
 	RotToPlayer();
 	m_orbitCooltime--;
 
-	auto stateMachine = m_owner.GetComponent<StateMachine<Mutant>>();
 	const Vector3 toPlayerXZ = GetToPlayerXZ();
 
 	// 攻撃のクールタイムが終わったら、ランダムで攻撃行動に移る

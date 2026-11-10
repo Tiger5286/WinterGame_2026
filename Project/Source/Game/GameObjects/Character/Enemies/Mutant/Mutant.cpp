@@ -339,7 +339,7 @@ void Mutant::ChangeAttackState(AttackType type)
 	}
 	else
 	{
-		assert(false && "Mutant::ChangeStateAttack() : 対応する攻撃ステートが見つかりませんでした");
+		assert(false && "Mutant::ChangeAttackState() : 対応する攻撃ステートが見つかりませんでした");
 	}
 }
 

@@ -14,6 +14,6 @@ public:
     ID GetID() const override { return ID::Approach; }
 
 private:
-
+	int m_approachTime = 0;	// 接近してからの経過時間
 };
 

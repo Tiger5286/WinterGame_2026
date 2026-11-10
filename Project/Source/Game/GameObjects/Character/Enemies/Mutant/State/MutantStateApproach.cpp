@@ -8,6 +8,10 @@
 namespace
 {
 	constexpr float kMaxMoveSpeed = 2.0f;
+
+	// 接近する最大時間
+	// これを超えると別の攻撃行動に移る
+	constexpr int kMaxApproachTime = 200;
 }
 
 MutantStateApproach::MutantStateApproach(Mutant& mutant) :
@@ -28,6 +32,14 @@ void MutantStateApproach::Enter()
 void MutantStateApproach::Update()
 {
 	RotToPlayer();
+	m_approachTime++;
+
+	// 制限時間を超えたら別の攻撃行動に移る
+	if (m_approachTime > kMaxApproachTime)
+	{
+		ChangeAttackStateRandom();
+		return;
+	}
 
 	Vector3 toPlayerXZ = GetToPlayerXZ();
 

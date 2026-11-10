@@ -38,7 +38,10 @@ private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();
     void SetHitbox();
+
+	// 攻撃ステートをランダムに選ぶ。前回の攻撃と同じものは選ばない
     AttackType SelectAttackType();
+	// 攻撃ステートを切り替える
 	void ChangeAttackState(AttackType type);
 #ifdef _DEBUG
     // 数字キーでステートを切り替える
@@ -54,6 +57,8 @@ private:
 #ifdef _DEBUG
     int m_debugPrevKey = -1;    // 前のフレームで押されていたキー(押しっぱなしで切り替え直さないため)
 #endif
+    // 最後の攻撃行動を記憶しておく
+	// これを使って同じ攻撃行動が連続しないようにする
     AttackType m_lastAttack = AttackType::None;
 
     friend class MutantState;
