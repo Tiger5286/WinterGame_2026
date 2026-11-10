@@ -16,5 +16,5 @@ public:
     ID GetID() const override { return ID::Missile; }
 
 private:
-
+    int m_frameCount = 0;
 };

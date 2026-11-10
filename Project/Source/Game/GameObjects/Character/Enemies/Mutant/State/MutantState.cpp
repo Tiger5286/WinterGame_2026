@@ -17,6 +17,11 @@ std::shared_ptr<Player> MutantState::GetPlayer() const
 	return m_owner.m_pPlayer.lock();
 }
 
+std::shared_ptr<GameObjectManager> MutantState::GetGameObjectManager() const
+{
+	return m_owner.m_pGameObjectManager.lock();
+}
+
 void MutantState::Die()
 {
 	m_owner.m_isDead = true;

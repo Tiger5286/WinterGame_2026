@@ -5,6 +5,7 @@
 
 class Mutant;
 class Player;
+class GameObjectManager;
 
 class MutantState :
     public State<Mutant>
@@ -41,6 +42,7 @@ public:
 
 protected:
     std::shared_ptr<Player> GetPlayer() const;
+	std::shared_ptr<GameObjectManager> GetGameObjectManager() const;
     void Die();
     void RotToPlayer();
 	void ChangeAttackStateRandom();
