@@ -50,4 +50,13 @@ namespace MyLib
 	/// <param name="filePath">読み込むcsvファイルのパス</param>
 	/// <returns>情報が格納された配列</returns>
 	std::vector<std::vector<std::wstring>> LoadCSV(const std::wstring& filePath);
+
+	/// <summary>
+	/// 3D空間に円を描画する。向きはY軸方向固定。
+	/// </summary>
+	/// <param name="pos">円の中心位置</param>
+	/// <param name="radius">円の半径</param>
+	/// <param name="divNum">円を構成する線の分割数</param>
+	/// <param name="color">円の色</param>
+	void DrawCircle3D(const Vector3& pos, const float radius, const int divNum, const unsigned int color);
 }

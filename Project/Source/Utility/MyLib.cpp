@@ -6,6 +6,7 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
+#include "Utility/Matrix4x4.h"
 
 float MyLib::GetAngleDiff(float angle1, float angle2)
 {
@@ -246,4 +247,14 @@ std::vector<std::vector<std::wstring>> MyLib::LoadCSV(const std::wstring& filePa
     FileRead_close(handle);
 
     return table;
+}
+
+void MyLib::DrawCircle3D(const Vector3& pos, const float radius, const int divNum, const unsigned int color)
+{
+    for (int i = 0; i < divNum; i++)
+    {
+        Vector3 tempV = Vector3::Front() * Matrix4x4::GetRotY(DX_PI_F * 2 / divNum * i) * radius;
+        Vector3 tempV2 = Vector3::Front() * Matrix4x4::GetRotY(DX_PI_F * 2 / divNum * (i + 1)) * radius;
+        DrawLine3D((pos + tempV).ToDxLib(), (pos + tempV2).ToDxLib(), color);
+    }
 }
