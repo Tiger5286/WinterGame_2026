@@ -36,19 +36,19 @@ void MutantStateOrbit::Enter()
 	m_owner.GetComponent<Physics>()->SetMaxSpeed(kMaxMoveSpeed);
 	// 横歩きのアニメーションがないため仮で前歩きを使う
 	m_owner.GetComponent<Animator>()->Play(L"Mutant|WalkForward");
-	m_attackCooltime = kAttackCooltime;
+	m_orbitCooltime = kAttackCooltime;
 }
 
 void MutantStateOrbit::Update()
 {
 	RotToPlayer();
-	m_attackCooltime--;
+	m_orbitCooltime--;
 
 	auto stateMachine = m_owner.GetComponent<StateMachine<Mutant>>();
 	const Vector3 toPlayerXZ = GetToPlayerXZ();
 
 	// 攻撃のクールタイムが終わったら、ランダムで攻撃行動に移る
-	if (m_attackCooltime <= 0)
+	if (m_orbitCooltime <= 0)
 	{
 		ChangeAttackStateRandom();
 		return;
