@@ -26,6 +26,7 @@ public:
         Missile,
         Orbit,
         BackStep,
+        MoveEdge,
 
         Num
     };
