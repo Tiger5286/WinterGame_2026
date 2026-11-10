@@ -43,7 +43,7 @@ namespace
 	// 攻撃ステートの対応表
 	const std::unordered_map<Mutant::AttackType,std::function<void(Mutant&)>> kAttackStateTable = {
 		{ Mutant::AttackType::Normal, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateApproach>(mutant)); } },
-		{ Mutant::AttackType::Missile, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateMissile>(mutant)); } },
+		{ Mutant::AttackType::Missile, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateBackStep>(mutant,MutantStateBackStep::NextState::Missile)); } },
 		{ Mutant::AttackType::Charge, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateCharge>(mutant)); } },
 	};
 
