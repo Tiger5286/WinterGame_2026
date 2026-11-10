@@ -1,6 +1,6 @@
 ﻿#include "MutantStateAttack.h"
 #include "../Mutant.h"
-#include "MutantStateOrbit.h"
+#include "MutantStateBackStep.h"
 #include "Components/Animator/Animator.h"
 #include "Components/State/StateMachine.h"
 #include "Components/Physics.h"
@@ -72,7 +72,7 @@ void MutantStateAttack::Update()
 	}
 	if (m_owner.GetComponent<Animator>()->IsEnd())
 	{
-		m_owner.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateOrbit>(m_owner));
+		m_owner.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateBackStep>(m_owner,MutantStateBackStep::NextState::Orbit));
 		return;
 	}
 }
