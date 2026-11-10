@@ -13,5 +13,5 @@ public:
 
     ID GetID() const override { return ID::MoveEdge; }
 private:
-
+    Vector3 m_targetPos;
 };
