@@ -12,7 +12,10 @@ class Missile :
     public GameObject
 {
 public:
-    Missile(const Vector3& pos);
+    static constexpr int kDefaultDamage = 100;
+
+public:
+    Missile(const Vector3& pos,const int damage = kDefaultDamage);
     ~Missile();
 
     void Init() override;
@@ -20,6 +23,7 @@ public:
     void Draw() override;
 
 private:
+    const int m_damage;
     // 時間をカウントし、爆発時間、消える時間などを管理する
     int m_frameCount = 0;
     

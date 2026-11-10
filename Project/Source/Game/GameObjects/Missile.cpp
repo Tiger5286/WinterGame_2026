@@ -10,10 +10,11 @@ namespace
 	constexpr int kImpactEndFrame = 125;
 	constexpr int kMaxFrame = 150;
 
-	constexpr float kRadius = 100.0f;
+	constexpr float kRadius = 200.0f;
 }
 
-Missile::Missile(const Vector3& pos)
+Missile::Missile(const Vector3& pos,const int damage) :
+	m_damage(damage)
 {
 	GetComponent<Transform>()->pos = pos;
 }
@@ -34,7 +35,7 @@ void Missile::Update()
 		// 爆発処理
 		m_pAtk = std::make_shared<Attack>();
 		CollisionManager::AttackInfo info = {
-			.damage = 100
+			.damage = m_damage
 		};
 		Attack::Data data = {
 			.info = info,
