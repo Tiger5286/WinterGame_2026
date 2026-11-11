@@ -453,32 +453,37 @@ bool Player::CanAction()
 
 std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPos)
 {
-	auto enemies = m_pGameObjectManager.lock()->GetHackables();
+	auto hackables = m_pGameObjectManager.lock()->GetHackables();
 
-	if (enemies.empty()) return nullptr;
+	if (hackables.empty()) return nullptr;
 
-	std::shared_ptr<GameObject> nearestEnemy = nullptr;
+	std::shared_ptr<GameObject> nearestHackable = nullptr;
 
 	float nearestDistSq = FLT_MAX;
 
 	Vector2 centerPos = Vector2(Game::kScreenWidth / 2, Game::kScreenHeight / 2);
 
-	for (auto& weakEnemy : enemies)
+	for (auto& weakHackable : hackables)
 	{
-		auto enemy = weakEnemy.lock();
+		auto hackable = weakHackable.lock();
 		// nullptrなら次へ
-		if (!enemy) continue;
+		if (!hackable) continue;
 		// ハッキングできない相手は除外
-		if (!enemy->GetComponent<Hackable>()) continue;
-		// 敵の中心位置を計算
-		Vector3 targetPos = enemy->GetComponent<Transform>()->pos;
-		targetPos += enemy->GetComponent<Hackable>()->GetHackLocalPos();
-		// 視界の外にいる敵を除外
+		if (!hackable->GetComponent<Hackable>()) continue;
+		// 対象の中心位置を計算
+		Vector3 targetPos = hackable->GetComponent<Transform>()->pos;
+		targetPos += hackable->GetComponent<Hackable>()->GetHackLocalPos();
+		// 視界の外にいる対象を除外
 		if (CheckCameraViewClip(targetPos)) continue;
 
-		// 一定距離より遠い敵は除外
+		// 一定距離より遠い対象は除外
 		float distSq = (GetComponent<Transform>()->pos - targetPos).SquaredLength();
 		if (distSq > kCanHackingDist * kCanHackingDist) continue;
+
+		// 壁の向こうにいる対象は除外
+		auto cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+		bool isHitPoly = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, targetPos + Vector3(0,10,0), true).isHit;
+		if (isHitPoly) continue;
 
 		// ワールド座標をスクリーン座標に変換する
 		Vector3 screenPos3d = Vector3::FromDxLib(ConvWorldPosToScreenPos(targetPos));
@@ -488,10 +493,10 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 		if (screenDistSq < nearestDistSq)
 		{
 			nearestDistSq = screenDistSq;
-			nearestEnemy = enemy;
+			nearestHackable = hackable;
 			screenPos = screenPos2d;
 		}
 	}
 
-	return nearestEnemy;
+	return nearestHackable;
 }
