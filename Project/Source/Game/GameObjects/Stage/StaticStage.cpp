@@ -19,6 +19,7 @@ void StaticStage::Init()
 	ServiceLocator::GetInstance().GetCollisionManager().Register(shared_from_this());
 
 	m_pModel = ResourceManager::GetInstance().GetModel(L"StaticStageModel");
+	m_pVisualModel = ResourceManager::GetInstance().GetModel(L"StaticVisualStageModel");
 	AddComponent<PolygonCollider>(*GetComponent<Transform>(), m_pModel);
 }
 
@@ -28,10 +29,12 @@ void StaticStage::Update()
 
 void StaticStage::Draw()
 {
-	GetComponent<PolygonCollider>()->Draw();
+	m_pVisualModel->Draw();
+#ifdef _DEBUG
+	//GetComponent<PolygonCollider>()->Draw();
+#endif
 }
 
 void StaticStage::OnWasShot(const CollisionManager::ShotInfo& info)
 {
-	//printfDx(L"StaticStageに当たった\n");
 }

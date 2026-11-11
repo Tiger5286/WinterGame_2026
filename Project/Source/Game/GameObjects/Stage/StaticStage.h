@@ -17,5 +17,6 @@ public:
 
 private:
 	Model* m_pModel = nullptr;
+	Model* m_pVisualModel = nullptr;
 };
 
