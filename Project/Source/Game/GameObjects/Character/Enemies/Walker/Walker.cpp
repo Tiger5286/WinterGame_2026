@@ -45,7 +45,6 @@ Walker::Walker(std::shared_ptr<Player> pPlayer) :
 
 Walker::~Walker()
 {
-	m_pHPUI->Destroy();
 }
 
 void Walker::Init()

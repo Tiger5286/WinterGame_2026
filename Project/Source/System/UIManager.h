@@ -24,10 +24,10 @@ public:
 	/// UIを追加する
 	/// </summary>
 	/// <param name="ui">追加するUIのポインタ</param>
-	void AddUI(std::shared_ptr<UIBase> ui);
+	void AddUI(const std::shared_ptr<UIBase>& ui);
 
 private:
-	std::list<std::shared_ptr<UIBase>> m_uiList;
+	std::list<std::weak_ptr<UIBase>> m_uiList;
 	int m_minLayer = 0;
 	int m_maxLayer = 0;
 };

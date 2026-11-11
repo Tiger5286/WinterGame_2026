@@ -39,7 +39,6 @@ TestEnemy::TestEnemy(std::shared_ptr<Player> pPlayer) :
 
 TestEnemy::~TestEnemy()
 {
-	m_pHPUI->Destroy();
 }
 
 void TestEnemy::Init()

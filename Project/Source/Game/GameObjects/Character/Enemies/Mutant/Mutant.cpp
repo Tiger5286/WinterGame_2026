@@ -68,7 +68,6 @@ Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
 
 Mutant::~Mutant()
 {
-	m_pHPUI->Destroy();
 }
 
 void Mutant::Init()

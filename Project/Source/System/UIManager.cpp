@@ -16,20 +16,16 @@ void UIManager::Init()
 
 void UIManager::Update()
 {
+	// 持ち主が消えたUIをリストから外す
+	m_uiList.remove_if([](const std::weak_ptr<UIBase>& ui) { return ui.expired(); });
+
 	// UIの更新処理を行う
-	std::list<std::shared_ptr<UIBase>> removeList;
-	for (auto& ui : m_uiList)
+	for (auto& weakUI : m_uiList)
 	{
-		ui->Update();
-		if (!ui->IsAlive())
+		if (auto ui = weakUI.lock())
 		{
-			removeList.push_back(ui);
+			ui->Update();
 		}
-	}
-	// 生存していないUIをリストから削除する
-	for (auto& ui : removeList)
-	{
-		m_uiList.remove(ui);
 	}
 }
 
@@ -39,19 +35,22 @@ void UIManager::Draw()
 	for (int i = m_minLayer; i <= m_maxLayer; i++)
 	{
 		// レイヤーが一致するUIを描画する
-		for (auto& ui : m_uiList)
+		for (auto& weakUI : m_uiList)
 		{
-			bool isVisible = ui->IsVisible();
-			bool isMatchLayer = ui->GetLayer() == i;
-			if (isVisible && isMatchLayer)
+			if (auto ui = weakUI.lock())
 			{
-				ui->Draw();
+				bool isVisible = ui->IsVisible();
+				bool isMatchLayer = ui->GetLayer() == i;
+				if (isVisible && isMatchLayer)
+				{
+					ui->Draw();
+				}
 			}
 		}
 	}
 }
 
-void UIManager::AddUI(std::shared_ptr<UIBase> ui)
+void UIManager::AddUI(const std::shared_ptr<UIBase>& ui)
 {
 	// レイヤーの最低値と最大値を更新する
 	int layer = ui->GetLayer();
