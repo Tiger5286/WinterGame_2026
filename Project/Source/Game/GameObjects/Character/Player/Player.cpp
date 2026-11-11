@@ -41,9 +41,18 @@ namespace
 	constexpr float kCanHackingDist = 1500.0f;
 
 	constexpr int kMaxHp = 1000;
+
+	constexpr float kMaxThruster = 100.0f;
+
+	// スラスターを使用してから回復し始めるまでの時間
+	constexpr int kStartThrusterRechargeFrame = 60;
+
+	// スラスターが毎フレームいくつ回復するか	最大量 / 最大まで回復する秒数 / 1秒のフレーム数
+	constexpr float kThrusterRechargePerSecond = kMaxThruster / 10.0f / 60.0f;
 }
 
-Player::Player()
+Player::Player() :
+	m_thruster(kMaxThruster)
 {
 	AddComponent<Animator>();
 	AddComponent<Physics>();
@@ -117,6 +126,9 @@ void Player::Update()
 
 	// ステートを更新
 	GetComponent<StateMachine<Player>>()->Update();
+
+	// スラスターを更新
+	UpdateThruster();
 
 	// 視界の中心に近い敵を保存(行動できないときは対象なし)
 	Vector2 screenPos;
@@ -274,6 +286,7 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16, 0xff0000, L"Player:acc x:%.1f,y:%.1f,z:%.1f", acc.x, acc.y, acc.z);
 	DrawFormatString(100, 100 + 16 * 2, 0xff0000, L"Direction8:%d", static_cast<int>(PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left)));
 	DrawFormatString(100, 100 + 16 * 3, 0xff0000, L"Player:HP %d/%d (Hキーで1にする)", m_hp, kMaxHp);
+	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f (Hキーで1にする)", m_thruster, kMaxThruster);
 #endif
 }
 
@@ -444,6 +457,30 @@ void Player::UpdateAim()
 	{
 		m_isAim = false;
 	}
+}
+
+void Player::UpdateThruster()
+{
+	m_thrusterRechargeFrame++;
+
+	if (m_thrusterRechargeFrame > kStartThrusterRechargeFrame)
+	{
+		m_thruster += kThrusterRechargePerSecond;
+		if (m_thruster > kMaxThruster)
+		{
+			m_thruster = kMaxThruster;
+		}
+	}
+}
+
+void Player::UseThruster(float usedChargeValue)
+{
+	m_thruster -= usedChargeValue;
+	if (m_thruster < 0.0f)
+	{
+		m_thruster = 0.0f;
+	}
+	m_thrusterRechargeFrame = 0;
 }
 
 bool Player::CanAction()

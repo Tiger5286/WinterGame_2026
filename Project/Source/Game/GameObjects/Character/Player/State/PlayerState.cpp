@@ -17,6 +17,11 @@ float PlayerState::GetAngle() const
 	return m_owner.m_angle;
 }
 
+float PlayerState::GetThruster() const
+{
+	return m_owner.m_thruster;
+}
+
 void PlayerState::SetAngle(float angle)
 {
 	m_owner.m_angle = angle;

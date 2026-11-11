@@ -14,6 +14,9 @@ namespace
 {
 	constexpr float kHoverVelY = -0.5f;	// ホバリング中の目標Y速度
 	constexpr float kHoverAccelY = 0.2f;	// ホバリング中に目標Y速度に近づけるための加速度
+
+	// 毎フレームいくつスラスターを消費するか
+	constexpr float kUseThrusterValue = 100.0f / 10.0f / 60.0f;
 }
 
 void PlayerStateHover::Enter()
@@ -28,6 +31,8 @@ void PlayerStateHover::Update()
 
 	// 移動できるようにする
 	UpdateMove(kHoverAccel, kMaxHoverSpeed);
+
+	m_owner.UseThruster(kUseThrusterValue);
 
 	// 地面に着地したら着地ステートに遷移する
 	if (m_owner.GetComponent<Physics>()->IsGrounded())

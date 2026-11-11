@@ -29,6 +29,8 @@ PlayerStateDodge::~PlayerStateDodge()
 
 void PlayerStateDodge::Enter()
 {
+	m_owner.UseThruster(50.0f);
+
 	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left);
 	if (stick.SquaredLength() > 0.0f)
 	{

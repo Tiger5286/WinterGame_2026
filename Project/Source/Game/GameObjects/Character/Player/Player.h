@@ -78,12 +78,15 @@ public:
 
     bool IsAim() const { return m_isAim; }
 
+	void UseThruster(float usedChargeValue);
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
+	void UpdateThruster();
 	// エイム・射撃・ハッキングができる状態か(被弾中・死亡中はできない)
 	bool CanAction();
 	std::shared_ptr<GameObject> FindNearestVisibleHackable(Vector2& screenPos);
+
 
 private:
 	int m_frame = 0;
@@ -107,6 +110,10 @@ private:
 
 	int m_shotIntervalFrame = 0;
 	bool m_isShooting = false;
+
+	float m_thruster;
+	// スラスターを最後に使用してから何フレーム経過したか
+	int m_thrusterRechargeFrame = 0;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
