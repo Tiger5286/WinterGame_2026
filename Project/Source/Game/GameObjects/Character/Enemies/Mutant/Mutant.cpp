@@ -24,6 +24,7 @@
 #include "State/MutantStateBackStep.h"
 #include "State/MutantStateCharge.h"
 #include "State/MutantStateMissile.h"
+#include "State/MutantStateMoveEdge.h"
 #include <vector>
 #include <unordered_map>
 #include <functional>
@@ -44,7 +45,7 @@ namespace
 	const std::unordered_map<Mutant::AttackType,std::function<void(Mutant&)>> kAttackStateTable = {
 		{ Mutant::AttackType::Normal, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateApproach>(mutant)); } },
 		{ Mutant::AttackType::Missile, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateBackStep>(mutant,MutantStateBackStep::NextState::Missile)); } },
-		{ Mutant::AttackType::Charge, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateCharge>(mutant)); } },
+		{ Mutant::AttackType::Charge, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateMoveEdge>(mutant)); } },
 	};
 
 #ifdef _DEBUG

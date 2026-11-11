@@ -13,5 +13,6 @@ public:
 
     ID GetID() const override { return ID::MoveEdge; }
 private:
-    Vector3 m_targetPos;
+    int m_frameCount = 0;
+    Vector3 m_moveVec;
 };
