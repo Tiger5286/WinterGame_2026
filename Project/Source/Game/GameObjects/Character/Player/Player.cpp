@@ -160,6 +160,9 @@ void Player::Update()
 			shotInfo.damage = 50;
 			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
 
+			// 反動
+			m_pCamera.lock()->AddRecoil(Vector2(-0.02f, 0.0f));
+
 			m_shotIntervalFrame = kShotInterval;
 			m_isShooting = true;
 		}

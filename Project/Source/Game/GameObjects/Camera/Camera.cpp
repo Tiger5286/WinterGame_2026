@@ -45,6 +45,11 @@ void Camera::Update()
 	// 入力を反映
 	Control();
 	// 回転の数値を調整
+	// 反動の数値を実際の向きに反映 
+	transform.rot.x += m_recoil.x * 0.4f;
+	transform.rot.y += m_recoil.y * 0.4f;
+	m_recoil *= 0.4f;
+
 	// X軸回転の上限下限を設定
 	transform.rot.x = std::clamp(transform.rot.x, -kRotXLimit, kRotXLimit);
 	if (m_pPlayer.lock()->IsAim())
@@ -123,6 +128,11 @@ void Camera::Update()
 void Camera::Draw()
 {
 	// 処理なし
+}
+
+void Camera::AddRecoil(const Vector2& recoil)
+{
+	m_recoil += recoil;
 }
 
 void Camera::Control()

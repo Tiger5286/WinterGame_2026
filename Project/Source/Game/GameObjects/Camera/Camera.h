@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../GameObject.h"
 #include "Utility/Vector3.h"
+#include "Utility/Vector2.h"
 
 class Player;
 
@@ -21,6 +22,8 @@ public:
 
     const Vector3& GetTargetPos() const { return m_targetPos; }
 
+    void AddRecoil(const Vector2& recoil);
+
 private:
     void Control();
 
@@ -28,5 +31,7 @@ private:
     float m_fov = kDefaultFov;
     Vector3 m_targetPos = Vector3::Zero();
     std::weak_ptr<Player> m_pPlayer;
+
+    Vector2 m_recoil;
 };
 
