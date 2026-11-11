@@ -48,6 +48,11 @@ namespace
 		{ Mutant::AttackType::Charge, [](Mutant& mutant) { mutant.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateMoveEdge>(mutant)); } },
 	};
 
+	// ステージの中央の位置
+	const Vector3 kStageCenterPos = { 6750, 100, 250 };
+	// ステージの中央から端までの幅
+	constexpr float kStageRadius = 1000.0f;
+
 #ifdef _DEBUG
 	// デバッグ用のステート切り替えに必要な情報
 	struct DebugStateData
@@ -307,6 +312,16 @@ void Mutant::SetHitbox()
 	capsule.topFrameName = L"mixamorig:LeftFoot";
 	capsule.radius = 25.0f;
 	hitbox->AddCollider(capsule);
+}
+
+Vector3 Mutant::GetStageCenter() const
+{
+	return kStageCenterPos;
+}
+
+float Mutant::GetStageRadius() const
+{
+	return kStageRadius;
 }
 
 Mutant::AttackType Mutant::SelectAttackType()

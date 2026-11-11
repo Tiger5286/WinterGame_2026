@@ -22,6 +22,16 @@ std::shared_ptr<GameObjectManager> MutantState::GetGameObjectManager() const
 	return m_owner.m_pGameObjectManager.lock();
 }
 
+Vector3 MutantState::GetStageCenter() const
+{
+	return m_owner.GetStageCenter();
+}
+
+float MutantState::GetStageRadius() const
+{
+	return m_owner.GetStageRadius();
+}
+
 void MutantState::Die()
 {
 	m_owner.m_isDead = true;

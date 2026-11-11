@@ -44,6 +44,8 @@ public:
 protected:
     std::shared_ptr<Player> GetPlayer() const;
 	std::shared_ptr<GameObjectManager> GetGameObjectManager() const;
+    Vector3 GetStageCenter() const;
+    float GetStageRadius() const;
     void Die();
     void RotToPlayer();
 	void ChangeAttackStateRandom();

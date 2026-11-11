@@ -42,6 +42,8 @@ private:
     void OnHacked(Hackable::HackedData data);
     void RotToPlayer();
     void SetHitbox();
+    Vector3 GetStageCenter() const;
+    float GetStageRadius() const;
 
 	// 攻撃ステートをランダムに選ぶ。前回の攻撃と同じものは選ばない
     AttackType SelectAttackType();
