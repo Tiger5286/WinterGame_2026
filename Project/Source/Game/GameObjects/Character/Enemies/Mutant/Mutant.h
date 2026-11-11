@@ -49,12 +49,6 @@ private:
     AttackType SelectAttackType();
 	// 攻撃ステートを切り替える
 	void ChangeAttackState(AttackType type);
-#ifdef _DEBUG
-    // 数字キーでステートを切り替える
-    void DebugChangeState();
-    // 現在のステートと切り替えキーの一覧を描画する
-    void DebugDraw();
-#endif
 
 private:
     std::unique_ptr<Model> m_pModel;
@@ -67,10 +61,6 @@ private:
 
 	// ミサイルを生成するためにGameObjectManagerのポインタを保持しておく
 	std::weak_ptr<GameObjectManager> m_pGameObjectManager;
-
-#ifdef _DEBUG
-    int m_debugPrevKey = -1;    // 前のフレームで押されていたキー(押しっぱなしで切り替え直さないため)
-#endif
 
     friend class MutantState;
 };
