@@ -67,7 +67,7 @@ void SceneMain::Init()
 	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");
-	hackPoint->GetComponent<Transform>()->pos = Vector3(4300, 500, 2300);
+	hackPoint->GetComponent<Transform>()->pos = Vector3(4290, 500, 2300);
 	m_pGameObjectManager->Add(hackPoint);
 	// プレイヤーを生成
 	m_pPlayer = std::make_shared<Player>();
