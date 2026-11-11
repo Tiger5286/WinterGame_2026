@@ -11,6 +11,8 @@ public:
     virtual void Update() = 0;
     virtual void Draw() = 0;
 
+    int GetHP() const { return m_hp; }
+
 protected:
     int m_hp = 0;
 };

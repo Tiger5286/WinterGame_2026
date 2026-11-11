@@ -80,6 +80,14 @@ public:
 
 	void SetAmmoMax();
 
+	int GetMaxHP() const;
+
+	int GetAmmo() const { return m_ammo; }
+	int GetMaxAmmo() const;
+
+	float GetThruster() const { return m_thruster; }
+	float GetMaxThruster() const;
+
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();

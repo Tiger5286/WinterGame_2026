@@ -50,7 +50,7 @@ namespace
 	constexpr int kStartThrusterRechargeFrame = 60;
 
 	// スラスターが毎フレームいくつ回復するか	最大量 / 最大まで回復する秒数 / 1秒のフレーム数
-	constexpr float kThrusterRechargePerSecond = kMaxThruster / 10.0f / 60.0f;
+	constexpr float kThrusterRechargePerSecond = kMaxThruster / 5.0f / 60.0f;
 
 	constexpr int kMaxAmmo = 20;
 	// 弾を撃ってから回復し始めるまでの時間
@@ -347,6 +347,21 @@ void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 void Player::SetAmmoMax()
 {
 	m_ammo = kMaxAmmo;
+}
+
+int Player::GetMaxHP() const
+{
+	return kMaxHp;
+}
+
+int Player::GetMaxAmmo() const
+{
+	return kMaxAmmo;
+}
+
+float Player::GetMaxThruster() const
+{
+	return kMaxThruster;
 }
 
 void Player::UpdateAnimation()
