@@ -66,5 +66,9 @@ protected:	// ステートが使っていいプレイヤーのメンバ
 	void UpdateMove(float accel, float maxSpeed);
 
 	void Die();
+
+	void UseThruster(float usedThruster);
+	bool ChangeStateDodge();
+	bool ChangeStateHover();
 };
 

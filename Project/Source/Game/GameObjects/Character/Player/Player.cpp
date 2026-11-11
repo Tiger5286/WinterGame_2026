@@ -8,6 +8,7 @@
 #include "State/PlayerStateDeath.h"
 #include "State/PlayerStateMove.h"
 #include "State/PlayerStateDodge.h"
+#include "State/PlayerStateHover.h"
 #include "Components/Animator/Animator.h"
 #include "Components/Physics.h"
 #include "Components/State/StateMachine.h"
@@ -286,7 +287,7 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16, 0xff0000, L"Player:acc x:%.1f,y:%.1f,z:%.1f", acc.x, acc.y, acc.z);
 	DrawFormatString(100, 100 + 16 * 2, 0xff0000, L"Direction8:%d", static_cast<int>(PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left)));
 	DrawFormatString(100, 100 + 16 * 3, 0xff0000, L"Player:HP %d/%d (Hキーで1にする)", m_hp, kMaxHp);
-	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f (Hキーで1にする)", m_thruster, kMaxThruster);
+	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f", m_thruster, kMaxThruster);
 #endif
 }
 
@@ -481,6 +482,26 @@ void Player::UseThruster(float usedChargeValue)
 		m_thruster = 0.0f;
 	}
 	m_thrusterRechargeFrame = 0;
+}
+
+bool Player::ChangeStateDodge()
+{
+	if (m_thruster > 0)
+	{
+		GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(*this));
+		return true;
+	}
+	return false;
+}
+
+bool Player::ChangeStateHover()
+{
+	if (m_thruster > 0)
+	{
+		GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(*this));
+		return true;
+	}
+	return false;
 }
 
 bool Player::CanAction()

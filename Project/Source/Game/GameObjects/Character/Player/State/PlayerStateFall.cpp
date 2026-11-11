@@ -30,15 +30,13 @@ void PlayerStateFall::Update()
 	// エイムしている、もしくはジャンプボタンが押されている場合はホバーする
 	if (IsAim() || PadInput::GetInstance().IsPressed(XINPUT_BUTTON_A))
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
-		return;
+		if (ChangeStateHover()) return;
 	}
 
 	// RBで回避
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
-		return;
+		if (ChangeStateDodge()) return;
 	}
 }
 

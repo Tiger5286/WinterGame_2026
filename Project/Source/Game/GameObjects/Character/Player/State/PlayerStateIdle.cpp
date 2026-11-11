@@ -40,8 +40,7 @@ void PlayerStateIdle::Update()
 	// RBで回避
 	if (pad.IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
-		return;
+		if (ChangeStateDodge()) return;
 	}
 	// 接地していない場合は落下
 	if (!m_owner.GetComponent<Physics>()->IsGrounded())

@@ -78,11 +78,19 @@ public:
 
     bool IsAim() const { return m_isAim; }
 
-	void UseThruster(float usedChargeValue);
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
 	void UpdateThruster();
+	// スラスターを消費するときに呼ぶ関数
+	void UseThruster(float usedChargeValue);
+	/// <summary>
+	/// スラスターを消費するステートに遷移する関数。スラスターがないときは遷移しない
+	/// </summary>
+	/// <returns>true:遷移した / false:スラスターが無いため遷移しなかった</returns>
+	bool ChangeStateDodge();
+	bool ChangeStateHover();
+
 	// エイム・射撃・ハッキングができる状態か(被弾中・死亡中はできない)
 	bool CanAction();
 	std::shared_ptr<GameObject> FindNearestVisibleHackable(Vector2& screenPos);

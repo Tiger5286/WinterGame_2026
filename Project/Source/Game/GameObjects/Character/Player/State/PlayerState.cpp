@@ -70,3 +70,18 @@ void PlayerState::Die()
 {
 	m_owner.m_isDead = true;
 }
+
+void PlayerState::UseThruster(float usedThruster)
+{
+	m_owner.UseThruster(usedThruster);
+}
+
+bool PlayerState::ChangeStateDodge()
+{
+	return m_owner.ChangeStateDodge();
+}
+
+bool PlayerState::ChangeStateHover()
+{
+	return m_owner.ChangeStateHover();
+}

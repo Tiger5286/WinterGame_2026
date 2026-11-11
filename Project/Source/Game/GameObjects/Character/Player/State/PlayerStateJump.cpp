@@ -38,8 +38,7 @@ void PlayerStateJump::Update()
 	// エイムしたらホバーに遷移
 	if (IsAim())
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
-		return;
+		if (ChangeStateHover()) return;
 	}
 
 	// ジャンプボタンを押してもホバーに遷移
@@ -47,16 +46,14 @@ void PlayerStateJump::Update()
 	{
 		if (m_owner.GetComponent<Physics>()->m_vel.y < 0.5f)
 		{
-			m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
-			return;
+			if (ChangeStateHover()) return;
 		}
 	}
 
 	// RBで回避
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
-		return;
+		if (ChangeStateDodge()) return;
 	}
 }
 

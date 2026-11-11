@@ -33,7 +33,7 @@ void PlayerStateHover::Update()
 	UpdateMove(kHoverAccel, kMaxHoverSpeed);
 
 	// スラスターを消費する
-	m_owner.UseThruster(kUseThrusterValue);
+	UseThruster(kUseThrusterValue);
 	// もしスラスターがなければ落下する
 	if (GetThruster() <= 0.0f)
 	{
@@ -80,8 +80,7 @@ void PlayerStateHover::Update()
 	// RBで回避
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateDodge>(m_owner));
-		return;
+		if (ChangeStateDodge()) return;
 	}
 }
 

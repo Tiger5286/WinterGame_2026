@@ -29,7 +29,7 @@ PlayerStateDodge::~PlayerStateDodge()
 
 void PlayerStateDodge::Enter()
 {
-	m_owner.UseThruster(50.0f);
+	UseThruster(50.0f);
 
 	Vector2 stick = PadInput::GetInstance().GetStickInput(PadInput::LR::Left);
 	if (stick.SquaredLength() > 0.0f)
@@ -81,14 +81,11 @@ void PlayerStateDodge::Update()
 		{
 			if (input.IsPressed(XINPUT_BUTTON_A) || input.IsPressedTrigger(PadInput::LR::Left))
 			{
-				m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateHover>(m_owner));
-				return;
+				if (ChangeStateHover()) return;
 			}
-			else
-			{
-				m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
-				return;
-			}
+			// ホバーしなかった(できなかった)場合は落下
+			m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
+			return;
 		}
 	}
 }
