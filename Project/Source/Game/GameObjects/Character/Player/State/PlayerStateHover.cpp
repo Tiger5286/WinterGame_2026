@@ -32,7 +32,14 @@ void PlayerStateHover::Update()
 	// 移動できるようにする
 	UpdateMove(kHoverAccel, kMaxHoverSpeed);
 
+	// スラスターを消費する
 	m_owner.UseThruster(kUseThrusterValue);
+	// もしスラスターがなければ落下する
+	if (GetThruster() <= 0.0f)
+	{
+		m_owner.GetComponent<StateMachine<Player>>()->ChangeState(std::make_unique<PlayerStateFall>(m_owner));
+		return;
+	}
 
 	// 地面に着地したら着地ステートに遷移する
 	if (m_owner.GetComponent<Physics>()->IsGrounded())
