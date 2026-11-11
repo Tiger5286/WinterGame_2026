@@ -123,6 +123,11 @@ private:
 	// スラスターを最後に使用してから何フレーム経過したか
 	int m_thrusterRechargeFrame = 0;
 
+	// 残弾数
+	int m_ammo;
+	// 最後に弾を撃ってから何フレーム経過したか
+	int m_ammoRechargeFrame = 0;
+
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
 	friend class PlayerState;

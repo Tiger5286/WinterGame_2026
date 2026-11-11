@@ -50,10 +50,17 @@ namespace
 
 	// スラスターが毎フレームいくつ回復するか	最大量 / 最大まで回復する秒数 / 1秒のフレーム数
 	constexpr float kThrusterRechargePerSecond = kMaxThruster / 10.0f / 60.0f;
+
+	constexpr int kMaxAmmo = 20;
+	// 弾を撃ってから回復し始めるまでの時間
+	constexpr int kStartAmmoRechargeFrame = 60;
+	// 何フレームごとに弾が回復するか
+	constexpr int kAmmoRechargeInterval = 30;
 }
 
 Player::Player() :
-	m_thruster(kMaxThruster)
+	m_thruster(kMaxThruster),
+	m_ammo(kMaxAmmo)
 {
 	AddComponent<Animator>();
 	AddComponent<Physics>();
@@ -157,10 +164,24 @@ void Player::Update()
 		m_shotIntervalFrame--;
 	}
 
+	// 弾回復
+	m_ammoRechargeFrame++;
+	if (m_ammoRechargeFrame >= kStartAmmoRechargeFrame)
+	{
+		if (m_ammoRechargeFrame % kAmmoRechargeInterval == 0)
+		{
+			m_ammo++;
+			if (m_ammo > kMaxAmmo)
+			{
+				m_ammo = kMaxAmmo;
+			}
+		}
+	}
+
 	// 射撃
 	if (CanAction() && input.IsPressedTrigger(PadInput::LR::Right))
 	{
-		if (m_shotIntervalFrame == 0)
+		if (m_shotIntervalFrame == 0 && m_ammo > 0)
 		{
 			const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
 			const Vector3& target = m_pCamera.lock()->GetTargetPos();
@@ -177,8 +198,10 @@ void Player::Update()
 			m_pCamera.lock()->AddRecoil(Vector2(-0.02f, 0.0f));
 
 			m_shotIntervalFrame = kShotInterval;
-			m_isShooting = true;
+			m_ammo--;
 		}
+		m_isShooting = true;
+		m_ammoRechargeFrame = 0;
 	}
 	else
 	{
@@ -288,6 +311,7 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16 * 2, 0xff0000, L"Direction8:%d", static_cast<int>(PadInput::GetInstance().GetStickDirection8(PadInput::LR::Left)));
 	DrawFormatString(100, 100 + 16 * 3, 0xff0000, L"Player:HP %d/%d (Hキーで1にする)", m_hp, kMaxHp);
 	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f", m_thruster, kMaxThruster);
+	DrawFormatString(100, 100 + 16 * 5, 0xff0000, L"Ammo: %d/%d", m_ammo, kMaxAmmo);
 #endif
 }
 
