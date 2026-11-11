@@ -16,6 +16,11 @@ namespace
 	constexpr int kStateEndFrame = 60;
 
 	constexpr float kJumpPower = 15.0f;
+
+	// 突進の最低回数
+	constexpr int kMinChargeCount = 2;
+	// 突進の最大回数
+	constexpr int kMaxChargeCount = 3;
 }
 
 MutantStateMoveEdge::MutantStateMoveEdge(Mutant& mutant) :
@@ -55,7 +60,8 @@ void MutantStateMoveEdge::Update()
 
 	if (m_frameCount >= kStateEndFrame)
 	{
-		m_owner.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateCharge>(m_owner));
+		int chargeCount = kMinChargeCount + GetRand(kMaxChargeCount - kMinChargeCount);
+		m_owner.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateCharge>(m_owner, chargeCount));
 		return;
 	}
 }
