@@ -112,7 +112,6 @@ void TestEnemy::Draw()
 
 void TestEnemy::OnWasShot(const CollisionManager::ShotInfo& info)
 {
-	printfDx(L"TestEnemyに当たった\n");
 	if (GetComponent<Hackable>()->IsHacked())
 	{
 		m_hp -= info.damage;
@@ -131,5 +130,4 @@ void TestEnemy::OnWasShot(const CollisionManager::ShotInfo& info)
 
 void TestEnemy::OnHacked(Hackable::HackedData data)
 {
-	printfDx(L"TestEnemyをハックした\n");
 }

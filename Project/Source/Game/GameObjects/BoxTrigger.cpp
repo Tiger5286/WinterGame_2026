@@ -44,7 +44,6 @@ void BoxTrigger::Update()
 			m_isPlayerEntered = true;
 			// プレイヤーがボックスに入ったときの処理
 			EventManager::GetInstance().CallEvent(m_enterEventName);
-			printfDx(L"BoxTrigger : Entered\n");
 		}
 	}
 }

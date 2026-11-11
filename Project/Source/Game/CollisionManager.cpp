@@ -338,10 +338,6 @@ void CollisionManager::CheckCollShot(const Vector3& start, const Vector3& end, S
 	{
 		hitObj->OnWasShot(shotInfo);
 	}
-	else
-	{
-		printfDx(L"何にも当たらなかった\n");
-	}
 }
 
 CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& capsule, const Vector3& movedPos, const PolygonCollider& poly)
