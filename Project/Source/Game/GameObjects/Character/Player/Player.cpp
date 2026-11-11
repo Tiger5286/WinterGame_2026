@@ -340,6 +340,11 @@ void Player::OnHitAttack(const CollisionManager::AttackInfo& info)
 	}
 }
 
+void Player::SetAmmoMax()
+{
+	m_ammo = kMaxAmmo;
+}
+
 void Player::UpdateAnimation()
 {
 	auto state = GetComponent<StateMachine<Player>>()->GetState<PlayerState>();

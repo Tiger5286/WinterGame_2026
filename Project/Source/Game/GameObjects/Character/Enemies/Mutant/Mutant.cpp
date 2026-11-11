@@ -201,6 +201,8 @@ void Mutant::OnHacked(Hackable::HackedData data)
 	// テクスチャをハックされたものに変える
 	MV1SetTextureGraphHandle(m_pModel->GetHandle(), m_diffuseTexIndex, ResourceManager::GetInstance().GetGraph(L"HackedMutantTex")->GetHandle(), false);
 	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f, 0.5f, 0.5f, 1.0f));
+	// プレイヤーの弾を回復させる
+	m_pPlayer.lock()->SetAmmoMax();
 }
 
 void Mutant::RotToPlayer()

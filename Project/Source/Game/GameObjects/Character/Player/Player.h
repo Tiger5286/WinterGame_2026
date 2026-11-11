@@ -75,8 +75,9 @@ public:
 	void SetHackingManager(std::weak_ptr<HackingManager> pHackingManager) { m_pHackingManager = pHackingManager; }
 	void SetGameObjectManager(std::weak_ptr<GameObjectManager> pGameObjectManager) { m_pGameObjectManager = pGameObjectManager; }
 
-
     bool IsAim() const { return m_isAim; }
+
+	void SetAmmoMax();
 
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();

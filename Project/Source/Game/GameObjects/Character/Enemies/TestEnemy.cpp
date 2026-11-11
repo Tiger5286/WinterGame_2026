@@ -10,6 +10,7 @@
 #include "Components/Hackable.h"
 #include "Game/UI/EnemyHPUI.h"
 #include "System/UIManager.h"
+#include "Game/GameObjects/Character/Player/Player.h"
 
 namespace
 {
@@ -130,4 +131,5 @@ void TestEnemy::OnWasShot(const CollisionManager::ShotInfo& info)
 
 void TestEnemy::OnHacked(Hackable::HackedData data)
 {
+	m_pPlayer.lock()->SetAmmoMax();
 }
