@@ -7,6 +7,7 @@ class Camera;
 class HackingManager;
 class GameObjectManager;
 class HackingTargetUI;
+class PlayerInfoUI;
 
 class Player :
     public Character
@@ -104,6 +105,7 @@ private:
     std::weak_ptr<Camera> m_pCamera;
 	std::weak_ptr<HackingManager> m_pHackingManager;
 	std::weak_ptr<GameObjectManager> m_pGameObjectManager;
+	std::shared_ptr<PlayerInfoUI> m_pPlayerInfoUI = nullptr;
     float m_angle = 0.0f;
 
     bool m_isAim = false;

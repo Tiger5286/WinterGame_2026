@@ -24,6 +24,7 @@
 #include "Components/Hackable.h"
 #include "Game/UI/HackingTargetUI.h"
 #include "System/UIManager.h"
+#include "Game/UI/PlayerInfoUI.h"
 
 namespace
 {
@@ -71,7 +72,6 @@ Player::Player() :
 
 Player::~Player()
 {
-	m_pHackingTargetUI->Destroy();
 }
 
 void Player::Init()
@@ -109,6 +109,10 @@ void Player::Init()
 
 	m_pHackingTargetUI = std::make_shared<HackingTargetUI>();
 	UIManager::GetInstance().AddUI(m_pHackingTargetUI);
+
+	std::shared_ptr<Player> pThis = std::static_pointer_cast<Player>(shared_from_this());
+	m_pPlayerInfoUI = std::make_shared<PlayerInfoUI>(pThis);
+	UIManager::GetInstance().AddUI(m_pPlayerInfoUI);
 
 	// HPを初期化
 	m_hp = kMaxHp;

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\UI\PlayerInfoUI.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Missile.cpp" />
     <ClCompile Include="Source\Game\GameObjects\BattleArea.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\UI\PlayerInfoUI.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.h" />
     <ClInclude Include="Source\Game\GameObjects\Missile.h" />
     <ClInclude Include="Source\Game\GameObjects\BattleArea.h" />
