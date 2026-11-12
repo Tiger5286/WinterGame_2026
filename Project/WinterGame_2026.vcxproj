@@ -62,6 +62,7 @@
     <ClCompile Include="Source\Game\UI\UIBase.cpp" />
     <ClCompile Include="Source\System\EventManager.cpp" />
     <ClCompile Include="Source\System\FadeManager.cpp" />
+    <ClCompile Include="Source\System\Menu.cpp" />
     <ClCompile Include="Source\System\ServiceLocator.cpp" />
     <ClCompile Include="Source\Game\CollisionManager.cpp" />
     <ClCompile Include="Source\Components\Collider\Collider.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Source\Game\UI\UIBase.h" />
     <ClInclude Include="Source\System\EventManager.h" />
     <ClInclude Include="Source\System\FadeManager.h" />
+    <ClInclude Include="Source\System\Menu.h" />
     <ClInclude Include="Source\System\ServiceLocator.h" />
     <ClInclude Include="Source\Game\CollisionManager.h" />
     <ClInclude Include="Source\Components\Collider\Collider.h" />
