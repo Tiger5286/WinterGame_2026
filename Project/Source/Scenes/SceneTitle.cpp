@@ -21,7 +21,7 @@ void SceneTitle::Update()
 {
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_sceneManager), true);
+		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_sceneManager), true,true);
 		return;
 	}
 }

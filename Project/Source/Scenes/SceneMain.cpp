@@ -44,6 +44,13 @@ SceneMain::~SceneMain()
 	clsDx();
 }
 
+void SceneMain::Load()
+{
+	// 必要なリソースをロード
+	auto& resourceManager = ResourceManager::GetInstance();
+	resourceManager.LoadFromCSV(kResourceFilePath);
+}
+
 void SceneMain::Init()
 {
 	UIManager::GetInstance().Init();
@@ -55,9 +62,6 @@ void SceneMain::Init()
 	// クリア時の処理をEventManagerに登録
 	EventManager::GetInstance().Register(L"DefeatedBoss", [this]() { StageClear(); }, shared_from_this());
 
-	// 必要なリソースをロード
-	auto& resourceManager = ResourceManager::GetInstance();
-	resourceManager.LoadFromCSV(kResourceFilePath);
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成
@@ -148,6 +152,9 @@ void SceneMain::Update()
 
 void SceneMain::Draw() const
 {
+	// まだGameObjectManagerが作られていないなら描画しない
+	if (!m_pGameObjectManager) return;
+
 	m_pGameObjectManager->Draw();
 
 	UIManager::GetInstance().Draw();

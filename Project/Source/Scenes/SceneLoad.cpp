@@ -7,21 +7,22 @@ namespace
 	constexpr int kMinLoadFrame = 30;
 }
 
-SceneLoad::SceneLoad(SceneManager& sceneManager) :
+SceneLoad::SceneLoad(SceneManager& sceneManager, std::shared_ptr<SceneBase> pNextScene) :
 	SceneBase(sceneManager),
-	m_firstLoadNum(GetASyncLoadNum())
+	m_pNextScene(pNextScene)
 {
 }
 
 SceneLoad::~SceneLoad()
 {
-	// ロードシーンが終わるとき非同期読み込みを終了する
-	SetUseASyncLoadFlag(false);
 }
 
 void SceneLoad::Init()
 {
-
+	SetUseASyncLoadFlag(true);
+	m_pNextScene->Load();
+	SetUseASyncLoadFlag(false);
+	m_firstLoadNum = GetASyncLoadNum();
 }
 
 void SceneLoad::Update()
@@ -34,8 +35,10 @@ void SceneLoad::Update()
 		m_loadEndFrame++;
 	}
 	// ロードが終わって一定時間たったらロードシーンをポップ
-	if (m_loadEndFrame > kMinLoadFrame)
+	if (m_loadEndFrame > kMinLoadFrame && !m_isInitNextScene)
 	{
+		m_isInitNextScene = true;
+		m_pNextScene->Init();
 		m_sceneManager.PopScene(true);
 		return;
 	}

@@ -1,28 +1,31 @@
 ﻿#include "SceneManager.h"
 #include "DxLib.h"
 #include "SceneBase.h"
+#include "SceneLoad.h"
 #include "System/FadeManager.h"
 
-void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
+void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade, bool isASyncLoad)
 {
 	if (m_pNextScene) return;
 	if (m_nextChangeScene != NextChangeScene::None) return;
 
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Change;
+	m_isNextSceneASyncLoad = isASyncLoad;
 	if (isFade)
 	{
 		FadeManager::GetInstance().StartFadeOut();
 	}
 }
 
-void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade)
+void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade, bool isASyncLoad)
 {
 	if (m_pNextScene) return;
 	if (m_nextChangeScene != NextChangeScene::None) return;
 
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Push;
+	m_isNextSceneASyncLoad = isASyncLoad;
 	if (isFade)
 	{
 		FadeManager::GetInstance().StartFadeOut();
@@ -40,13 +43,14 @@ void SceneManager::PopScene(bool isFade)
 	}
 }
 
-void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
+void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade, bool isASyncLoad)
 {
 	if (m_pNextScene) return;
 	if (m_nextChangeScene != NextChangeScene::None) return;
 
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Reset;
+	m_isNextSceneASyncLoad = isASyncLoad;
 	if (isFade)
 	{
 		FadeManager::GetInstance().StartFadeOut();
@@ -89,11 +93,23 @@ void SceneManager::Update()
 			break;
 		}
 
-		if (m_pNextScene)
+		if (m_isNextSceneASyncLoad)
 		{
-			m_pNextScene->Init();
+			auto sceneLoad = std::make_shared<SceneLoad>(*this, m_pNextScene);
+			sceneLoad->Init();
+			m_pScenes.push_back(sceneLoad);
 		}
+		else
+		{
+			if (m_pNextScene)
+			{
+				m_pNextScene->Load();
+				m_pNextScene->Init();
+			}
+		}
+
 		m_pNextScene = nullptr;
+		m_isNextSceneASyncLoad = false;
 		m_nextChangeScene = NextChangeScene::None;
 	}
 }

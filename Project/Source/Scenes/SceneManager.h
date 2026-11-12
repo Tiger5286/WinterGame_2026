@@ -14,14 +14,14 @@ public:
 	/// 一番上のシーンを変更する
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	/// <param name="isCallLoadScene">ロードシーンを使うかどうか</param>
-	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isFade);
+	/// <param name="isASyncLoad">ロードシーンを使うかどうか</param>
+	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isFade, bool isASyncLoad = false);
 
 	/// <summary>
 	/// シーンを追加する
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	void PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade = false);
+	void PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade = false, bool isASyncLoad = false);
 
 	/// <summary>
 	/// 一番上のシーンを削除する
@@ -32,7 +32,7 @@ public:
 	/// シーンをリセットする
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	void ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade);
+	void ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade, bool isASyncLoad = false);
 
 	void Update();
 	void Draw();
@@ -51,5 +51,6 @@ private:
 	std::list<std::shared_ptr<SceneBase>> m_pScenes;
 	std::shared_ptr<SceneBase> m_pNextScene = nullptr;
 	NextChangeScene m_nextChangeScene = NextChangeScene::None;
+	bool m_isNextSceneASyncLoad = false;
 };
 

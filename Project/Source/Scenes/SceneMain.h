@@ -14,6 +14,8 @@ public:
     SceneMain(SceneManager& sceneManager);
     virtual ~SceneMain() override;
 
+    void Load() override;
+
     void Init() override;
     void Update() override;
     void Draw() const override;

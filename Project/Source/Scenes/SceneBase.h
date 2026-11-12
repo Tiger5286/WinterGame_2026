@@ -9,6 +9,8 @@ public:
 	SceneBase(SceneManager& sceneManager);
 	virtual ~SceneBase() = default;
 
+	virtual void Load() {}
+
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() const = 0;

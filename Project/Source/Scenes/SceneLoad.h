@@ -4,7 +4,7 @@ class SceneLoad :
     public SceneBase
 {
 public:
-    SceneLoad(SceneManager& sceneManager);
+    SceneLoad(SceneManager& sceneManager,std::shared_ptr<SceneBase> pNextScene);
     ~SceneLoad();
 
     void Init() override;
@@ -12,9 +12,13 @@ public:
     void Draw() const override;
 
 private:
-    const int m_firstLoadNum;
+    int m_firstLoadNum = 0;
 
     // ロードが終わってからのフレームをカウントする
     int m_loadEndFrame = 0;
-};
 
+    bool m_isInitNextScene = false;
+
+    // ロードが終わった後に始まるシーン
+    std::shared_ptr<SceneBase> m_pNextScene;
+};
