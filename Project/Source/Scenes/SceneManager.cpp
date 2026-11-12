@@ -2,55 +2,24 @@
 #include "DxLib.h"
 #include "SceneBase.h"
 
-void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene)
-{
-	// シーンが空なら新しいシーンを追加する
-	if (m_pScenes.empty())
-	{
-		m_pScenes.push_back(pNewScene);
-	}
-	else	// シーンが空でないなら最後のシーンを新しいシーンにする
-	{
-		m_pScenes.back() = pNewScene;
-	}
-
-	// 新しいシーンの初期化
-	pNewScene->Init();
-}
-
-void SceneManager::ChangeSceneWithFade(std::shared_ptr<SceneBase> pNewScene)
+void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Change;
 }
 
-void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene)
+void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade)
 {
-	m_pScenes.push_back(pNewScene);
-	pNewScene->Init();
+	m_pNextScene = pNewScene;
+	m_nextChangeScene = NextChangeScene::Push;
 }
 
-void SceneManager::PopScene()
-{
-	if (m_pScenes.size() > 1)
-	{
-		m_pScenes.pop_back();
-	}
-}
-
-void SceneManager::PopSceneWithFade()
+void SceneManager::PopScene(bool isFade)
 {
 	m_nextChangeScene = NextChangeScene::Pop;
 }
 
-void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene)
-{
-	m_pScenes.clear();
-	m_pScenes.push_back(pNewScene);
-	pNewScene->Init();
-}
-
-void SceneManager::ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene)
+void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Reset;
@@ -58,23 +27,42 @@ void SceneManager::ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene)
 
 void SceneManager::Update()
 {
-	m_pScenes.back()->Update();
+	if (!m_pScenes.empty())
+	{
+		m_pScenes.back()->Update();
+	}
 
 	if (m_nextChangeScene != NextChangeScene::None)
 	{
 		switch (m_nextChangeScene)
 		{
 		case NextChangeScene::Change:
-			ChangeScene(m_pNextScene);
+			// シーンが空なら新しいシーンを追加する
+			if (m_pScenes.empty())
+			{
+				m_pScenes.push_back(m_pNextScene);
+			}
+			else	// シーンが空でないなら最後のシーンを新しいシーンにする
+			{
+				m_pScenes.back() = m_pNextScene;
+			}
 			break;
 		case NextChangeScene::Reset:
-			ResetScene(m_pNextScene);
+			m_pScenes.clear();
+			m_pScenes.push_back(m_pNextScene);
+			break;
+		case NextChangeScene::Push:
+			m_pScenes.push_back(m_pNextScene);
 			break;
 		case NextChangeScene::Pop:
-			PopScene();
+			m_pScenes.pop_back();
 			break;
 		}
 
+		if (m_pNextScene)
+		{
+			m_pNextScene->Init();
+		}
 		m_pNextScene = nullptr;
 		m_nextChangeScene = NextChangeScene::None;
 	}

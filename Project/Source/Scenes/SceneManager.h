@@ -15,27 +15,24 @@ public:
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
 	/// <param name="isCallLoadScene">ロードシーンを使うかどうか</param>
-	void ChangeScene(std::shared_ptr<SceneBase> pNewScene);
-	void ChangeSceneWithFade(std::shared_ptr<SceneBase> pNewScene);
+	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isFade = false);
 
 	/// <summary>
 	/// シーンを追加する
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	void PushScene(std::shared_ptr<SceneBase> pNewScene);
+	void PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade = false);
 
 	/// <summary>
 	/// 一番上のシーンを削除する
 	/// </summary>
-	void PopScene();
-	void PopSceneWithFade();
+	void PopScene(bool isFade = false);
 
 	/// <summary>
 	/// シーンをリセットする
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	void ResetScene(std::shared_ptr<SceneBase> pNewScene);
-	void ResetSceneWithFade(std::shared_ptr<SceneBase> pNewScene);
+	void ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade = false);
 
 	void Update();
 	void Draw();
@@ -47,6 +44,7 @@ private:
 		None,
 		Change,
 		Reset,
+		Push,
 		Pop
 	};
 
