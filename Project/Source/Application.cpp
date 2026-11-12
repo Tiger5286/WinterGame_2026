@@ -5,6 +5,7 @@
 #include "Scenes/SceneManager.h"
 #include "Scenes/SceneTitle.h"
 #include "System/PadInput.h"
+#include "System/FadeManager.h"
 
 #include <memory>
 #include <string>
@@ -68,7 +69,10 @@ void Application::Run()
 	SetUseLighting(true);
 
 	SceneManager sceneManager;
-	sceneManager.ChangeScene(std::make_shared<SceneTitle>(sceneManager));
+	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager));
+
+	FadeManager& fadeManager = FadeManager::GetInstance();
+	fadeManager.StartFadeIn();
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{
@@ -78,9 +82,11 @@ void Application::Run()
 		// 更新
 		PadInput::GetInstance().Update();	// 入力の更新
 		sceneManager.Update();	// シーンの更新
+		fadeManager.Update();
 
 		// 描画
 		sceneManager.Draw();
+		fadeManager.Draw();
 
 		// escキーで終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
