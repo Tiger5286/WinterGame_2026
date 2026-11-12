@@ -69,10 +69,9 @@ void Application::Run()
 	SetUseLighting(true);
 
 	SceneManager sceneManager;
-	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager));
+	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager),true);
 
 	FadeManager& fadeManager = FadeManager::GetInstance();
-	fadeManager.StartFadeIn();
 
 	while (ProcessMessage() != -1 && !m_isRequestExit)
 	{

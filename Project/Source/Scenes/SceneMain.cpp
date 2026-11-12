@@ -125,9 +125,10 @@ void SceneMain::Update()
 	m_pHackingManager->Update();
 
 	// プレイヤーが死んだらゲームオーバー
-	if (m_pPlayer->IsDead())
+	if (m_pPlayer->IsDead() && !m_isDeadPlayer)
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, false));
+		m_isDeadPlayer = true;
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, false),true);
 		return;
 	}
 
@@ -135,7 +136,7 @@ void SceneMain::Update()
 	// Qキーでクリア
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, true));
+		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, true),true);
 		return;
 	}
 	// Wキーでボス部屋にテレポート
@@ -166,5 +167,5 @@ void SceneMain::Draw() const
 
 void SceneMain::StageClear()
 {
-	m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, true));
+	m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, true),true);
 }

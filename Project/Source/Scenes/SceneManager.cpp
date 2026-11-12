@@ -1,28 +1,45 @@
 ﻿#include "SceneManager.h"
 #include "DxLib.h"
 #include "SceneBase.h"
+#include "System/FadeManager.h"
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Change;
+	if (isFade)
+	{
+		FadeManager::GetInstance().StartFadeOut();
+	}
 }
 
 void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade)
 {
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Push;
+	if (isFade)
+	{
+		FadeManager::GetInstance().StartFadeOut();
+	}
 }
 
 void SceneManager::PopScene(bool isFade)
 {
 	m_nextChangeScene = NextChangeScene::Pop;
+	if (isFade)
+	{
+		FadeManager::GetInstance().StartFadeOut();
+	}
 }
 
 void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Reset;
+	if (isFade)
+	{
+		FadeManager::GetInstance().StartFadeOut();
+	}
 }
 
 void SceneManager::Update()
@@ -31,9 +48,11 @@ void SceneManager::Update()
 	{
 		m_pScenes.back()->Update();
 	}
+	auto& fadeManager = FadeManager::GetInstance();
 
-	if (m_nextChangeScene != NextChangeScene::None)
+	if (m_nextChangeScene != NextChangeScene::None && fadeManager.IsNotFading())
 	{
+		fadeManager.StartFadeIn();
 		switch (m_nextChangeScene)
 		{
 		case NextChangeScene::Change:
