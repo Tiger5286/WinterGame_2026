@@ -27,7 +27,5 @@ private:
     std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
 
     std::shared_ptr<Player> m_pPlayer = nullptr;
-
-    bool m_isDeadPlayer = false;
 };
 

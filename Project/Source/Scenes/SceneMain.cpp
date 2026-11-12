@@ -125,9 +125,8 @@ void SceneMain::Update()
 	m_pHackingManager->Update();
 
 	// プレイヤーが死んだらゲームオーバー
-	if (m_pPlayer->IsDead() && !m_isDeadPlayer)
+	if (m_pPlayer->IsDead())
 	{
-		m_isDeadPlayer = true;
 		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, false),true);
 		return;
 	}

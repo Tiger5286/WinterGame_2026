@@ -5,6 +5,9 @@
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
+	if (m_pNextScene) return;
+	if (m_nextChangeScene != NextChangeScene::None) return;
+
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Change;
 	if (isFade)
@@ -15,6 +18,9 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> pNewScene, bool isFade
 
 void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade)
 {
+	if (m_pNextScene) return;
+	if (m_nextChangeScene != NextChangeScene::None) return;
+
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Push;
 	if (isFade)
@@ -25,6 +31,8 @@ void SceneManager::PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade)
 
 void SceneManager::PopScene(bool isFade)
 {
+	if (m_nextChangeScene != NextChangeScene::None) return;
+
 	m_nextChangeScene = NextChangeScene::Pop;
 	if (isFade)
 	{
@@ -34,6 +42,9 @@ void SceneManager::PopScene(bool isFade)
 
 void SceneManager::ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade)
 {
+	if (m_pNextScene) return;
+	if (m_nextChangeScene != NextChangeScene::None) return;
+
 	m_pNextScene = pNewScene;
 	m_nextChangeScene = NextChangeScene::Reset;
 	if (isFade)
