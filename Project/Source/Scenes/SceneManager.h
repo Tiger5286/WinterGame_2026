@@ -11,27 +11,33 @@ public:
 	~SceneManager() = default;
 
 	/// <summary>
-	/// 一番上のシーンを変更する
+	/// シーンを変更する。重なっている場合は、最も上のシーンのみ変更する。
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
-	/// <param name="isASyncLoad">ロードシーンを使うかどうか</param>
+	/// <param name="isFade">フェードするかどうか</param>
+	/// <param name="isASyncLoad">ロード画面を挟むかどうか</param>
 	void ChangeScene(std::shared_ptr<SceneBase> pNewScene,bool isFade, bool isASyncLoad = false);
 
 	/// <summary>
-	/// シーンを追加する
+	/// シーンを追加する。追加したシーンは最後のシーンの上に乗る。
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
+	/// <param name="isFade">フェードするかどうか</param>
+	/// <param name="isASyncLoad">ロード画面を挟むかどうか</param>
 	void PushScene(std::shared_ptr<SceneBase> pNewScene,bool isFade = false, bool isASyncLoad = false);
 
 	/// <summary>
-	/// 一番上のシーンを削除する
+	/// 一番上のシーンを削除する。
 	/// </summary>
+	/// <param name="isFade">フェードするかどうか</param>
 	void PopScene(bool isFade = false);
 
 	/// <summary>
-	/// シーンをリセットする
+	/// シーンをリセットする。積まれたシーンはすべて消され、新しいシーンだけが残る。
 	/// </summary>
 	/// <param name="pNewScene">新しいシーン</param>
+	/// <param name="isFade">フェードするかどうか</param>
+	/// <param name="isASyncLoad">ロード画面を挟むかどうか</param>
 	void ResetScene(std::shared_ptr<SceneBase> pNewScene, bool isFade, bool isASyncLoad = false);
 
 	void Update();

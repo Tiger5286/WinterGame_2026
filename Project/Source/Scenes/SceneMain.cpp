@@ -123,6 +123,9 @@ void SceneMain::Init()
 
 void SceneMain::Update()
 {
+	// まだGameObjectManagerが生成されていないなら処理しない
+	if (!m_pGameObjectManager) return;
+
 	UIManager::GetInstance().Update();
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();

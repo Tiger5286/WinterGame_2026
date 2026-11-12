@@ -49,7 +49,9 @@ void MutantStateCharge::Update()
 		if (m_frameCount == kWindUpFrame)
 		{
 			// プレイヤーへの方向を求める
-			m_toPlayerVec = (GetPlayer()->GetComponent<Transform>()->pos - thisPos).Normalized();
+			m_toPlayerVec = (GetPlayer()->GetComponent<Transform>()->pos - thisPos);
+			m_toPlayerVec.y = 0.0f;
+			m_toPlayerVec.Normalize();
 			// 攻撃を生成する
 			m_pAtk = std::make_shared<Attack>();
 			CollisionManager::AttackInfo info = {

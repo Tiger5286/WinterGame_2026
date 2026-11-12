@@ -9,6 +9,9 @@ public:
 	SceneBase(SceneManager& sceneManager);
 	virtual ~SceneBase() = default;
 
+	/// <summary>
+	/// ここではロード処理のみを書き、ロードしたリソースはInit以降で使用する
+	/// </summary>
 	virtual void Load() {}
 
 	virtual void Init() = 0;
