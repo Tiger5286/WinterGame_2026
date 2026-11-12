@@ -27,7 +27,7 @@
 
 namespace
 {
-	const std::wstring kResourceFilePath = L"data/loadData.csv";
+	const std::wstring kResourceFilePath = L"data/stages/stage1/stage1Resources.csv";
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager):

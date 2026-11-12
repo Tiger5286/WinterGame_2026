@@ -1,0 +1,3 @@
+﻿#resourceType,key,filePath
+model,PlayerModel,data/models/player/player.mv1
+model,GunModel,data/models/gun/gun.mv1

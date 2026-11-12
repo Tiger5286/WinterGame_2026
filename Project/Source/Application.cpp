@@ -6,6 +6,7 @@
 #include "Scenes/SceneTitle.h"
 #include "System/PadInput.h"
 #include "System/FadeManager.h"
+#include "Resource/ResourceManager.h"
 
 #include <memory>
 #include <string>
@@ -52,6 +53,9 @@ bool Application::Init()
 
 	// フォントを読み込む
 	AddFontResourceExA("data/SourceHanSansJP-Medium.otf", FR_PRIVATE, NULL);
+
+	// ゲーム内で常に使用するデータを読み込む
+	ResourceManager::GetInstance().LoadFromCSV(L"data/usuallyResources.csv");
 
 	return true;
 }

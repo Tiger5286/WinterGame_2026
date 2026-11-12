@@ -1,6 +1,4 @@
 ﻿#resourceType,key,filePath
-model,PlayerModel,data/models/player/player.mv1
-model,GunModel,data/models/gun/gun.mv1
 model,StaticStageModel,data/stages/stage1/Stage1StaticCol.mv1
 model,StaticVisualStageModel,data/stages/stage1/Stage1Visual.mv1
 model,Barrier1,data/stages/stage1/Barrier1.mv1
