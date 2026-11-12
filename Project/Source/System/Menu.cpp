@@ -19,12 +19,15 @@ namespace
 	constexpr int kBarHeight = 8;
 }
 
+Menu::Menu() :
+	m_font(CreateFontToHandle(Game::kMainFontName,kFontSize,-1))
+{
+}
+
 Menu::~Menu()
 {
 	DeleteGraph(m_uiHandle);
 	DeleteGraph(m_selectUIHandle);
-
-	DeleteFontToHandle(m_fontHandle);
 }
 
 void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
@@ -141,20 +144,20 @@ void Menu::Draw()
 		int graphW, graphH;
 		GetGraphSize(m_uiHandle, &graphW, &graphH);
 		// 文字の描画
-		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_fontHandle);
+		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_font.GetHandle());
 		if (m_items[i].type == Type::Normal)
 		{
 			// 文字の描画(中央揃え)
 			DrawExtendStringToHandle(m_x - (strW / 2) * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
 		}
 		else if (m_items[i].type == Type::Bar)
 		{
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
 			// バーの描画
 			int x1, y1, x2, y2;
 			x1 = m_x + kBarOffset * m_scale;
@@ -173,7 +176,7 @@ void Menu::Draw()
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_fontHandle);
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
 			// スイッチの描画
 			unsigned int color = 0x888888;
 			if (*m_items[i].pSwitch) color = 0xff0000;

@@ -2,6 +2,7 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include "Resource/Font.h"
 
 class Menu
 {
@@ -36,7 +37,7 @@ private:
 
 public:
 
-	Menu() = default;
+	Menu();
 	~Menu();
 
 	/// <summary>
@@ -56,7 +57,7 @@ private:
 	int m_uiHandle = -1;
 	int m_selectUIHandle = -1;
 
-	int m_fontHandle = -1;
+	Font m_font;
 
 	int m_x = 0;
 	int m_y = 0;
