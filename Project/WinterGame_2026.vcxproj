@@ -103,6 +103,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Resource\Font.h" />
     <ClInclude Include="Source\Scenes\SceneLoad.h" />
     <ClInclude Include="Source\Game\UI\PlayerInfoUI.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.h" />
