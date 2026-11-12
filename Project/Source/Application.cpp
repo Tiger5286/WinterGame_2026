@@ -50,6 +50,9 @@ bool Application::Init()
 	// エフェクトの歪みを有効にする
 	Effekseer_InitDistortion();
 
+	// フォントを読み込む
+	AddFontResourceExA("data/SourceHanSansJP-Medium.otf", FR_PRIVATE, NULL);
+
 	return true;
 }
 
@@ -100,6 +103,9 @@ void Application::Run()
 
 void Application::Terminate()
 {
+	// フォントを削除
+	RemoveFontResourceExA("", FR_PRIVATE, NULL);
+
 	Effkseer_End();	// Effekseerの終了処理
 	DxLib_End();	// ＤＸライブラリの終了処理
 	return;

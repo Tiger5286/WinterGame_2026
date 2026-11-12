@@ -8,4 +8,7 @@ namespace Game
 	constexpr int kScreenHeight = 720;
 
 	constexpr int kFPS = 60;
+
+	// メインで使用するフォントの名前
+	constexpr const wchar_t* kMainFontName = L"源ノ角ゴシック JP Medium";
 }
