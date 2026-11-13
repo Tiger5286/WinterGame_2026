@@ -126,7 +126,7 @@ void Menu::Draw()
 	{
 		int fontHandle = resourceManager.GetFont(L"MainFont30")->GetHandle();
 		int graphHandle = resourceManager.GetGraph(L"Menu")->GetHandle();
-		if (i == m_selectIndex) graphHandle = resourceManager.GetGraph(L"MenuSelect")->GetHandle();
+		int selectGraphHandle = resourceManager.GetGraph(L"MenuSelect")->GetHandle();
 		auto actionName = m_items[i].name;
 
 		int origBlendMode, origBlendParam;
@@ -136,9 +136,9 @@ void Menu::Draw()
 		int black = (1.0f - m_items[i].colorRate) * 255;
 		int red = m_items[i].colorRate * 255;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, black);
-		//DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_uiHandle, true);
+		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, graphHandle, true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, red);
-		//DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_selectUIHandle, true);
+		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, selectGraphHandle, true);
 		SetDrawBlendMode(origBlendMode, origBlendParam);
 
 		int graphW, graphH;
