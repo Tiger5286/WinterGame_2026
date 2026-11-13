@@ -44,7 +44,7 @@ void SceneLoad::Update()
 	}
 }
 
-void SceneLoad::Draw() const
+void SceneLoad::Draw()
 {
 	int loadNum = GetASyncLoadNum();
 #ifdef _DEBUG

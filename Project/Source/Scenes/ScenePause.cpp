@@ -36,7 +36,7 @@ void ScenePause::Update()
 	m_menu.Update();
 }
 
-void ScenePause::Draw() const
+void ScenePause::Draw()
 {
 	// 半透明の黒背景を描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);

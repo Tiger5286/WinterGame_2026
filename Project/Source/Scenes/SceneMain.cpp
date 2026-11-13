@@ -161,7 +161,7 @@ void SceneMain::Update()
 #endif
 }
 
-void SceneMain::Draw() const
+void SceneMain::Draw()
 {
 	// まだGameObjectManagerが作られていないなら描画しない
 	if (!m_pGameObjectManager) return;

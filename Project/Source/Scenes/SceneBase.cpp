@@ -5,7 +5,7 @@ SceneBase::SceneBase(SceneManager& sceneManager):
 	m_sceneManager(sceneManager)
 {}
 
-void SceneBase::DrawGrid() const
+void SceneBase::DrawGrid()
 {
 	// 直線の始点と終点
 	VECTOR startPos;

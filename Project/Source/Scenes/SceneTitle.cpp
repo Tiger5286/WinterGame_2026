@@ -28,7 +28,7 @@ void SceneTitle::Update()
 	}
 }
 
-void SceneTitle::Draw() const
+void SceneTitle::Draw()
 {
 	// テスト用四角
 	DrawBox(100, 100, 200, 200, 0xffffff, true);

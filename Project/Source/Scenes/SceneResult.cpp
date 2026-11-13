@@ -27,7 +27,7 @@ void SceneResult::Update()
 	}
 }
 
-void SceneResult::Draw() const
+void SceneResult::Draw()
 {
 #ifdef _DEBUG
 	DrawString(0, 0, L"SceneResult", 0xffffff);

@@ -11,7 +11,7 @@ public:
 
     void Init() override;
     void Update() override;
-    void Draw() const override;
+    void Draw() override;
 
 private:
     Menu m_menu;
