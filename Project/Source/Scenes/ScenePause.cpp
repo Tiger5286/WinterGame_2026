@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Game.h"
 #include "SceneTitle.h"
+#include "SceneOption.h"
 
 ScenePause::ScenePause(SceneManager& sceneManager) :
 	SceneBase(sceneManager)
@@ -23,7 +24,7 @@ void ScenePause::Init()
 	infos.push_back(info);
 
 	info.name = L"オプション";
-	info.action = [this]() {};
+	info.action = [this]() { m_sceneManager.PushScene(std::make_shared<SceneOption>(m_sceneManager)); };
 	infos.push_back(info);
 
 	info.name = L"ステージセレクトへ戻る";
@@ -36,8 +37,8 @@ void ScenePause::Init()
 void ScenePause::Update()
 {
 	auto& input = PadInput::GetInstance();
-	// startボタンでポーズシーンを終わる
-	if (input.IsTriggerd(XINPUT_BUTTON_START))
+	// startボタンかBボタンでポーズシーンを終わる
+	if (input.IsTriggerd(XINPUT_BUTTON_START) || input.IsTriggerd(XINPUT_BUTTON_B))
 	{
 		m_sceneManager.PopScene();
 		return;
