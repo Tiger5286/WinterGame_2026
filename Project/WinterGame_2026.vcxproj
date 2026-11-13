@@ -27,7 +27,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Missile.cpp" />
     <ClCompile Include="Source\Game\GameObjects\BattleArea.cpp" />
-    <ClCompile Include="Source\Game\BarrierPlacer.cpp" />
+    <ClCompile Include="Source\Game\StageGenerator.cpp" />
     <ClCompile Include="Source\Game\GameObjects\BoxTrigger.cpp" />
     <ClCompile Include="Source\Game\EnemyFactory.cpp" />
     <ClCompile Include="Source\Game\EnemyPlacer.cpp" />
@@ -115,7 +115,7 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.h" />
     <ClInclude Include="Source\Game\GameObjects\Missile.h" />
     <ClInclude Include="Source\Game\GameObjects\BattleArea.h" />
-    <ClInclude Include="Source\Game\BarrierPlacer.h" />
+    <ClInclude Include="Source\Game\StageGenerator.h" />
     <ClInclude Include="Source\Game\GameObjects\BoxTrigger.h" />
     <ClInclude Include="Source\Game\EnemyFactory.h" />
     <ClInclude Include="Source\Game\EnemyPlacer.h" />

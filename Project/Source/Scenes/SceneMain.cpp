@@ -21,7 +21,7 @@
 #include "System/PadInput.h"
 #include "Game/EnemyPlacer.h"
 #include "Game/GameObjects/BoxTrigger.h"
-#include "Game/BarrierPlacer.h"
+#include "Game/StageGenerator.h"
 #include "Game/GameObjects/BattleArea.h"
 #include "System/EventManager.h"
 #include "ScenePause.h"
@@ -43,11 +43,11 @@ namespace
 
 	const LoadCSVDatas kStageDatas[] = {
 		{
-			.resources = L"data/stages/stage1/stage1Resources.csv",
-			.barriers = L"data/stages/stage1/barrierData.csv",
-			.enemies = L"data/stages/stage1/enemyPlaceData.csv",
-			.boxTriggers = L"data/stages/stage1/",
-			.battleAreas = L"data/stages/stage1/"
+			.resources = L"data/stages/stage1/datas/stage1Resources.csv",
+			.barriers = L"data/stages/stage1/datas/barrierData.csv",
+			.enemies = L"data/stages/stage1/datas/enemyPlaceData.csv",
+			.boxTriggers = L"data/stages/stage1/datas/boxTriggerData.csv",
+			.battleAreas = L"data/stages/stage1/datas/battleAreas.csv"
 		}
 	};
 }
@@ -90,7 +90,7 @@ void SceneMain::Init()
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// バリアを生成
-	BarrierPlacer::Place(m_pGameObjectManager, kStageDatas[m_nowStage - 1].barriers);
+	StageGenerator::PlaceBarriers(m_pGameObjectManager, kStageDatas[m_nowStage - 1].barriers);
 	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");
@@ -126,7 +126,7 @@ void SceneMain::Init()
 	BattleArea::Info battleAreaInfo = {
 		.startEventName = L"BattleArea1Enter",
 		.endEventName = L"BattleArea1Clear",
-		.csvFilePath = L"data/stages/stage1/battleArea1EnemyPlaceData.csv",
+		.csvFilePath = L"data/stages/stage1/datas/battleAreas/battleArea1EnemyPlaceData.csv",
 		.pGameObjectManager = m_pGameObjectManager,
 		.pPlayer = m_pPlayer
 	};
@@ -136,7 +136,7 @@ void SceneMain::Init()
 	battleAreaInfo = {
 		.startEventName = L"BossAreaEnter",
 		.endEventName = L"DefeatedBoss",
-		.csvFilePath = L"data/stages/stage1/BossAreaEnemyPlaceData.csv",
+		.csvFilePath = L"data/stages/stage1/datas/battleAreas/bossAreaEnemyPlaceData.csv",
 		.pGameObjectManager = m_pGameObjectManager,
 		.pPlayer = m_pPlayer
 	};

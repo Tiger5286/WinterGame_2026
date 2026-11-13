@@ -1,0 +1,3 @@
+﻿#EventName,x,y,z,x,y,z
+BattleArea1Enter,3600,100,600,2900,500,900
+BossAreaEnter,5600,600,-100,5900,100,600

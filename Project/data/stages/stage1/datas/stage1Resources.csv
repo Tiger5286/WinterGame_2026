@@ -1,9 +1,9 @@
 ﻿#resourceType,key,filePath
-model,StaticStageModel,data/stages/stage1/Stage1StaticCol.mv1
-model,StaticVisualStageModel,data/stages/stage1/Stage1Visual.mv1
-model,Barrier1,data/stages/stage1/Barrier1.mv1
-model,Barrier2,data/stages/stage1/Barrier2.mv1
-model,Barrier3,data/stages/stage1/Barrier3.mv1
+model,StaticStageModel,data/stages/stage1/models/Stage1StaticCol.mv1
+model,StaticVisualStageModel,data/stages/stage1/models/Stage1Visual.mv1
+model,Barrier1,data/stages/stage1/models/Barrier1.mv1
+model,Barrier2,data/stages/stage1/models/Barrier2.mv1
+model,Barrier3,data/stages/stage1/models/Barrier3.mv1
 model,Walker,data/models/enemies/Walker.mv1
 model,Mutant,data/models/enemies/Mutant.mv1
 graph,NormalWalkerTex,data/models/enemies/Walker.fbm/Ch36_1001_Diffuse_Cyber.png

@@ -1,4 +1,4 @@
-﻿#include "BarrierPlacer.h"
+﻿#include "StageGenerator.h"
 #include "Utility/MyLib.h"
 #include "Game/GameObjectManager.h"
 #include <unordered_map>
@@ -13,7 +13,7 @@ namespace
 	};
 }
 
-void BarrierPlacer::Place(const std::shared_ptr<GameObjectManager>& pGameObjectManager, const std::wstring& filePath)
+void StageGenerator::PlaceBarriers(const std::shared_ptr<GameObjectManager>& pGameObjectManager, const std::wstring& filePath)
 {
 	// GameObjectManagerのnullチェック
 	if (!pGameObjectManager)
@@ -73,4 +73,16 @@ void BarrierPlacer::Place(const std::shared_ptr<GameObjectManager>& pGameObjectM
 		// GameObjectManagerにBarrierを追加
 		pGameObjectManager->Add(barrier);
 	}
+}
+
+void StageGenerator::PlaceHackPoints(const Info& info, const std::wstring& filePath)
+{
+}
+
+void StageGenerator::PlaceBoxTriggers(const Info& info, const std::wstring& filePath)
+{
+}
+
+void StageGenerator::PlaceBattleAreas(const Info& info, const std::wstring& filePath)
+{
 }
