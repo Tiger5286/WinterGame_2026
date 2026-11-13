@@ -24,6 +24,7 @@
 #include "Game/BarrierPlacer.h"
 #include "Game/GameObjects/BattleArea.h"
 #include "System/EventManager.h"
+#include "ScenePause.h"
 
 namespace
 {
@@ -135,6 +136,13 @@ void SceneMain::Update()
 	if (m_pPlayer->IsDead())
 	{
 		m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, false),true);
+		return;
+	}
+
+	// startボタンでポーズ
+	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_START))
+	{
+		m_sceneManager.PushScene(std::make_shared<ScenePause>(m_sceneManager));
 		return;
 	}
 

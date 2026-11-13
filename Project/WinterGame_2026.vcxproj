@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Scenes\ScenePause.cpp" />
     <ClCompile Include="Source\Scenes\SceneLoad.cpp" />
     <ClCompile Include="Source\Game\UI\PlayerInfoUI.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Mutant\State\MutantStateMoveEdge.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Scenes\ScenePause.h" />
     <ClInclude Include="Source\Resource\Font.h" />
     <ClInclude Include="Source\Scenes\SceneLoad.h" />
     <ClInclude Include="Source\Game\UI\PlayerInfoUI.h" />
