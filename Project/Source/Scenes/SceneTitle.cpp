@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "System/PadInput.h"
 #include "SceneManager.h"
-#include "SceneMain.h"
+#include "SceneStageSelect.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Font.h"
 
@@ -23,7 +23,7 @@ void SceneTitle::Update()
 {
 	if (PadInput::GetInstance().IsTriggerd(XINPUT_BUTTON_A))
 	{
-		m_sceneManager.ChangeScene(std::make_shared<SceneMain>(m_sceneManager), true,true);
+		m_sceneManager.ChangeScene(std::make_shared<SceneStageSelect>(m_sceneManager), true);
 		return;
 	}
 }

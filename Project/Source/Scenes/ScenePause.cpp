@@ -2,7 +2,7 @@
 #include "System/PadInput.h"
 #include "SceneManager.h"
 #include "Game.h"
-#include "SceneTitle.h"
+#include "SceneStageSelect.h"
 #include "SceneOption.h"
 
 ScenePause::ScenePause(SceneManager& sceneManager) :
@@ -28,7 +28,7 @@ void ScenePause::Init()
 	infos.push_back(info);
 
 	info.name = L"ステージセレクトへ戻る";
-	info.action = [this]() { m_sceneManager.ResetScene(std::make_shared<SceneTitle>(m_sceneManager), true); };
+	info.action = [this]() { m_sceneManager.ResetScene(std::make_shared<SceneStageSelect>(m_sceneManager), true); };
 	infos.push_back(info);
 
 	m_menu.Init(infos, Game::kScreenWidth / 2, Game::kScreenHeight / 2);
