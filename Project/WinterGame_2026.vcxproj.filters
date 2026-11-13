@@ -554,5 +554,8 @@
     <ClInclude Include="Source\Scenes\SceneStageSelect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\SpawnContext.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

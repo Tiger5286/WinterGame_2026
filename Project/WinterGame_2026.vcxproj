@@ -106,6 +106,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\SpawnContext.h" />
     <ClInclude Include="Source\Scenes\SceneStageSelect.h" />
     <ClInclude Include="Source\Scenes\SceneOption.h" />
     <ClInclude Include="Source\Scenes\ScenePause.h" />

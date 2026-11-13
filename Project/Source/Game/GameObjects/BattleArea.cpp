@@ -2,6 +2,7 @@
 #include "System/EventManager.h"
 #include "Game/EnemyPlacer.h"
 #include "Game/GameObjects/Character/Enemies/EnemyBase.h"
+#include "Game/SpawnContext.h"
 
 BattleArea::BattleArea(const Info& info) :
 	m_info(info)
@@ -73,7 +74,7 @@ void BattleArea::StartBattle()
 	// 戦闘開始フラグを立て、敵の監視を開始する
 	m_isStarted = true;
 	// 敵を配置するための情報を準備
-	EnemyFactory::Info info;
+	SpawnContext::Info info;
 	info.pGameObjectManager = gameObjectManager;
 	info.pPlayer = player;
 	// 敵を配置する

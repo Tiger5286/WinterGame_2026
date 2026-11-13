@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "SceneBase.h"
+#include <memory>
+#include <string>
 
 class GameObjectManager;
 class CollisionManager;
@@ -31,5 +33,6 @@ private:
     std::shared_ptr<Player> m_pPlayer = nullptr;
 
     const int m_nowStage;
+    const std::wstring m_stageFolderPath;
 };
 

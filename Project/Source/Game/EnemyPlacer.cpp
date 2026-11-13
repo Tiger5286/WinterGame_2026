@@ -5,7 +5,7 @@
 #include "Components/Transform.h"
 #include "GameObjects/Character/Enemies/EnemyBase.h"
 
-std::vector<std::shared_ptr<EnemyBase>> EnemyPlacer::Place(const EnemyFactory::Info& info, const std::wstring& filePath)
+std::vector<std::shared_ptr<EnemyBase>> EnemyPlacer::Place(const SpawnContext::Info& info, const std::wstring& filePath)
 {
 	auto datas = MyLib::LoadCSV(filePath);
 

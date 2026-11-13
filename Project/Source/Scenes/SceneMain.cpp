@@ -25,38 +25,20 @@
 #include "Game/GameObjects/BattleArea.h"
 #include "System/EventManager.h"
 #include "ScenePause.h"
+#include "Game/SpawnContext.h"
 
 namespace
 {
-	//const std::wstring kResourceFilePath = L"data/stages/stage1/stage1Resources.csv";
-
 	constexpr const wchar_t* kClearEventName = L"DefeatedBoss";
 
-	struct LoadCSVDatas
-	{
-		const wchar_t* resources;
-		const wchar_t* barriers;
-		const wchar_t* enemies;
-		const wchar_t* boxTriggers;
-		const wchar_t* battleAreas;
-		const wchar_t* hackPoints;
-	};
-
-	const LoadCSVDatas kStageDatas[] = {
-		{
-			.resources = L"data/stages/stage1/datas/resources.csv",
-			.barriers = L"data/stages/stage1/datas/barrierData.csv",
-			.enemies = L"data/stages/stage1/datas/enemyPlaceData.csv",
-			.boxTriggers = L"data/stages/stage1/datas/boxTriggerData.csv",
-			.battleAreas = L"data/stages/stage1/datas/battleAreas.csv",
-			.hackPoints = L"data/stages/stage1/datas/hackPointData.csv"
-		}
-	};
+	constexpr const wchar_t* kStageFolderPath = L"data/stages/stage";
+	constexpr const wchar_t* kResourcesFilePath = L"/datas/resources.csv";
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager,int stage):
 	SceneBase(sceneManager),
-	m_nowStage(stage)
+	m_nowStage(stage),
+	m_stageFolderPath(kStageFolderPath + std::to_wstring(stage))
 {
 }
 
@@ -65,7 +47,7 @@ SceneMain::~SceneMain()
 	// CollisionManagerが消えるのでServiceLocatorの登録を解除
 	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
 	// SceneMainでしか使わないリソースを削除
-	ResourceManager::GetInstance().DeleteFromCSV(kStageDatas[m_nowStage - 1].resources);
+	ResourceManager::GetInstance().DeleteFromCSV(m_stageFolderPath + kResourcesFilePath);
 	clsDx();
 }
 
@@ -73,7 +55,7 @@ void SceneMain::Load()
 {
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
-	resourceManager.LoadFromCSV(kStageDatas[m_nowStage - 1].resources);
+	resourceManager.LoadFromCSV(m_stageFolderPath + kResourcesFilePath);
 }
 
 void SceneMain::Init()
@@ -108,23 +90,12 @@ void SceneMain::Init()
 	m_pPlayer->SetHackingManager(m_pHackingManager);
 	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	// ステージ生成に必要な情報を準備
-	StageGenerator::Info stageGenInfo = {
+	SpawnContext::Info stageGenInfo = {
 		.pPlayer = m_pPlayer,
 		.pGameObjectManager = m_pGameObjectManager
 	};
-	// バリアを生成
-	StageGenerator::PlaceBarriers(stageGenInfo, kStageDatas[m_nowStage - 1].barriers);
-	// ハックポイントを生成
-	StageGenerator::PlaceHackPoints(stageGenInfo, kStageDatas[m_nowStage - 1].hackPoints);
-	// 敵を生成
-	EnemyFactory::Info enemyFactoryInfo;
-	enemyFactoryInfo.pGameObjectManager = m_pGameObjectManager;
-	enemyFactoryInfo.pPlayer = m_pPlayer;
-	EnemyPlacer::Place(enemyFactoryInfo, kStageDatas[m_nowStage - 1].enemies);
-	// BoxTriggerを生成
-	StageGenerator::PlaceBoxTriggers(stageGenInfo, kStageDatas[m_nowStage - 1].boxTriggers);
-	// BattleAreaを生成
-	StageGenerator::PlaceBattleAreas(stageGenInfo, kStageDatas[m_nowStage - 1].battleAreas);
+	// ステージ生成
+	StageGenerator::Generate(stageGenInfo, m_stageFolderPath);
 }
 
 void SceneMain::Update()
