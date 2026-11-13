@@ -15,22 +15,22 @@ ScenePause::~ScenePause()
 
 void ScenePause::Init()
 {
-	std::vector<Menu::Funcs> actions;
-	Menu::Funcs action = {
+	std::vector<Menu::ItemInfo> infos;
+	Menu::ItemInfo info = {
 		.name = L"ゲームに戻る",
 		.action = [this]() { m_sceneManager.PopScene(); }
 	};
-	actions.push_back(action);
+	infos.push_back(info);
 
-	action.name = L"オプション";
-	action.action = [this]() {};
-	actions.push_back(action);
+	info.name = L"オプション";
+	info.action = [this]() {};
+	infos.push_back(info);
 
-	action.name = L"ステージセレクトへ戻る";
-	action.action = [this]() { m_sceneManager.ResetScene(std::make_shared<SceneTitle>(m_sceneManager), true); };
-	actions.push_back(action);
+	info.name = L"ステージセレクトへ戻る";
+	info.action = [this]() { m_sceneManager.ResetScene(std::make_shared<SceneTitle>(m_sceneManager), true); };
+	infos.push_back(info);
 
-	m_menu.Init(actions, Game::kScreenWidth / 2, Game::kScreenHeight / 2);
+	m_menu.Init(infos, Game::kScreenWidth / 2, Game::kScreenHeight / 2);
 }
 
 void ScenePause::Update()

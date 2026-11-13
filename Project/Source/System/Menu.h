@@ -14,7 +14,7 @@ public:
 		Switch
 	};
 
-	struct Funcs
+	struct ItemInfo
 	{
 		std::wstring name;
 		std::function<void()> action;
@@ -26,13 +26,9 @@ public:
 private:
 	struct Item
 	{
-		std::wstring name;
-		std::function<void()> action;
+		ItemInfo info;
 		float scale = 0.0f;
 		float colorRate = 0.0f;
-		Type type = Type::Normal;
-		float* pBarRate = nullptr;
-		bool* pSwitch = nullptr;
 	};
 
 public:
@@ -46,7 +42,7 @@ public:
 	/// <param name="actions">メニューのアクションの配列</param>
 	/// <param name="x">メニューの一番上の項目の真ん中座標X</param>
 	/// <param name="y">メニューの真ん中座標Y</param>
-	void Init(std::vector<Funcs> actions,int x,int y,float scale = 1.0f);
+	void Init(std::vector<ItemInfo> infos,int x,int y,float scale = 1.0f);
 	void Update();
 	void Draw();
 

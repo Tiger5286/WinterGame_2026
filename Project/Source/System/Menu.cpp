@@ -33,18 +33,14 @@ Menu::~Menu()
 {
 }
 
-void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
+void Menu::Init(std::vector<ItemInfo> infos, int x, int y,float scale)
 {
 	// 関数とそのアクション名を初期化
-	m_items.resize(actions.size());
-	for (int i = 0; i < actions.size(); i++)
+	m_items.resize(infos.size());
+	for (int i = 0; i < infos.size(); i++)
 	{
-		m_items[i].name = actions[i].name;
-		m_items[i].action = actions[i].action;
+		m_items[i].info = infos[i];
 		// scaleとcolorRateは0.0で初期化
-		m_items[i].type = actions[i].type;
-		m_items[i].pBarRate = actions[i].pBarRate;
-		m_items[i].pSwitch = actions[i].pSwitch;
 	}
 	// 位置を初期化
 	m_x = x;
@@ -80,18 +76,18 @@ void Menu::Update()
 
 	// 選択中の項目によって異なるアクションを実行する
 	const auto& currentItem = m_items[m_selectIndex];
-	switch (currentItem.type)
+	switch (currentItem.info.type)
 	{
 	case Type::Normal:
 		// 決定ボタンで選択中のメニューのアクションを実行する
 		if (input.IsTriggerd(XINPUT_BUTTON_A))
 		{
-			currentItem.action();
+			currentItem.info.action();
 		}
 		break;
 	case Type::Bar:
 	case Type::Switch:
-		currentItem.action();
+		currentItem.info.action();
 		break;
 	}
 
@@ -127,7 +123,7 @@ void Menu::Draw()
 		int fontHandle = resourceManager.GetFont(L"MainFont30")->GetHandle();
 		int graphHandle = resourceManager.GetGraph(L"Menu")->GetHandle();
 		int selectGraphHandle = resourceManager.GetGraph(L"MenuSelect")->GetHandle();
-		auto actionName = m_items[i].name;
+		auto actionName = m_items[i].info.name;
 
 		int origBlendMode, origBlendParam;
 		GetDrawBlendMode(&origBlendMode, &origBlendParam);
@@ -145,14 +141,14 @@ void Menu::Draw()
 		GetGraphSize(graphHandle, &graphW, &graphH);
 		// 文字の描画
 		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), fontHandle);
-		if (m_items[i].type == Type::Normal)
+		if (m_items[i].info.type == Type::Normal)
 		{
 			// 文字の描画(中央揃え)
 			DrawExtendStringToHandle(m_x - (strW / 2) * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
 						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, fontHandle);
 		}
-		else if (m_items[i].type == Type::Bar)
+		else if (m_items[i].info.type == Type::Bar)
 		{
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
@@ -166,12 +162,12 @@ void Menu::Draw()
 			y2 = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i + kBarHeight / 2) * m_scale;
 			DrawBox(x1, y1, x2, y2, 0x888888, true);	// バーの背景
 			int barLength = abs(x2 - x1);
-			x2 = x1 + barLength * *m_items[i].pBarRate;
+			x2 = x1 + barLength * *m_items[i].info.pBarRate;
 			DrawBox(x1, y1, x2, y2, 0xff0000, true);	// バーの本体
 			y1 = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale;
 			DrawCircle(x2, y1, kBarHeight, 0xffffff);
 		}
-		else if (m_items[i].type == Type::Switch)
+		else if (m_items[i].info.type == Type::Switch)
 		{
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
@@ -179,7 +175,7 @@ void Menu::Draw()
 						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, fontHandle);
 			// スイッチの描画
 			unsigned int color = 0x888888;
-			if (*m_items[i].pSwitch) color = 0xff0000;
+			if (*m_items[i].info.pSwitch) color = 0xff0000;
 			int x, y;
 			x = m_x + (graphW / 2 - 30) * m_scale;
 			y = m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale;
@@ -192,7 +188,7 @@ void Menu::Draw()
 			x2 = x + 30;
 			y2 = y + 10 + 1;
 			DrawBox(x1, y1, x2, y2, color, true);
-			if (*m_items[i].pSwitch) x += 30;
+			if (*m_items[i].info.pSwitch) x += 30;
 			DrawCircle(x, y, 13, 0xffffff);
 		}
 	}
