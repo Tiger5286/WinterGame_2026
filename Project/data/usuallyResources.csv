@@ -2,3 +2,5 @@
 model,PlayerModel,data/models/player/player.mv1,
 model,GunModel,data/models/gun/gun.mv1,
 font,MainFont30,源ノ角ゴシック JP Medium,30
+graph,Menu,data/graphs/MenuUI.png,
+graph,MenuSelect,data/graphs/MenuUI_Select.png,

@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "DxLib.h"
 //#include "Singleton/SoundManager.h"
+#include "Resource/ResourceManager.h"
+#include "Resource/Graph.h"
 
 namespace
 {
@@ -17,17 +19,18 @@ namespace
 	constexpr int kStringOffset = 15;
 	constexpr int kBarOffset = 20;
 	constexpr int kBarHeight = 8;
+
+	constexpr int kWidth = 350;
+	constexpr int kHeight = 60;
+	constexpr int kEdgeThickness = 6;
 }
 
-Menu::Menu() :
-	m_font(CreateFontToHandle(Game::kMainFontName,kFontSize,-1))
+Menu::Menu()
 {
 }
 
 Menu::~Menu()
 {
-	DeleteGraph(m_uiHandle);
-	DeleteGraph(m_selectUIHandle);
 }
 
 void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
@@ -48,11 +51,6 @@ void Menu::Init(std::vector<Funcs> actions, int x, int y,float scale)
 	m_y = y;
 	// 大きさを初期化
 	m_scale = scale;
-
-	m_uiHandle = LoadGraph(L"data/Graphs/Game/MenuUI.png");
-	m_selectUIHandle = LoadGraph(L"data/Graphs/Game/MenuUI_Select.png");
-
-	//m_fontHandle = CreateFontToHandle(Game::kMainFontName, kFontSize, -1);
 }
 
 void Menu::Update()
@@ -123,10 +121,12 @@ void Menu::Update()
 
 void Menu::Draw()
 {
+	auto& resourceManager = ResourceManager::GetInstance();
 	for (int i = 0; i < m_items.size(); i++)
 	{
-		int handle = m_uiHandle;
-		if (i == m_selectIndex) handle = m_selectUIHandle;
+		int fontHandle = resourceManager.GetFont(L"MainFont30")->GetHandle();
+		int graphHandle = resourceManager.GetGraph(L"Menu")->GetHandle();
+		if (i == m_selectIndex) graphHandle = resourceManager.GetGraph(L"MenuSelect")->GetHandle();
 		auto actionName = m_items[i].name;
 
 		int origBlendMode, origBlendParam;
@@ -136,28 +136,28 @@ void Menu::Draw()
 		int black = (1.0f - m_items[i].colorRate) * 255;
 		int red = m_items[i].colorRate * 255;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, black);
-		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_uiHandle, true);
+		//DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_uiHandle, true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, red);
-		DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_selectUIHandle, true);
+		//DrawRotaGraph(m_x, m_y + (kFontSize / 2 + (kFontSize + kMargin) * i) * m_scale, m_items[i].scale * m_scale, 0.0, m_selectUIHandle, true);
 		SetDrawBlendMode(origBlendMode, origBlendParam);
 
 		int graphW, graphH;
-		GetGraphSize(m_uiHandle, &graphW, &graphH);
+		GetGraphSize(graphHandle, &graphW, &graphH);
 		// 文字の描画
-		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), m_font.GetHandle());
+		int strW = GetDrawExtendStringWidthToHandle(m_items[i].scale, actionName.c_str(), actionName.size(), fontHandle);
 		if (m_items[i].type == Type::Normal)
 		{
 			// 文字の描画(中央揃え)
 			DrawExtendStringToHandle(m_x - (strW / 2) * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, fontHandle);
 		}
 		else if (m_items[i].type == Type::Bar)
 		{
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, fontHandle);
 			// バーの描画
 			int x1, y1, x2, y2;
 			x1 = m_x + kBarOffset * m_scale;
@@ -176,7 +176,7 @@ void Menu::Draw()
 			// 文字の描画(左揃え)
 			DrawExtendStringToHandle(m_x - (graphW / 2 - kStringOffset) * m_items[i].scale * m_scale,
 						   m_y + ((kFontSize + kMargin) * i) * m_scale,
-						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, m_font.GetHandle());
+						   m_items[i].scale * m_scale, m_items[i].scale * m_scale, actionName.c_str(), kTextColor, fontHandle);
 			// スイッチの描画
 			unsigned int color = 0x888888;
 			if (*m_items[i].pSwitch) color = 0xff0000;
