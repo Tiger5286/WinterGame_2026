@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Scenes\SceneStageSelect.cpp" />
     <ClCompile Include="Source\Scenes\SceneOption.cpp" />
     <ClCompile Include="Source\Scenes\ScenePause.cpp" />
     <ClCompile Include="Source\Scenes\SceneLoad.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Scenes\SceneStageSelect.h" />
     <ClInclude Include="Source\Scenes\SceneOption.h" />
     <ClInclude Include="Source\Scenes\ScenePause.h" />
     <ClInclude Include="Source\Resource\Font.h" />
