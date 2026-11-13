@@ -7,6 +7,7 @@
 class Resource;
 class Model;
 class Graph;
+class Font;
 
 /// <summary>
 /// リソースを管理するシングルトンクラス
@@ -27,7 +28,10 @@ public:
 	void LoadModel(const std::wstring& filePath, const std::wstring& key);
 	// 画像をロードする
 	void LoadGraph(const std::wstring& filePath, const std::wstring& key);
+	// 音をロードする
 	//void LoadSound(const std::wstring& filePath, const std::wstring key);
+	// フォントをロードする
+	void LoadFont(const std::wstring& fontName, const std::wstring& key, int size);
 
 	/// <summary>
 	/// リソースを解放する
@@ -60,6 +64,13 @@ public:
 	/// <param name="key">登録名</param>
 	/// <returns>画像のハンドル</returns>
 	Graph* GetGraph(const std::wstring& key);
+
+	/// <summary>
+	/// フォントハンドルを取得する
+	/// </summary>
+	/// <param name="key">登録名</param>
+	/// <returns>フォントハンドル</returns>
+	Font* GetFont(const std::wstring& key);
 
 	/// <summary>
 	/// リソースをCSVからロードする。この関数でロードしたリソースはファイルパスと紐づけられ、DeleteFromCSV()でまとめて削除できる

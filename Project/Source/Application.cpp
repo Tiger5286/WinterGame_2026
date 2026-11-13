@@ -108,7 +108,7 @@ void Application::Run()
 void Application::Terminate()
 {
 	// フォントを削除
-	RemoveFontResourceExA("", FR_PRIVATE, NULL);
+	RemoveFontResourceExA("data/SourceHanSansJP-Medium.otf", FR_PRIVATE, NULL);
 
 	Effkseer_End();	// Effekseerの終了処理
 	DxLib_End();	// ＤＸライブラリの終了処理

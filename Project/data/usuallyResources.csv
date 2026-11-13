@@ -1,3 +1,4 @@
-﻿#resourceType,key,filePath
-model,PlayerModel,data/models/player/player.mv1
-model,GunModel,data/models/gun/gun.mv1
+﻿#resourceType,key,filePath(fontName),size(only font)
+model,PlayerModel,data/models/player/player.mv1,
+model,GunModel,data/models/gun/gun.mv1,
+font,MainFont30,源ノ角ゴシック JP Medium,30

@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "Model.h"
 #include "Graph.h"
+#include "Font.h"
 #include "Utility/MyLib.h"
 
 ResourceManager& ResourceManager::GetInstance()
@@ -51,6 +52,23 @@ void ResourceManager::LoadGraph(const std::wstring& filePath, const std::wstring
 		return;
 	}
 	m_resources[key] = std::make_unique<Graph>(handle);
+}
+
+void ResourceManager::LoadFont(const std::wstring& fontName, const std::wstring& key, int size)
+{
+	// キーが重複していたらエラー
+	if (m_resources.find(key) != m_resources.end())
+	{
+		assert(false && "ResourceManager::LoadFont() : すでに登録済みのキーを登録しようとしています");
+		return;
+	}
+	const int handle = DxLib::CreateFontToHandle(fontName.c_str(), size, -1);
+	if (handle == -1)
+	{
+		assert(false && "ResourceManager::LoadFont() : フォントが正しく作られませんでした");
+		return;
+	}
+	m_resources[key] = std::make_unique<Font>(handle);
 }
 
 void ResourceManager::Delete(const std::wstring& key)
@@ -112,14 +130,32 @@ Graph* ResourceManager::GetGraph(const std::wstring& key)
 	return pGraph;
 }
 
+Font* ResourceManager::GetFont(const std::wstring& key)
+{
+	auto it = m_resources.find(key);
+	if (it == m_resources.end())
+	{
+		assert(false && "ResourceManager::GetFont() : キーに対応したリソースが見つかりませんでした");
+		return nullptr;
+	}
+	auto* pFont = dynamic_cast<Font*>(it->second.get());
+	assert(pFont && "ResourceManager::GetGraph() : キーに登録されているリソースはFontではありません");
+	return pFont;
+}
+
 void ResourceManager::LoadFromCSV(const std::wstring& filePath)
 {
 	auto csvData = MyLib::LoadCSV(filePath);
 	for (const auto& row : csvData)
 	{
-		const auto& type = row[0];
-		const auto& key = row[1];
-		const auto& path = row[2];
+		const std::wstring& type = row[0];
+		const std::wstring& key = row[1];
+		const std::wstring& path = row[2];
+		int size = -1;
+		if (type == L"font" && row.size() >= 4)
+		{
+			size = std::stoi(row[3]);
+		}
 
 		if (type == L"model")
 		{
@@ -129,6 +165,15 @@ void ResourceManager::LoadFromCSV(const std::wstring& filePath)
 		else if (type == L"graph")
 		{
 			LoadGraph(path, key);
+			m_csvResourceMap[filePath].push_back(key);
+		}
+		else if (type == L"font")
+		{
+			if (size == -1)
+			{
+				assert(false && "ResourceManager::LoadFromCSV() : フォントサイズが正しくありません");
+			}
+			LoadFont(path, key, size);
 			m_csvResourceMap[filePath].push_back(key);
 		}
 		else
