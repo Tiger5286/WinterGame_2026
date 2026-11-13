@@ -19,7 +19,7 @@ namespace StageGenerator
 	/// </summary>
 	/// <param name="pGameObjectManager">GameObjectManagerのポインタ</param>
 	/// <param name="filePath">csvファイルのパス</param>
-	void PlaceBarriers(const std::shared_ptr<GameObjectManager>& pGameObjectManager, const std::wstring& filePath);
+	void PlaceBarriers(const Info& info, const std::wstring& filePath);
 
 	/// <summary>
 	/// csvファイルを読み込み、ハックポイントを配置する

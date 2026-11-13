@@ -39,6 +39,7 @@ namespace
 		const wchar_t* enemies;
 		const wchar_t* boxTriggers;
 		const wchar_t* battleAreas;
+		const wchar_t* hackPoints;
 	};
 
 	const LoadCSVDatas kStageDatas[] = {
@@ -47,7 +48,8 @@ namespace
 			.barriers = L"data/stages/stage1/datas/barrierData.csv",
 			.enemies = L"data/stages/stage1/datas/enemyPlaceData.csv",
 			.boxTriggers = L"data/stages/stage1/datas/boxTriggerData.csv",
-			.battleAreas = L"data/stages/stage1/datas/battleAreas.csv"
+			.battleAreas = L"data/stages/stage1/datas/battleAreas.csv",
+			.hackPoints = L"data/stages/stage1/datas/hackPointData.csv"
 		}
 	};
 }
@@ -89,13 +91,7 @@ void SceneMain::Init()
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
-	// バリアを生成
-	StageGenerator::PlaceBarriers(m_pGameObjectManager, kStageDatas[m_nowStage - 1].barriers);
-	// ハックポイントを生成
-	auto hackPoint = std::make_shared<HackPoint>();
-	hackPoint->SetEvent(L"RemoveBarrier1");
-	hackPoint->GetComponent<Transform>()->pos = Vector3(4290, 500, 2300);
-	m_pGameObjectManager->Add(hackPoint);
+
 	// プレイヤーを生成
 	m_pPlayer = std::make_shared<Player>();
 	m_pGameObjectManager->Add(m_pPlayer);
@@ -111,37 +107,24 @@ void SceneMain::Init()
 	// プレイヤーにマネージャーを渡す
 	m_pPlayer->SetHackingManager(m_pHackingManager);
 	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
+	// ステージ生成に必要な情報を準備
+	StageGenerator::Info stageGenInfo = {
+		.pPlayer = m_pPlayer,
+		.pGameObjectManager = m_pGameObjectManager
+	};
+	// バリアを生成
+	StageGenerator::PlaceBarriers(stageGenInfo, kStageDatas[m_nowStage - 1].barriers);
+	// ハックポイントを生成
+	StageGenerator::PlaceHackPoints(stageGenInfo, kStageDatas[m_nowStage - 1].hackPoints);
 	// 敵を生成
 	EnemyFactory::Info enemyFactoryInfo;
 	enemyFactoryInfo.pGameObjectManager = m_pGameObjectManager;
 	enemyFactoryInfo.pPlayer = m_pPlayer;
 	EnemyPlacer::Place(enemyFactoryInfo, kStageDatas[m_nowStage - 1].enemies);
-	// BoxTriggerを生成(戦闘エリアの入り口)
-	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
-	m_pGameObjectManager->Add(boxTrigger);
-	// 二つ目のBoxTriggerを生成(ボス部屋の入り口)
-	boxTrigger = std::make_shared<BoxTrigger>(Vector3(5600, 600, -100), Vector3(5900, 100, 600), m_pPlayer, L"BossAreaEnter");
-	m_pGameObjectManager->Add(boxTrigger);
+	// BoxTriggerを生成
+	StageGenerator::PlaceBoxTriggers(stageGenInfo, kStageDatas[m_nowStage - 1].boxTriggers);
 	// BattleAreaを生成
-	BattleArea::Info battleAreaInfo = {
-		.startEventName = L"BattleArea1Enter",
-		.endEventName = L"BattleArea1Clear",
-		.csvFilePath = L"data/stages/stage1/datas/battleAreas/battleArea1EnemyPlaceData.csv",
-		.pGameObjectManager = m_pGameObjectManager,
-		.pPlayer = m_pPlayer
-	};
-	auto battleArea = std::make_shared<BattleArea>(battleAreaInfo);
-	m_pGameObjectManager->Add(battleArea);
-	// 二つ目のBattleAreaを生成
-	battleAreaInfo = {
-		.startEventName = L"BossAreaEnter",
-		.endEventName = L"DefeatedBoss",
-		.csvFilePath = L"data/stages/stage1/datas/battleAreas/bossAreaEnemyPlaceData.csv",
-		.pGameObjectManager = m_pGameObjectManager,
-		.pPlayer = m_pPlayer
-	};
-	battleArea = std::make_shared<BattleArea>(battleAreaInfo);
-	m_pGameObjectManager->Add(battleArea);
+	StageGenerator::PlaceBattleAreas(stageGenInfo, kStageDatas[m_nowStage - 1].battleAreas);
 }
 
 void SceneMain::Update()

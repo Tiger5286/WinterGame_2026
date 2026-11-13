@@ -3,6 +3,10 @@
 #include "Game/GameObjectManager.h"
 #include <unordered_map>
 #include "Game/GameObjects/Stage/Barrier.h"
+#include "Game/GameObjects/HackPoint.h"
+#include "Game/GameObjects/BoxTrigger.h"
+#include "Game/GameObjects/BattleArea.h"
+#include "Components/Transform.h"
 
 namespace
 {
@@ -11,12 +15,18 @@ namespace
 		{ L"Disable", Barrier::ActionType::Disable },
 		{ L"Destroy", Barrier::ActionType::Destroy }
 	};
+
+	Vector3 ReadVector3(const std::vector<std::wstring>& row, int index)
+	{
+		return { std::stof(row[index]),std::stof(row[index + 1]),std::stof(row[index + 2]) };
+	}
 }
 
-void StageGenerator::PlaceBarriers(const std::shared_ptr<GameObjectManager>& pGameObjectManager, const std::wstring& filePath)
+// name, defaultType, event, type, event, type, ...
+void StageGenerator::PlaceBarriers(const Info& info, const std::wstring& filePath)
 {
 	// GameObjectManagerのnullチェック
-	if (!pGameObjectManager)
+	if (!info.pGameObjectManager)
 	{
 		assert(false && "BarrierPlacer::Place() : pGameObjectManagerがnullptrです");
 		return;
@@ -71,18 +81,91 @@ void StageGenerator::PlaceBarriers(const std::shared_ptr<GameObjectManager>& pGa
 			barrier->AddEvent(actionInfo);
 		}
 		// GameObjectManagerにBarrierを追加
-		pGameObjectManager->Add(barrier);
+		info.pGameObjectManager->Add(barrier);
 	}
 }
 
+// eventName, x, y, z
 void StageGenerator::PlaceHackPoints(const Info& info, const std::wstring& filePath)
 {
+	// nullチェック
+	if (!info.pGameObjectManager)
+	{
+		assert(false && "StageGenerator::PlaceHackPoints() : GameObjectManagerがnullptrです");
+		return;
+	}
+	// CSVファイルを読み込む
+	auto csv = MyLib::LoadCSV(filePath);
+
+	for (const auto& row : csv)
+	{
+		const std::wstring& eventName = row[0];
+		Vector3 pos = ReadVector3(row, 1);
+
+		auto hackPoint = std::make_shared<HackPoint>();
+		hackPoint->SetEvent(eventName);
+		hackPoint->GetComponent<Transform>()->pos = pos;
+		info.pGameObjectManager->Add(hackPoint);
+	}
 }
 
+// eventName, x, y, z, x, y, z
 void StageGenerator::PlaceBoxTriggers(const Info& info, const std::wstring& filePath)
 {
+	if (!info.pGameObjectManager)
+	{
+		assert(false && "StageGenerator::PlaceBoxTriggers() : GameObjectManagerがnullptrです");
+		return;
+	}
+	if (!info.pPlayer)
+	{
+		assert(false && "StageGenerator::PlaceBoxTriggers() : Playerがnullptrです");
+		return;
+	}
+
+	auto csv = MyLib::LoadCSV(filePath);
+
+	for (const auto& row : csv)
+	{
+		const std::wstring& eventName = row[0];
+		Vector3 pos1 = ReadVector3(row, 1);
+		Vector3 pos2 = ReadVector3(row, 4);
+
+		auto boxTrigger = std::make_shared<BoxTrigger>(pos1, pos2, info.pPlayer, eventName);
+		info.pGameObjectManager->Add(boxTrigger);
+	}
 }
 
+// startEventName, endEventName, enemiesDataFilePath
 void StageGenerator::PlaceBattleAreas(const Info& info, const std::wstring& filePath)
 {
+	if (!info.pGameObjectManager)
+	{
+		assert(false && "StageGenerator::PlaceBattleAreas() : GameObjectManagerがnullptrです");
+		return;
+	}
+	if (!info.pPlayer)
+	{
+		assert(false && "StageGenerator::PlaceBattleAreas() : Playerがnullptrです");
+		return;
+	}
+
+	auto csv = MyLib::LoadCSV(filePath);
+
+	for (const auto& row : csv)
+	{
+		const std::wstring& startEventName = row[0];
+		const std::wstring& endEventName = row[1];
+		const std::wstring& enemyDataFilePath = row[2];
+
+		BattleArea::Info battleAreaInfo = {
+			.startEventName = startEventName,
+			.endEventName = endEventName,
+			.csvFilePath = enemyDataFilePath,
+			.pGameObjectManager = info.pGameObjectManager,
+			.pPlayer = info.pPlayer
+		};
+		auto battleArea = std::make_shared<BattleArea>(battleAreaInfo);
+		info.pGameObjectManager->Add(battleArea);
+	}
 }
