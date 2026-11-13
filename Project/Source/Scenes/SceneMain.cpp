@@ -44,7 +44,7 @@ namespace
 
 	const LoadCSVDatas kStageDatas[] = {
 		{
-			.resources = L"data/stages/stage1/datas/stage1Resources.csv",
+			.resources = L"data/stages/stage1/datas/resources.csv",
 			.barriers = L"data/stages/stage1/datas/barrierData.csv",
 			.enemies = L"data/stages/stage1/datas/enemyPlaceData.csv",
 			.boxTriggers = L"data/stages/stage1/datas/boxTriggerData.csv",
