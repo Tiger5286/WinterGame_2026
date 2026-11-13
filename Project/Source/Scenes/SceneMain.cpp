@@ -28,11 +28,33 @@
 
 namespace
 {
-	const std::wstring kResourceFilePath = L"data/stages/stage1/stage1Resources.csv";
+	//const std::wstring kResourceFilePath = L"data/stages/stage1/stage1Resources.csv";
+
+	constexpr const wchar_t* kClearEventName = L"DefeatedBoss";
+
+	struct LoadCSVDatas
+	{
+		const wchar_t* resources;
+		const wchar_t* barriers;
+		const wchar_t* enemies;
+		const wchar_t* boxTriggers;
+		const wchar_t* battleAreas;
+	};
+
+	const LoadCSVDatas kStageDatas[] = {
+		{
+			.resources = L"data/stages/stage1/stage1Resources.csv",
+			.barriers = L"data/stages/stage1/barrierData.csv",
+			.enemies = L"data/stages/stage1/enemyPlaceData.csv",
+			.boxTriggers = L"data/stages/stage1/",
+			.battleAreas = L"data/stages/stage1/"
+		}
+	};
 }
 
-SceneMain::SceneMain(SceneManager& sceneManager):
-	SceneBase(sceneManager)
+SceneMain::SceneMain(SceneManager& sceneManager,int stage):
+	SceneBase(sceneManager),
+	m_nowStage(stage)
 {
 }
 
@@ -41,7 +63,7 @@ SceneMain::~SceneMain()
 	// CollisionManagerが消えるのでServiceLocatorの登録を解除
 	ServiceLocator::GetInstance().ProvideCollisionManager(nullptr);
 	// SceneMainでしか使わないリソースを削除
-	ResourceManager::GetInstance().DeleteFromCSV(kResourceFilePath);
+	ResourceManager::GetInstance().DeleteFromCSV(kStageDatas[m_nowStage - 1].resources);
 	clsDx();
 }
 
@@ -49,7 +71,7 @@ void SceneMain::Load()
 {
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
-	resourceManager.LoadFromCSV(kResourceFilePath);
+	resourceManager.LoadFromCSV(kStageDatas[m_nowStage - 1].resources);
 }
 
 void SceneMain::Init()
@@ -61,14 +83,14 @@ void SceneMain::Init()
 	ServiceLocator::GetInstance().ProvideCollisionManager(m_pCollisionManager.get());
 
 	// クリア時の処理をEventManagerに登録
-	EventManager::GetInstance().Register(L"DefeatedBoss", [this]() { StageClear(); }, shared_from_this());
+	EventManager::GetInstance().Register(kClearEventName, [this]() { StageClear(); }, shared_from_this());
 
 	// GameObjectManagerを生成
 	m_pGameObjectManager = std::make_shared<GameObjectManager>();
 	// ステージを生成
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 	// バリアを生成
-	BarrierPlacer::Place(m_pGameObjectManager, L"data/stages/stage1/barrierData.csv");
+	BarrierPlacer::Place(m_pGameObjectManager, kStageDatas[m_nowStage - 1].barriers);
 	// ハックポイントを生成
 	auto hackPoint = std::make_shared<HackPoint>();
 	hackPoint->SetEvent(L"RemoveBarrier1");
@@ -93,7 +115,7 @@ void SceneMain::Init()
 	EnemyFactory::Info enemyFactoryInfo;
 	enemyFactoryInfo.pGameObjectManager = m_pGameObjectManager;
 	enemyFactoryInfo.pPlayer = m_pPlayer;
-	EnemyPlacer::Place(enemyFactoryInfo, L"data/stages/stage1/enemyPlaceData.csv");
+	EnemyPlacer::Place(enemyFactoryInfo, kStageDatas[m_nowStage - 1].enemies);
 	// BoxTriggerを生成(戦闘エリアの入り口)
 	auto boxTrigger = std::make_shared<BoxTrigger>(Vector3(3600, 100, 600), Vector3(2900, 500, 900), m_pPlayer, L"BattleArea1Enter");
 	m_pGameObjectManager->Add(boxTrigger);

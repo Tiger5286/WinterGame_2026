@@ -11,7 +11,7 @@ class SceneMain :
     public SceneBase
 {
 public:
-    SceneMain(SceneManager& sceneManager);
+    SceneMain(SceneManager& sceneManager,int stage = 1);
     virtual ~SceneMain() override;
 
     void Load() override;
@@ -29,5 +29,7 @@ private:
     std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
 
     std::shared_ptr<Player> m_pPlayer = nullptr;
+
+    const int m_nowStage;
 };
 
