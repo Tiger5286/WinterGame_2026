@@ -59,4 +59,15 @@ namespace MyLib
 	/// <param name="divNum">円を構成する線の分割数</param>
 	/// <param name="color">円の色</param>
 	void DrawCircle3D(const Vector3& pos, const float radius, const int divNum, const unsigned int color);
+
+	float DegreeToRadian(float digree);
+	float RadianToDegree(float radian);
+
+	/// <summary>
+	/// csvのベクトル部分を読み込み、Vector3型にして返す
+	/// </summary>
+	/// <param name="row">読み込みたいベクトル部分が含まれた行</param>
+	/// <param name="index">読み込みたいベクトル部分の最初の列</param>
+	/// <returns>読み込んだベクトル</returns>
+	Vector3 ReadVector3(const std::vector<std::wstring>& row, int index);
 }

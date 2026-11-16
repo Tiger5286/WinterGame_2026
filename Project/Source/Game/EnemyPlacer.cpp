@@ -19,10 +19,7 @@ std::vector<std::shared_ptr<EnemyBase>> EnemyPlacer::Place(const SpawnContext::I
 			assert(false && "EnemyPlacer::Place() : EnemyFactory::Create()に失敗しました");
 			continue;
 		}
-		Vector3 pos;
-		pos.x = std::stof(data[1]);
-		pos.y = std::stof(data[2]);
-		pos.z = std::stof(data[3]);
+		Vector3 pos = MyLib::ReadVector3(data, 1);
 		enemy->GetComponent<Transform>()->pos = pos;
 		info.pGameObjectManager->Add(enemy);
 		enemies.push_back(enemy);

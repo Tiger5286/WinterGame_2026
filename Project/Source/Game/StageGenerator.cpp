@@ -17,16 +17,6 @@ namespace
 		{ L"Destroy", Barrier::ActionType::Destroy }
 	};
 
-	Vector3 ReadVector3(const std::vector<std::wstring>& row, int index)
-	{
-		if (index + 2 >= row.size())
-		{
-			assert(false && "ReadVector3() : 要素外アクセスしようとしています");
-			return Vector3::Zero();
-		}
-		return { std::stof(row[index]),std::stof(row[index + 1]),std::stof(row[index + 2]) };
-	}
-
 	// name, defaultType, event, type, event, type, ...
 	void PlaceBarriers(const SpawnContext::Info& info, const std::wstring& filePath)
 	{
@@ -93,7 +83,7 @@ namespace
 		for (const auto& row : csv)
 		{
 			const std::wstring& eventName = row[0];
-			Vector3 pos = ReadVector3(row, 1);
+			Vector3 pos = MyLib::ReadVector3(row, 1);
 
 			auto hackPoint = std::make_shared<HackPoint>();
 			hackPoint->SetEvent(eventName);
@@ -110,8 +100,8 @@ namespace
 		for (const auto& row : csv)
 		{
 			const std::wstring& eventName = row[0];
-			Vector3 pos1 = ReadVector3(row, 1);
-			Vector3 pos2 = ReadVector3(row, 4);
+			Vector3 pos1 = MyLib::ReadVector3(row, 1);
+			Vector3 pos2 = MyLib::ReadVector3(row, 4);
 
 			auto boxTrigger = std::make_shared<BoxTrigger>(pos1, pos2, info.pPlayer, eventName);
 			info.pGameObjectManager->Add(boxTrigger);

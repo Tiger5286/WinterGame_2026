@@ -258,3 +258,23 @@ void MyLib::DrawCircle3D(const Vector3& pos, const float radius, const int divNu
         DrawLine3D((pos + tempV).ToDxLib(), (pos + tempV2).ToDxLib(), color);
     }
 }
+
+float MyLib::DegreeToRadian(float digree)
+{
+    return digree / 180 * DX_PI_F;
+}
+
+float MyLib::RadianToDegree(float radian)
+{
+    return radian * 180 / DX_PI_F;
+}
+
+Vector3 MyLib::ReadVector3(const std::vector<std::wstring>& row, int index)
+{
+    if (index + 2 >= row.size())
+    {
+        assert(false && "MyLib::ReadVector3() : 要素外アクセスしようとしています");
+        return Vector3::Zero();
+    }
+    return { std::stof(row[index]),std::stof(row[index + 1]),std::stof(row[index + 2]) };
+}
