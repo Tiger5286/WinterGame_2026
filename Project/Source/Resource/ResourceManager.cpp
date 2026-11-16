@@ -1,9 +1,10 @@
 ﻿#include "ResourceManager.h"
 #include <cassert>
-#include "DxLib.h"
+#include "EffekseerForDXLib.h"
 #include "Model.h"
 #include "Graph.h"
 #include "Font.h"
+#include "Effect.h"
 #include "Utility/MyLib.h"
 
 ResourceManager& ResourceManager::GetInstance()
@@ -69,6 +70,23 @@ void ResourceManager::LoadFont(const std::wstring& fontName, const std::wstring&
 		return;
 	}
 	m_resources[key] = std::make_unique<Font>(handle);
+}
+
+void ResourceManager::LoadEffect(const std::wstring filePath, const std::wstring& key, float scale)
+{
+	// キーが重複していたらエラー
+	if (m_resources.find(key) != m_resources.end())
+	{
+		assert(false && "ResourceManager::LoadEffect() : すでに登録済みのキーを登録しようとしています");
+		return;
+	}
+	const int handle = LoadEffekseerEffect(filePath.c_str(), scale);
+	if (handle == -1)
+	{
+		assert(false && "ResourceManager::LoadEffect() : エフェクトが正しくロードされませんでした");
+		return;
+	}
+	m_resources[key] = std::make_unique<Effect>(handle);
 }
 
 void ResourceManager::Delete(const std::wstring& key)
@@ -141,6 +159,19 @@ Font* ResourceManager::GetFont(const std::wstring& key)
 	auto* pFont = dynamic_cast<Font*>(it->second.get());
 	assert(pFont && "ResourceManager::GetGraph() : キーに登録されているリソースはFontではありません");
 	return pFont;
+}
+
+Effect* ResourceManager::GetEffect(const std::wstring& key)
+{
+	auto it = m_resources.find(key);
+	if (it == m_resources.end())
+	{
+		assert(false && "ResourceManager::GetEffect() : キーに対応したリソースが見つかりませんでした");
+		return nullptr;
+	}
+	auto* pEffect = dynamic_cast<Effect*>(it->second.get());
+	assert(pEffect && "ResourceManager::GetGraph() : キーに登録されているリソースはEffectではありません");
+	return pEffect;
 }
 
 void ResourceManager::LoadFromCSV(const std::wstring& filePath)

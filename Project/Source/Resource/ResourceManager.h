@@ -8,6 +8,7 @@ class Resource;
 class Model;
 class Graph;
 class Font;
+class Effect;
 
 /// <summary>
 /// リソースを管理するシングルトンクラス
@@ -32,6 +33,8 @@ public:
 	//void LoadSound(const std::wstring& filePath, const std::wstring key);
 	// フォントをロードする
 	void LoadFont(const std::wstring& fontName, const std::wstring& key, int size);
+	// エフェクトをロードする
+	void LoadEffect(const std::wstring filePath, const std::wstring& key, float scale = 1.0f);
 
 	/// <summary>
 	/// リソースを解放する
@@ -71,6 +74,13 @@ public:
 	/// <param name="key">登録名</param>
 	/// <returns>フォントハンドル</returns>
 	Font* GetFont(const std::wstring& key);
+
+	/// <summary>
+	/// エフェクトハンドルを取得する
+	/// </summary>
+	/// <param name="key">登録名</param>
+	/// <returns>エフェクトハンドル</returns>
+	Effect* GetEffect(const std::wstring& key);
 
 	/// <summary>
 	/// リソースをCSVからロードする。この関数でロードしたリソースはファイルパスと紐づけられ、DeleteFromCSV()でまとめて削除できる
