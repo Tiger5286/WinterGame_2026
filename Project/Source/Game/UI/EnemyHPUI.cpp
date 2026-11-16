@@ -1,4 +1,6 @@
 ﻿#include "EnemyHPUI.h"
+#include "System/ServiceLocator.h"
+#include "Game/CollisionManager.h"
 
 namespace
 {
@@ -28,7 +30,12 @@ void EnemyHPUI::Update()
 
 void EnemyHPUI::Draw()
 {
-	if (!CheckCameraViewClip(m_info.uiPos))
+	if (CheckCameraViewClip(m_info.uiPos)) return;
+
+	auto& collisionManager = ServiceLocator::GetInstance().GetCollisionManager();
+	auto result = collisionManager.RayCast(Vector3::FromDxLib(GetCameraPosition()), m_info.uiPos, true);
+
+	if (!result.isHit)
 	{
 		Vector3 screenPos = Vector3::FromDxLib(ConvWorldPosToScreenPos(m_info.uiPos));
 
