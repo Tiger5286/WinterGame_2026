@@ -26,6 +26,7 @@
 #include "System/EventManager.h"
 #include "ScenePause.h"
 #include "Game/SpawnContext.h"
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -33,6 +34,7 @@ namespace
 
 	constexpr const wchar_t* kStageFolderPath = L"data/stages/stage";
 	constexpr const wchar_t* kResourcesFilePath = L"/datas/resources.csv";
+	constexpr const wchar_t* kGeneralFilePath = L"/datas/general.csv";
 }
 
 SceneMain::SceneMain(SceneManager& sceneManager,int stage):
@@ -56,6 +58,8 @@ void SceneMain::Load()
 	// 必要なリソースをロード
 	auto& resourceManager = ResourceManager::GetInstance();
 	resourceManager.LoadFromCSV(m_stageFolderPath + kResourcesFilePath);
+
+	m_generalData = MyLib::LoadCSV(m_stageFolderPath + kGeneralFilePath);
 }
 
 void SceneMain::Init()
@@ -78,17 +82,21 @@ void SceneMain::Init()
 	m_pPlayer = std::make_shared<Player>();
 	m_pGameObjectManager->Add(m_pPlayer);
 	// カメラを生成(プレイヤーの移動後に追従させるため、プレイヤーより後に追加する)
-	auto pCamera = std::make_shared<Camera>();
-	m_pGameObjectManager->Add(pCamera);
+	m_pCamera = std::make_shared<Camera>();
+	m_pGameObjectManager->Add(m_pCamera);
 	// ハッキングマネージャーを生成
 	m_pHackingManager = std::make_shared<HackingManager>();
 	m_pHackingManager->Init(m_pPlayer);
 	// カメラとプレイヤーにお互いの弱参照を渡す
-	m_pPlayer->SetCamera(pCamera);
-	pCamera->SetPlayer(m_pPlayer);
-	// プレイヤーにマネージャーを渡す
+	m_pPlayer->SetCamera(m_pCamera);
+	m_pCamera->SetPlayer(m_pPlayer);
+	// プレイヤーに必要なマネージャーを渡す
 	m_pPlayer->SetHackingManager(m_pHackingManager);
 	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
+
+	// ステージ共通のデータを初期化
+	InitGeneral();
+
 	// ステージ生成に必要な情報を準備
 	SpawnContext::Info stageGenInfo = {
 		.pPlayer = m_pPlayer,
@@ -161,4 +169,29 @@ void SceneMain::Draw()
 void SceneMain::StageClear()
 {
 	m_sceneManager.ChangeScene(std::make_shared<SceneResult>(m_sceneManager, true),true);
+}
+
+void SceneMain::InitGeneral()
+{
+	for (const auto& row : m_generalData)
+	{
+		if (row[0] == L"PlayerPos")
+		{
+			Vector3 pos = MyLib::ReadVector3(row, 1);
+			m_pPlayer->GetComponent<Transform>()->pos = pos;
+			m_pPlayer->SetDefaultPos(pos);
+		}
+		else if (row[0] == L"PlayerRot")
+		{
+			float rot = std::stof(row[1]);
+			rot = MyLib::DegreeToRadian(rot);
+			m_pPlayer->SetAngle(rot);
+			// プレイヤーを背中側から見るためにカメラの向きは180度回す
+			m_pCamera->GetComponent<Transform>()->rot.y = DX_PI_F + rot;
+		}
+		else
+		{
+			assert(false && "SceneMain::InitGeneral() : general.csvの書き方が正しくありません");
+		}
+	}
 }

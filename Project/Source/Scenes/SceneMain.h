@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 class GameObjectManager;
 class CollisionManager;
@@ -25,14 +26,19 @@ public:
 private:
 	void StageClear();
 
+    void InitGeneral();
+
 private:
     std::unique_ptr<CollisionManager> m_pCollisionManager;
     std::shared_ptr<GameObjectManager> m_pGameObjectManager = nullptr;
     std::shared_ptr<HackingManager> m_pHackingManager = nullptr;
 
     std::shared_ptr<Player> m_pPlayer = nullptr;
+    std::shared_ptr<Camera> m_pCamera = nullptr;
 
     const int m_nowStage;
     const std::wstring m_stageFolderPath;
+
+    std::vector<std::vector<std::wstring>> m_generalData;
 };
 

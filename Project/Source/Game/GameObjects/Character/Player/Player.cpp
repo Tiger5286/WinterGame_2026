@@ -244,10 +244,10 @@ void Player::Update()
 	// physicsの更新
 	GetComponent<Physics>()->Update();
 
-	// 奈落に落ちたら原点に戻す
+	// 奈落に落ちたら初期位置に戻す
 	if (transform.pos.y < -2000.0f)
 	{
-		transform.pos = Vector3::Zero();
+		transform.pos = m_defaultPos;
 	}
 
 	// 向きを更新
@@ -308,6 +308,7 @@ void Player::Draw()
 
 #ifdef _DEBUG
 	GetComponent<CapsuleCollider>()->Draw();
+	Vector3 pos = GetComponent<Transform>()->pos;
 	Vector3 vel = GetComponent<Physics>()->m_vel;
 	Vector3 acc = GetComponent<Physics>()->m_accel;
 	DrawFormatString(100, 100, 0xff0000, L"Player:vel x:%.1f,y:%.1f,z:%.1f", vel.x, vel.y, vel.z);
@@ -316,6 +317,7 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16 * 3, 0xff0000, L"Player:HP %d/%d (Hキーで1にする)", m_hp, kMaxHp);
 	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f", m_thruster, kMaxThruster);
 	DrawFormatString(100, 100 + 16 * 5, 0xff0000, L"Ammo: %d/%d", m_ammo, kMaxAmmo);
+	DrawFormatString(100, 100 + 16 * 6, 0xff0000, L"Player:pos x:%.1f,y:%.1f,z:%.1f", pos.x, pos.y, pos.z);
 #endif
 }
 
@@ -608,4 +610,15 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 	}
 
 	return nearestHackable;
+}
+
+void Player::SetAngle(float angle)
+{
+	m_angle = angle;
+	GetComponent<Transform>()->rot.y = angle;
+}
+
+void Player::SetDefaultPos(const Vector3& pos)
+{
+	m_defaultPos = pos;
 }

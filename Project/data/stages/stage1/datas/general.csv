@@ -1,0 +1,4 @@
+﻿#PlayerPos,x,y,z
+PlayerPos,0,100,0
+#PlayerRot(degree),y,,
+PlayerRot,180,,

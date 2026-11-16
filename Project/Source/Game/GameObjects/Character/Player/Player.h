@@ -88,6 +88,9 @@ public:
 	float GetThruster() const { return m_thruster; }
 	float GetMaxThruster() const;
 
+	void SetAngle(float angle);
+	void SetDefaultPos(const Vector3& pos);
+
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
@@ -138,6 +141,9 @@ private:
 	int m_ammo;
 	// 最後に弾を撃ってから何フレーム経過したか
 	int m_ammoRechargeFrame = 0;
+
+	// 初期位置
+	Vector3 m_defaultPos;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
