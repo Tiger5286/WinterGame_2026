@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Scenes/SceneManager.h"
 #include "Scenes/SceneTitle.h"
+#include "Scenes/SceneDebug.h"
 #include "System/PadInput.h"
 #include "System/FadeManager.h"
 #include "Resource/ResourceManager.h"
@@ -76,7 +77,11 @@ void Application::Run()
 	SetUseLighting(true);
 
 	SceneManager sceneManager;
+#ifdef _DEBUG
+	sceneManager.ResetScene(std::make_shared<SceneDebug>(sceneManager), false);
+#else
 	sceneManager.ResetScene(std::make_shared<SceneTitle>(sceneManager),true);
+#endif
 
 	FadeManager& fadeManager = FadeManager::GetInstance();
 
@@ -86,7 +91,16 @@ void Application::Run()
 		ClearDrawScreen(); // 画面をクリア
 
 		// 更新
-		PadInput::GetInstance().Update();	// 入力の更新
+		auto& input = PadInput::GetInstance();
+		input.Update();	// 入力の更新
+#ifdef _DEBUG
+		// StartとSelectを同時に押したときデバッグシーンに行く
+		if (input.IsPressed(XINPUT_BUTTON_START) && input.IsTriggerd(XINPUT_BUTTON_BACK) ||
+			input.IsPressed(XINPUT_BUTTON_BACK) && input.IsTriggerd(XINPUT_BUTTON_START))
+		{
+			sceneManager.ResetScene(std::make_shared<SceneDebug>(sceneManager), false);
+		}
+#endif
 		sceneManager.Update();	// シーンの更新
 		fadeManager.Update();
 
