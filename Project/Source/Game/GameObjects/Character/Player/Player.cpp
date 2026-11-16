@@ -593,7 +593,7 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 
 		// 壁の向こうにいる対象は除外
 		auto cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
-		bool isHitPoly = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, targetPos + Vector3(0,10,0), true).isHit;
+		bool isHitPoly = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, targetPos, true).isHit;
 		if (isHitPoly) continue;
 
 		// ワールド座標をスクリーン座標に変換する
