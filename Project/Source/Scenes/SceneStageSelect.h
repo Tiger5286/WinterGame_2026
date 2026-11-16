@@ -12,6 +12,6 @@ public:
     void Draw() override;
 
 private:
-
+    int m_selectIndex = 0;
 };
 
