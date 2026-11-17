@@ -27,6 +27,7 @@
 #include "ScenePause.h"
 #include "Game/SpawnContext.h"
 #include "Utility/MyLib.h"
+#include "System/EffectManager.h"
 
 namespace
 {
@@ -51,6 +52,9 @@ SceneMain::~SceneMain()
 	// SceneMainでしか使わないリソースを削除
 	ResourceManager::GetInstance().DeleteFromCSV(m_stageFolderPath + kResourcesFilePath);
 	clsDx();
+
+	// エフェクトをすべて停止
+	EffectManager::GetInstance().StopEffectAll();
 }
 
 void SceneMain::Load()
@@ -112,6 +116,8 @@ void SceneMain::Update()
 	if (!m_pGameObjectManager) return;
 
 	UIManager::GetInstance().Update();
+	EffectManager::GetInstance().Update();
+
 	m_pCollisionManager->Update();
 	m_pGameObjectManager->Update();
 	m_pHackingManager->Update();
@@ -149,6 +155,8 @@ void SceneMain::Draw()
 {
 	// まだGameObjectManagerが作られていないなら描画しない
 	if (!m_pGameObjectManager) return;
+
+	EffectManager::GetInstance().Draw();
 
 	m_pGameObjectManager->Draw();
 

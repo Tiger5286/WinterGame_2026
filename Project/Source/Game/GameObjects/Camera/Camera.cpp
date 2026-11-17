@@ -5,9 +5,9 @@
 #include <algorithm>
 #include "Components/Transform.h"
 #include <cmath>
-#include "Effekseer.h"
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
+#include "EffekseerForDXLib.h"
 
 namespace
 {
@@ -119,10 +119,12 @@ void Camera::Update()
 		m_fov = std::lerp(m_fov, kDefaultFov, 0.05f);
 	}
 	SetupCamera_Perspective(m_fov);
-	
 
 	// DxLibのカメラに適用
 	SetCameraPositionAndTarget_UpVecY(transform.pos, m_targetPos);
+
+	// Effekseerと同期
+	Effekseer_Sync3DSetting();
 }
 
 void Camera::Draw()
