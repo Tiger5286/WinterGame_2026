@@ -25,7 +25,7 @@ public:
 	/// </summary>
 	/// <param name="name">再生するエフェクトの登録名</param>
 	/// <param name="pos">再生するエフェクトの位置</param>
-	/// return : 再生したエフェクトのハンドル
+	/// <returns>再生したエフェクトのハンドル</returns>
 	int PlayEffect(const std::wstring& name, const Vector3& pos);
 
 	/// <summary>
