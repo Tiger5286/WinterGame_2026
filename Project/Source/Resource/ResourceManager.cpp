@@ -183,9 +183,14 @@ void ResourceManager::LoadFromCSV(const std::wstring& filePath)
 		const std::wstring& key = row[1];
 		const std::wstring& path = row[2];
 		int size = -1;
+		float scale = -1.0f;
 		if (type == L"font" && row.size() >= 4)
 		{
 			size = std::stoi(row[3]);
+		}
+		if (type == L"effect" && row.size() >= 4)
+		{
+			scale = std::stof(row[3]);
 		}
 
 		if (type == L"model")
@@ -203,8 +208,19 @@ void ResourceManager::LoadFromCSV(const std::wstring& filePath)
 			if (size == -1)
 			{
 				assert(false && "ResourceManager::LoadFromCSV() : フォントサイズが正しくありません");
+				continue;
 			}
 			LoadFont(path, key, size);
+			m_csvResourceMap[filePath].push_back(key);
+		}
+		else if (type == L"effect")
+		{
+			if (scale == -1.0f)
+			{
+				assert(false && "ResourceManager::LoadFromCSV() : エフェクトスケールが正しくありません");
+				continue;
+			}
+			LoadEffect(path, key, scale);
 			m_csvResourceMap[filePath].push_back(key);
 		}
 		else
