@@ -4,6 +4,8 @@
 #include "../Walker.h"
 #include "Components/Hackable.h"
 #include "Components/Collider/CapsuleCollider.h"
+#include "System/EffectManager.h"
+#include "Components/Transform.h"
 
 WalkerStateDeath::WalkerStateDeath(Walker& walker) :
 	WalkerState(walker)
@@ -29,6 +31,9 @@ void WalkerStateDeath::Update()
 {
 	if (m_owner.GetComponent<Animator>()->IsEnd())
 	{
+		Vector3 pos = m_owner.GetComponent<Transform>()->pos;
+
+		EffectManager::GetInstance().PlayEffect(L"Explosion", pos + Vector3(0, 100, 0));
 		Die();
 	}
 }
