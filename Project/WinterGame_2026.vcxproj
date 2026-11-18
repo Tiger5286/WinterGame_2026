@@ -20,6 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneState.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateIdle.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateShoot.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateFall.cpp" />
+    <ClCompile Include="Source\Components\Animator\SimpleAnimator.cpp" />
     <ClCompile Include="Source\Scenes\SceneDebug.cpp" />
     <ClCompile Include="Source\Scenes\SceneStageSelect.cpp" />
     <ClCompile Include="Source\Scenes\SceneOption.cpp" />
@@ -110,6 +115,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneState.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateIdle.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateShoot.h" />
+    <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateFall.h" />
+    <ClInclude Include="Source\Components\Animator\SimpleAnimator.h" />
     <ClInclude Include="Source\Resource\Effect.h" />
     <ClInclude Include="Source\Scenes\SceneDebug.h" />
     <ClInclude Include="Source\Game\SpawnContext.h" />

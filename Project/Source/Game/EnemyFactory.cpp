@@ -3,6 +3,7 @@
 #include <functional>
 #include "Game/GameObjects/Character/Enemies/Walker/Walker.h"
 #include "Game/GameObjects/Character/Enemies/Mutant/Mutant.h"
+#include "Game/GameObjects/Character/Enemies/Drone/Drone.h"
 
 namespace
 {
@@ -13,6 +14,7 @@ namespace
 			auto mutant = std::make_shared<Mutant>(info.pPlayer);
 			mutant->SetGameObjectManager(info.pGameObjectManager);
 			return mutant; }},
+		{L"Drone",[](const SpawnContext::Info& info) { return std::make_shared<Drone>(info.pPlayer); }},
 	};
 }
 
