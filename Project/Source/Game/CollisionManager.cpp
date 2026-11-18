@@ -15,6 +15,12 @@
 #include "Components/Hitbox/HitboxCapsule.h"
 #include "Utility/MyLib.h"
 
+namespace
+{
+	// 線分と三角形の最近点がこれより近い場合は、接触方向が決められないとみなす
+	constexpr float kMinContactDist = 0.001f;
+}
+
 void CollisionManager::Update()
 {
 	// CollisionManagerはGameObjectを所有せず、weak_ptrで参照している。
@@ -354,13 +360,34 @@ CollisionManager::HitInfo CollisionManager::ColCheckCP(const CapsuleCollider& ca
 	// 準備した変数に必要な情報を代入
 	for (int i = 0; i < dxResult.HitNum; i++)
 	{
+		const auto& poly = dxResult.Dim[i];
+
+		// カプセルの線分と三角形の最近点を求める
+		SEGMENT_TRIANGLE_RESULT segTri;
+		const VECTOR segStart = pos1;
+		const VECTOR segEnd = pos2;
+		Segment_Triangle_Analyse(&segStart, &segEnd,
+			&poly.Position[0], &poly.Position[1], &poly.Position[2], &segTri);
+		const float minDist = std::sqrt(segTri.Seg_Tri_MinDist_Square);
+
 		ContactInfo info;
 		info.type = Collider::Type::Polygon;
-		info.normal = dxResult.Dim[i].Normal;
 		// 押し戻し量を計算
-		float minDist = Segment_Triangle_MinLength(pos1, pos2,
-			dxResult.Dim[i].Position[0], dxResult.Dim[i].Position[1], dxResult.Dim[i].Position[2]);
 		info.pushDist = radius - minDist;
+
+		if (minDist > kMinContactDist)
+		{
+			// 三角形上の最近点からカプセル上の最近点への向きを押し戻し方向にする
+			// (面の端に触れているだけなら、ポリゴンの向きではなく実際に触れている向きになる)
+			const Vector3 dir = Vector3::FromDxLib(VSub(segTri.Seg_MinDist_Pos, segTri.Tri_MinDist_Pos));
+			info.normal = dir.Normalized();
+		}
+		else
+		{
+			// 線分が三角形に刺さっていて向きが決まらないので、ポリゴンの法線を使う
+			info.normal = poly.Normal;
+		}
+
 		result.contactInfo.push_back(info);
 	}
 	// メモリを解放
