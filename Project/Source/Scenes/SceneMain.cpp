@@ -156,9 +156,9 @@ void SceneMain::Draw()
 	// まだGameObjectManagerが作られていないなら描画しない
 	if (!m_pGameObjectManager) return;
 
-	EffectManager::GetInstance().Draw();
-
 	m_pGameObjectManager->Draw();
+
+	EffectManager::GetInstance().Draw();
 
 	UIManager::GetInstance().Draw();
 
