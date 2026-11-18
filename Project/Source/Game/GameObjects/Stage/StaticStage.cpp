@@ -29,10 +29,20 @@ void StaticStage::Update()
 
 void StaticStage::Draw()
 {
-	m_pVisualModel->Draw();
-#ifdef _DEBUG
-	//GetComponent<PolygonCollider>()->Draw();
-#endif
+	if (!m_pModel)
+	{
+		assert(false && "StaticStage::Draw() : ステージの当たり判定モデルがnullptrです");
+		return;
+	}
+
+	if (m_pVisualModel)
+	{
+		m_pVisualModel->Draw();
+	}
+	else
+	{
+		GetComponent<PolygonCollider>()->Draw();
+	}
 }
 
 void StaticStage::OnWasShot(const CollisionManager::ShotInfo& info)

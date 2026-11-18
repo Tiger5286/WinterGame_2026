@@ -1,3 +1,1 @@
 ﻿#StartEventName,EndEventName,enemiesDataFilePath
-BattleArea1Enter,BattleArea1Clear,battleArea1EnemyPlaceData.csv
-BossAreaEnter,DefeatedBoss,bossAreaEnemyPlaceData.csv
