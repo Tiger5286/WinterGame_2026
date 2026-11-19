@@ -28,6 +28,8 @@
 #include "Game/SpawnContext.h"
 #include "Utility/MyLib.h"
 #include "System/EffectManager.h"
+#include "System/KeyboardInput.h"
+#include "System/Time.h"
 
 namespace
 {
@@ -148,6 +150,20 @@ void SceneMain::Update()
 	{
 		m_pPlayer->GetComponent<Transform>()->pos = Vector3(5700, 100, 200);
 	}
+	// Eキーでタイムスケール切り替え
+	if (KeyboardInput::GetInstance().IsTriggerd(KEY_INPUT_E))
+	{
+		auto& time = Time::GetInstance();
+		float timeScale = time.GetTimeScale();
+		if (timeScale == 1.0f)
+		{
+			time.SetTimeScale(0.3f);
+		}
+		else if (timeScale == 0.3f)
+		{
+			time.SetTimeScale(1.0f);
+		}
+	}
 #endif
 }
 
@@ -171,6 +187,7 @@ void SceneMain::Draw()
 
 	DrawString(0, 0, L"SceneMain", 0xffffff);
 	DrawString(0, 16, L"Qキーでクリアする", 0xffffff);
+	DrawFormatString(0, 16 * 2, 0xffffff, L"TimeScale : %.1f", Time::GetInstance().GetTimeScale());
 #endif
 }
 

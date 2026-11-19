@@ -10,6 +10,8 @@ private:
 	Time& operator=(const Time&) = delete;
 	Time() = default;
 
+public:
+
 	float GetTimeScale() const { return m_timeScale; }
 	void SetTimeScale(float timeScale);
 
