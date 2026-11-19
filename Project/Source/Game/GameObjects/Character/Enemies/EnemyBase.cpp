@@ -1,5 +1,15 @@
 ﻿#include "EnemyBase.h"
 
+namespace
+{
+	// 弱点を撃たれた時のダメージ倍率
+	constexpr float kWeakPointDamageRate = 1.5f;
+	// ハッキングされてないときのダメージ減衰率
+	constexpr float kNotHackedDamageRate = 0.1f;
+	// クリティカルノード発動時のダメージ倍率
+	constexpr float kCriticalNodeRate = 3.0f;
+}
+
 EnemyBase::EnemyBase(std::shared_ptr<Player> pPlayer) :
 	m_pPlayer(pPlayer)
 {
@@ -21,6 +31,20 @@ void EnemyBase::OnDamage(int damage)
 	}
 }
 
+void EnemyBase::OnHacked(Hackable::HackedData data)
+{
+	int damage = data.damage;
+	for (const auto& special : data.specials)
+	{
+		if (special == Hackable::SpecialNode::Critical)
+		{
+			damage *= kCriticalNodeRate;
+			break;
+		}
+	}
+	OnDamage(damage);
+}
+
 void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 {
 	// 死亡中は撃たれても何もしない(死亡ステートに入り直さない)
@@ -31,7 +55,7 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 	{
 		if (info.isWeakPoint)
 		{
-			damage = info.damage * 1.5f;
+			damage = info.damage * kWeakPointDamageRate;
 		}
 		else
 		{
@@ -40,7 +64,7 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 	}
 	else
 	{
-		damage = info.damage / 10;
+		damage = info.damage * kNotHackedDamageRate;
 	}
 
 	OnDamage(damage);

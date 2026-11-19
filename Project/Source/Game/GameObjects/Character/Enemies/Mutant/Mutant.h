@@ -30,16 +30,16 @@ public:
     void Update() override;
     void Draw() override;
 
-    void OnWasShot(const CollisionManager::ShotInfo& info) override;
-
     // 死亡ステート中かどうか
-    bool IsDying();
+    bool IsDying() override;
 
 	// ミサイルを生成するためにGameObjectManagerのポインタを保持しておく
 	void SetGameObjectManager(const std::shared_ptr<GameObjectManager>& gameObjectManager) { m_pGameObjectManager = gameObjectManager; }
 
 private:
-    void OnHacked(Hackable::HackedData data);
+    void Death() override;
+    void OnHacked(Hackable::HackedData data) override;
+
     void RotToPlayer();
     void SetHitbox();
     Vector3 GetStageCenter() const;

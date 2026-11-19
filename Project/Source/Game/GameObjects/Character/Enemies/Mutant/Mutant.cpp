@@ -163,42 +163,19 @@ void Mutant::Draw()
 #endif
 }
 
-void Mutant::OnWasShot(const CollisionManager::ShotInfo& info)
-{
-	// 死亡中は撃たれても何もしない(死亡ステートに入り直さない)
-	if (IsDying()) return;
-
-	// ハッキングしていないときはダメージが1/10になる(Walkerと同じ)
-	if (GetComponent<Hackable>()->IsHacked())
-	{
-		if (info.isWeakPoint)
-		{
-			m_hp -= info.damage * 1.5f;
-		}
-		else
-		{
-			m_hp -= info.damage;
-		}
-	}
-	else
-	{
-		m_hp -= info.damage / 10;
-	}
-
-	if (m_hp <= 0)
-	{
-		m_hp = 0;
-		GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateDeath>(*this));
-	}
-}
-
 bool Mutant::IsDying()
 {
 	return GetComponent<StateMachine<Mutant>>()->GetState<MutantStateDeath>() != nullptr;
 }
 
+void Mutant::Death()
+{
+	GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateDeath>(*this));
+}
+
 void Mutant::OnHacked(Hackable::HackedData data)
 {
+	EnemyBase::OnHacked(data);
 	// テクスチャをハックされたものに変える
 	MV1SetTextureGraphHandle(m_pModel->GetHandle(), m_diffuseTexIndex, ResourceManager::GetInstance().GetGraph(L"HackedMutantTex")->GetHandle(), false);
 	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f, 0.5f, 0.5f, 1.0f));

@@ -140,7 +140,7 @@ void Walker::Death()
 
 void Walker::OnHacked(Hackable::HackedData data)
 {
-	OnDamage(data.damage);
+	EnemyBase::OnHacked(data);
 	auto& resourceManager = ResourceManager::GetInstance();
 	// テクスチャをハックされたものに変える
 	MV1SetTextureGraphHandle(m_pModel->GetHandle(), 0, resourceManager.GetGraph(L"HackedWalkerTex")->GetHandle(), false);

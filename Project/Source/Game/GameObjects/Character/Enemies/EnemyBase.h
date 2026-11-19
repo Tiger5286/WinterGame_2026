@@ -19,7 +19,7 @@ public:
     virtual bool IsDying() = 0;
 protected:
     virtual void Death() = 0;
-    virtual void OnHacked(Hackable::HackedData data) = 0;
+    virtual void OnHacked(Hackable::HackedData data);
     void OnWasShot(const CollisionManager::ShotInfo& info) override;
 
 protected:
