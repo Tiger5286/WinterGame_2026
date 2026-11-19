@@ -174,44 +174,22 @@ void Drone::Draw()
 #endif
 }
 
-void Drone::OnWasShot(const CollisionManager::ShotInfo& info)
-{
-	// 落下中は撃たれても何もしない(落下ステートに入り直さない)
-	if (IsFalling()) return;
-
-	if (GetComponent<Hackable>()->IsHacked())
-	{
-		if (info.isWeakPoint)
-		{
-			m_hp -= info.damage * 1.5f;
-		}
-		else
-		{
-			m_hp -= info.damage;
-		}
-	}
-	else
-	{
-		m_hp -= info.damage / 10;
-	}
-
-	if (m_hp <= 0)
-	{
-		m_hp = 0;
-		GetComponent<StateMachine<Drone>>()->ChangeState(std::make_unique<DroneStateFall>(*this));
-	}
-}
-
-bool Drone::IsFalling()
+bool Drone::IsDying()
 {
 	return GetComponent<StateMachine<Drone>>()->GetState<DroneStateFall>() != nullptr;
 }
 
 void Drone::OnHacked(Hackable::HackedData data)
 {
+	EnemyBase::OnHacked(data);
 	// 見た目はUpdateHackedLook()で毎フレーム変えている
 	// プレイヤーの弾を回復させる
 	m_pPlayer.lock()->SetAmmoMax();
+}
+
+void Drone::Death()
+{
+	GetComponent<StateMachine<Drone>>()->ChangeState(std::make_unique<DroneStateFall>(*this));
 }
 
 void Drone::SetHitbox()

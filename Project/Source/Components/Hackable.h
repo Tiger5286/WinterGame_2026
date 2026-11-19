@@ -23,7 +23,8 @@ public:
     enum class SpecialNode
     {
         None,
-        Trigger // トリガーノード(銃の連射速度が上がる)
+        Trigger,    // トリガーノード(銃の連射速度が上がる)
+        Critical,   // クリティカルノード(ハッキング成功時のダメージが上がる)
     };
 
     struct NodeData

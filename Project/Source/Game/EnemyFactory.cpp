@@ -14,7 +14,7 @@ namespace
 			auto mutant = std::make_shared<Mutant>(info.pPlayer);
 			mutant->SetGameObjectManager(info.pGameObjectManager);
 			return mutant;}},
-		{L"Drone",[](const SpawnContext::Info& info) { /*return std::make_shared<Drone>(info.pPlayer);*/ return nullptr; }},
+		{L"Drone",[](const SpawnContext::Info& info) { return std::make_shared<Drone>(info.pPlayer);}},
 	};
 }
 

@@ -9,6 +9,7 @@ namespace
 	// 各特殊ノードごとの効果
 	const std::map<Hackable::SpecialNode, std::function<void(const std::shared_ptr<Player>&)>> kSpecialEffects = {
 		{ Hackable::SpecialNode::Trigger, [](const std::shared_ptr<Player>& player) { player->OnActiveTrigger(); }},
+		{ Hackable::SpecialNode::Critical, [](const std::shared_ptr<Player>& player) { /*何もしない*/ }},
 	};
 }
 

@@ -21,13 +21,12 @@ public:
     void Update() override;
     void Draw() override;
 
-    void OnWasShot(const CollisionManager::ShotInfo& info) override;
-
-    // 落下ステート中かどうか
-    bool IsFalling();
+    bool IsDying() override;
 
 private:
-    void OnHacked(Hackable::HackedData data);
+    void OnHacked(Hackable::HackedData data) override;
+    void Death() override;
+
     void SetHitbox();
     // モデルの位置と回転をTransformに合わせる
     void ApplyModelTransform();

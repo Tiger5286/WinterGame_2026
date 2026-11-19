@@ -19,12 +19,13 @@ namespace
 	constexpr int kMinHackFrame = 60 * 3;
 
 	// 最大ダメージ
-	constexpr int kMaxDamage = 150;
+	constexpr int kMaxDamage = 100;
 	// 最低ダメージ
-	constexpr int kMinDamage = 30;
+	constexpr int kMinDamage = 20;
 
 	const std::map<Hackable::SpecialNode, std::wstring> kSpecialNames = {
-		{ Hackable::SpecialNode::Trigger,L"Trigger" }
+		{ Hackable::SpecialNode::Trigger, L"Trigger" },
+		{ Hackable::SpecialNode::Critical, L"Critical"}
 	};
 }
 
@@ -132,6 +133,7 @@ void Hackable::Init()
 	// 仮でTriggerのみの配列を用意しておく
 	std::vector<SpecialNode> specialNodes;
 	specialNodes.push_back(SpecialNode::Trigger);
+	specialNodes.push_back(SpecialNode::Critical);
 	placeRandomSpecial(specialCandidates, specialNodes);
 }
 
