@@ -57,6 +57,8 @@ namespace
 	constexpr int kStartAmmoRechargeFrame = 60;
 	// 何フレームごとに弾が回復するか
 	constexpr int kAmmoRechargeInterval = 30;
+
+	constexpr int kShotDamage = 50;
 }
 
 Player::Player() :
@@ -200,7 +202,7 @@ void Player::Update()
 			Vector3 end = cameraPos + vec;
 
 			CollisionManager::ShotInfo shotInfo;
-			shotInfo.damage = 50;
+			shotInfo.damage = kShotDamage;
 			ServiceLocator::GetInstance().GetCollisionManager().CheckCollShot(cameraPos, end, shotInfo);
 
 			// 反動
