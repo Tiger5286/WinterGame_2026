@@ -13,5 +13,5 @@ public:
 	ID GetID() const override;
 
 private:
-	int m_frame = 0;
+	float m_frame = 0.0f;
 };

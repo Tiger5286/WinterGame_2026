@@ -19,7 +19,7 @@ private:
     void KeepVelY();
 
 private:
-    int m_frame = 0;
+    float m_frame = 0.0f;
     Vector3 m_dir;
 };
 

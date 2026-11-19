@@ -116,13 +116,13 @@ void Player::Init()
 
 	// HPを初期化
 	m_hp = kMaxHp;
+
+	m_ammoRechargeInterval = kAmmoRechargeInterval;
 }
 
 void Player::Update()
 {
 	const float ts = GetTimeScale();
-
-	m_frame++;
 
 	auto& input = PadInput::GetInstance();
 
@@ -167,15 +167,18 @@ void Player::Update()
 
 	if (m_shotIntervalFrame > 0)
 	{
-		m_shotIntervalFrame--;
+		m_shotIntervalFrame -= ts;
+		m_shotIntervalFrame = (std::max)(m_shotIntervalFrame, 0.0f);
 	}
 
 	// 弾回復
-	m_ammoRechargeFrame++;
+	m_ammoRechargeFrame += ts;
 	if (m_ammoRechargeFrame >= kStartAmmoRechargeFrame)
 	{
-		if (m_ammoRechargeFrame % kAmmoRechargeInterval == 0)
+		m_ammoRechargeInterval -= ts;
+		if (m_ammoRechargeInterval <= 0)
 		{
+			m_ammoRechargeInterval = kAmmoRechargeInterval;
 			m_ammo++;
 			if (m_ammo > kMaxAmmo)
 			{
@@ -208,6 +211,7 @@ void Player::Update()
 		}
 		m_isShooting = true;
 		m_ammoRechargeFrame = 0;
+		m_ammoRechargeInterval = kAmmoRechargeInterval;
 	}
 	else
 	{
@@ -220,13 +224,13 @@ void Player::Update()
 		m_angle = m_pCamera.lock()->GetComponent<Transform>()->rot.y - DX_PI_F;
 		m_isRun = false;
 
-		m_aimStartFrame++;
+		m_aimStartFrame += ts;
 		if (m_aimStartFrame > kAimStartFrame)
 		{
 			m_aimStartAngle = m_angle;
 		}
 		float diff = MyLib::GetAngleDiff(m_angle, m_aimStartAngle);
-		float rate = static_cast<float>(m_aimStartFrame) / static_cast<float>(kAimStartFrame);
+		float rate = m_aimStartFrame / kAimStartFrame;
 		transform.rot.y = m_aimStartAngle + diff * rate;
 
 		// モデルの向きを更新
@@ -514,11 +518,12 @@ void Player::UpdateAim()
 
 void Player::UpdateThruster()
 {
-	m_thrusterRechargeFrame++;
+	const float ts = GetTimeScale();
+	m_thrusterRechargeFrame += ts;
 
 	if (m_thrusterRechargeFrame > kStartThrusterRechargeFrame)
 	{
-		m_thruster += kThrusterRechargePerSecond;
+		m_thruster += kThrusterRechargePerSecond * ts;
 		if (m_thruster > kMaxThruster)
 		{
 			m_thruster = kMaxThruster;

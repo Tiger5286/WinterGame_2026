@@ -57,7 +57,7 @@ void PlayerStateDodge::Update()
 {
 	auto& input = PadInput::GetInstance();
 
-	m_frame++;
+	m_frame += m_owner.GetTimeScale();
 	auto physics = m_owner.GetComponent<Physics>();
 	if (m_frame < 5)
 	{

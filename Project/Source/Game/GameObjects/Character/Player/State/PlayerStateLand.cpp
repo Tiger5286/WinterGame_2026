@@ -25,7 +25,7 @@ void PlayerStateLand::Enter()
 
 void PlayerStateLand::Update()
 {
-	m_frame++;
+	m_frame+=m_owner.GetTimeScale();
 
 	// 移動処理
 	float accel = kJogAccel;

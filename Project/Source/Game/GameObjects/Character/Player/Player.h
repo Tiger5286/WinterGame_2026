@@ -110,8 +110,6 @@ private:	// プレイヤーだけが使う関数
 
 
 private:
-	int m_frame = 0;
-
     std::unique_ptr<Model> m_pModel;
     std::weak_ptr<Camera> m_pCamera;
 	std::weak_ptr<HackingManager> m_pHackingManager;
@@ -123,24 +121,25 @@ private:
 	bool m_isRun = false;
 
 	float m_aimStartAngle = 0.0f;
-	int m_aimStartFrame = 0;
+	float m_aimStartFrame = 0;
 
 	std::unique_ptr<Model> m_pGunModel;
 	int m_haveGunFrameIndex = -1;
 
 	std::shared_ptr<HackingTargetUI> m_pHackingTargetUI = nullptr;
 
-	int m_shotIntervalFrame = 0;
+	float m_shotIntervalFrame = 0;
 	bool m_isShooting = false;
 
 	float m_thruster;
 	// スラスターを最後に使用してから何フレーム経過したか
-	int m_thrusterRechargeFrame = 0;
+	float m_thrusterRechargeFrame = 0;
 
 	// 残弾数
 	int m_ammo;
 	// 最後に弾を撃ってから何フレーム経過したか
-	int m_ammoRechargeFrame = 0;
+	float m_ammoRechargeFrame = 0.0f;
+	float m_ammoRechargeInterval = 0.0f;
 
 	// 初期位置
 	Vector3 m_defaultPos;

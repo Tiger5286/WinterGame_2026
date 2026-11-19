@@ -33,7 +33,7 @@ void PlayerStateHover::Update()
 	UpdateMove(kHoverAccel, kMaxHoverSpeed);
 
 	// スラスターを消費する
-	UseThruster(kUseThrusterValue);
+	UseThruster(kUseThrusterValue * m_owner.GetTimeScale());
 	// もしスラスターがなければ落下する
 	if (GetThruster() <= 0.0f)
 	{
