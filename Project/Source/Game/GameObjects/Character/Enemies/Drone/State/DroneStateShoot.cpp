@@ -18,7 +18,7 @@ namespace
 	// 追っている間に1フレームで回れる最大の角度
 	const float kTrackTurnSpeed = MyLib::DegreeToRadian(0.2f);
 	// 追っている間の点滅の間隔(追い始め → 追い終わり にかけてだんだん短くする)
-	constexpr int kTrackBlinkStartInterval = 30;
+	constexpr int kTrackBlinkStartInterval = 20;
 	constexpr int kTrackBlinkEndInterval = 1;
 
 	// 光ってから撃つまでの時間
@@ -53,7 +53,8 @@ void DroneStateShoot::Enter()
 
 void DroneStateShoot::Update()
 {
-	m_frame++;
+	const float ts = m_owner.GetTimeScale();
+	m_frame += ts;
 
 	switch (m_phase)
 	{
@@ -70,7 +71,7 @@ void DroneStateShoot::Update()
 		// ゆっくりプレイヤーの方に向いていく
 		TurnToPlayerLimited(kTrackTurnSpeed);
 		// 残りフレームが0になったら表示を切り替え、その時点の間隔で数え直す
-		m_blinkTimer--;
+		m_blinkTimer -= ts;
 		if (m_blinkTimer <= 0)
 		{
 			m_isLaserOn = !m_isLaserOn;
@@ -144,16 +145,16 @@ void DroneStateShoot::StartReady()
 void DroneStateShoot::ChangePhase(Phase phase)
 {
 	m_phase = phase;
-	m_frame = 0;
+	m_frame = 0.0f;
 	// 点滅は「点いている」状態から始める
 	m_isLaserOn = true;
 	m_blinkTimer = GetTrackBlinkInterval();
 }
 
-int DroneStateShoot::GetTrackBlinkInterval() const
+float DroneStateShoot::GetTrackBlinkInterval() const
 {
 	// 追っている時間の進み具合(0～1)で、間隔を最初の値から最後の値へ近づける
-	const float t = static_cast<float>(m_frame) / kTrackFrame;
+	const float t = m_frame / kTrackFrame;
 	const float interval = kTrackBlinkStartInterval + (kTrackBlinkEndInterval - kTrackBlinkStartInterval) * t;
-	return (std::max)(1, static_cast<int>(interval));
+	return (std::max)(1.0f, (interval));
 }

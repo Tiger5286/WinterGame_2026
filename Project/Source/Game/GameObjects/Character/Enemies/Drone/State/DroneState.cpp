@@ -1,5 +1,6 @@
 ﻿#include "DroneState.h"
 #include "../Drone.h"
+#include <cmath>
 
 DroneState::DroneState(Drone& drone) :
 	State(drone)
@@ -22,12 +23,12 @@ void DroneState::Die()
 
 void DroneState::TurnToPlayerLerp(float rate)
 {
-	m_owner.TurnToPlayerLerp(rate);
+	m_owner.TurnToPlayerLerp(1.0f - std::pow(1.0f - rate, m_owner.GetTimeScale()));
 }
 
 void DroneState::TurnToPlayerLimited(float maxAngle)
 {
-	m_owner.TurnToPlayerLimited(maxAngle);
+	m_owner.TurnToPlayerLimited(maxAngle * m_owner.GetTimeScale());
 }
 
 bool DroneState::CanSeePlayer() const

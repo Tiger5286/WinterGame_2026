@@ -41,11 +41,12 @@ void DroneStateFall::Enter()
 
 void DroneStateFall::Update()
 {
-	m_frame++;
-	m_fallSpeed = (std::min)(m_fallSpeed + kGravity, kMaxFallSpeed);
+	float ts = m_owner.GetTimeScale();
+	m_frame += ts;
+	m_fallSpeed = (std::min)(m_fallSpeed + kGravity * ts, kMaxFallSpeed);
 
 	auto transform = m_owner.GetComponent<Transform>();
-	const Vector3 nextPos = transform->pos + Vector3::Down() * m_fallSpeed;
+	const Vector3 nextPos = transform->pos + Vector3::Down() * m_fallSpeed * ts;
 
 	// 本体の中心から移動後の足元までの間に床があるか調べる
 	const Vector3 center = transform->pos + Vector3::Up() * Drone::kBodyCenterHeight;

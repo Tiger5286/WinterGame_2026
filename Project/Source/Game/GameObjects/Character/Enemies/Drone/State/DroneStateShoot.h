@@ -32,12 +32,12 @@ private:
     // フェーズを切り替える(経過フレームをリセットする)
     void ChangePhase(Phase phase);
     // 追っている間の、今の点滅の間隔
-    int GetTrackBlinkInterval() const;
+    float GetTrackBlinkInterval() const;
 
 private:
     Phase m_phase = Phase::Ready;
-    int m_frame = 0;
+    float m_frame = 0;
     bool m_isLaserOn = true;    // 点滅で今レーザーが点いているか
-    int m_blinkTimer = 0;       // 次に点滅が切り替わるまでの残りフレーム
+    float m_blinkTimer = 0;       // 次に点滅が切り替わるまでの残りフレーム
     Vector3 m_lockedDir;    // 固定したレーザーの向き(Lockの間だけ使う)
 };

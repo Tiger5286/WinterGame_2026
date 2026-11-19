@@ -22,5 +22,5 @@ private:
 
 private:
     float m_fallSpeed = 0.0f;
-    int m_frame = 0;
+    float m_frame = 0.0f;
 };

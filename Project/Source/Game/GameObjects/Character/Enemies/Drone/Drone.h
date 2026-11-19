@@ -70,8 +70,8 @@ private:
     COLOR_F m_eyeDefaultDifColor = {};               // 目の元の色
     COLOR_F m_eyeDefaultEmiColor = {};               // 目の元の発光色
     // ハック中の故障っぽい演出
-    int m_glitchWaitFrame = 0;                  // 次にチラつくまでの残りフレーム
-    int m_glitchFrame = 0;                      // チラつきの残りフレーム(0ならチラついていない)
+    float m_glitchWaitFrame = 0.0f;                  // 次にチラつくまでの残りフレーム
+    float m_glitchFrame = 0.0f;                      // チラつきの残りフレーム(0ならチラついていない)
     Vector3 m_shakeOffset;                      // 描画位置だけをずらす揺れ
     std::shared_ptr<EnemyHPUI> m_pHPUI = nullptr;
 

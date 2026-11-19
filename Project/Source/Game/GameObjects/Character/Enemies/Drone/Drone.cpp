@@ -255,6 +255,7 @@ void Drone::ApplyModelTransform()
 void Drone::UpdateHackedLook(bool isHacked)
 {
 	const int handle = m_pModel->GetHandle();
+	const float ts = GetTimeScale();
 
 	if (!isHacked)
 	{
@@ -274,11 +275,11 @@ void Drone::UpdateHackedLook(bool isHacked)
 	// チラつきのタイミングを数える
 	if (m_glitchFrame > 0)
 	{
-		m_glitchFrame--;
+		m_glitchFrame -= ts;
 	}
 	else
 	{
-		m_glitchWaitFrame--;
+		m_glitchWaitFrame -= ts;
 		if (m_glitchWaitFrame <= 0)
 		{
 			// チラつきを始めて、次にチラつくまでの時間をランダムに決める
