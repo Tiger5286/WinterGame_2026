@@ -15,7 +15,7 @@ public:
 
     void Init(Transform* pTransform, Collider* pCollider = nullptr,
               float drag = kDefaultDrag,float gravity = kDefaultGravity);
-    void Update();
+    void Update(float timeScale);
 
     // 速度の減衰率を設定する。0.0~1.0の範囲外の数値を入れるとクランプされる。
     void SetDrag(float drag);

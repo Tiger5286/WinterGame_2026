@@ -75,7 +75,9 @@ void TestEnemy::Init()
 
 void TestEnemy::Update()
 {
-	GetComponent<Physics>()->Update();
+	const float ts = GetTimeScale();
+
+	GetComponent<Physics>()->Update(ts);
 
 	GetComponent<Animator>()->Update();
 

@@ -32,7 +32,7 @@ void Physics::Init(Transform* pTransform, Collider* pCollider, float drag, float
 	m_isGrounded = false;
 }
 
-void Physics::Update()
+void Physics::Update(float timeScale)
 {
 	// ジャンプで上向きの速度を設定したフレームは吸着しない。
 	const bool canSnap = m_isGrounded && m_vel.y <= 0.0f;
@@ -40,12 +40,13 @@ void Physics::Update()
 	const float minFloorNormalY = std::cos(kMaxFloorAngle);
 
 	// 速度に加速度を足す
-	m_vel += m_accel;
-	m_vel.y += m_gravity;
+	m_vel += m_accel * timeScale;
+	m_vel.y += m_gravity * timeScale;
 
 	// 水平移動は減衰する
-	m_vel.x *= m_drag;
-	m_vel.z *= m_drag;
+	const float drag = std::pow(m_drag, timeScale);
+	m_vel.x *= drag;
+	m_vel.z *= drag;
 
 	// 水平移動の最高速度を設定
 	Vector2 velXZ = Vector2(m_vel.x, m_vel.z);
@@ -59,7 +60,7 @@ void Physics::Update()
 
 	// 当たり判定と押し戻し
 	// 当たり判定がなければ処理しない
-	Vector3 movedPos = m_pTransform->pos + m_vel;
+	Vector3 movedPos = m_pTransform->pos + m_vel * timeScale;
 	if (m_pCollider && m_pCollider->IsEnable())
 	{
 		auto& collisionManager = ServiceLocator::GetInstance().GetCollisionManager();

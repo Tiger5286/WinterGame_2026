@@ -120,6 +120,8 @@ void Player::Init()
 
 void Player::Update()
 {
+	const float ts = GetTimeScale();
+
 	m_frame++;
 
 	auto& input = PadInput::GetInstance();
@@ -242,7 +244,7 @@ void Player::Update()
 	}
 
 	// physicsの更新
-	GetComponent<Physics>()->Update();
+	GetComponent<Physics>()->Update(ts);
 
 	// 奈落に落ちたら初期位置に戻す
 	if (transform.pos.y < -2000.0f)

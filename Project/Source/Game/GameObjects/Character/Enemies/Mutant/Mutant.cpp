@@ -120,12 +120,14 @@ void Mutant::Init()
 
 void Mutant::Update()
 {
+	const float ts = GetTimeScale();
+
 	GetComponent<StateMachine<Mutant>>()->Update();
 
 	// 死亡中はコライダーが無効で床と押し戻しされないため、物理を止める
 	if (!IsDying())
 	{
-		GetComponent<Physics>()->Update();
+		GetComponent<Physics>()->Update(ts);
 	}
 
 	auto hackable = GetComponent<Hackable>();

@@ -81,6 +81,8 @@ void Walker::Init()
 
 void Walker::Update()
 {
+	const float ts = GetTimeScale();
+
 	auto& resourceManager = ResourceManager::GetInstance();
 
 	GetComponent<StateMachine<Walker>>()->Update();
@@ -90,7 +92,7 @@ void Walker::Update()
 	// 死亡中はコライダーが無効で床と押し戻しされないため、物理を止める
 	if (!IsDying())
 	{
-		GetComponent<Physics>()->Update();
+		GetComponent<Physics>()->Update(ts);
 	}
 
 	auto hackable = GetComponent<Hackable>();
