@@ -1,6 +1,7 @@
 ﻿#include "EffectManager.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Effect.h"
+#include "System/Time.h"
 
 EffectManager& EffectManager::GetInstance()
 {
@@ -19,7 +20,6 @@ EffectManager::~EffectManager()
 
 void EffectManager::Update()
 {
-	UpdateEffekseer3D();
 	// 再生されていないエフェクトハンドルを除外する
 	std::list<int> deleteHandles;
 	for (auto& handle : m_effectPlayingHandles)
@@ -28,11 +28,17 @@ void EffectManager::Update()
 		{
 			deleteHandles.push_back(handle);
 		}
+		else
+		{
+			SetSpeedPlayingEffekseer3DEffect(handle, Time::GetInstance().GetTimeScale());
+		}
 	}
 	for (auto& handle : deleteHandles)
 	{
 		m_effectPlayingHandles.remove(handle);
 	}
+
+	UpdateEffekseer3D();
 }
 
 void EffectManager::Draw()
