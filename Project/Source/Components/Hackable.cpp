@@ -7,6 +7,7 @@
 #include <cassert>
 #include <string>
 #include "System/Time.h"
+#include <map>
 
 namespace
 {
@@ -16,6 +17,11 @@ namespace
 	constexpr int kMaxHackingFrame = 60 * 20;
 	
 	constexpr int kMinHackFrame = 60 * 3;
+
+	// 最大ダメージ
+	constexpr int kMaxDamage = 150;
+	// 最低ダメージ
+	constexpr int kMinDamage = 30;
 }
 
 Hackable::Hackable()
@@ -37,11 +43,11 @@ void Hackable::Init()
 		line.resize(m_boardData.size.x);
 		for (auto& cell : line)
 		{
-			cell = NodeType::None;
+			cell = {};
 		}
 	}
 	// ゴール位置を設定
-	m_board[data.goalPos.y][data.goalPos.x] = NodeType::Goal;
+	m_board[data.goalPos.y][data.goalPos.x].type = NodeType::Goal;
 
 	// 開始位置に戻す
 	m_pos.resize(1);
@@ -59,9 +65,26 @@ void Hackable::Init()
 		// 配置する数分、ランダムにした配列の順番にノードを置いていく
 		for (int i = 0; i < num; i++)
 		{
-			m_board[candidates[i].y][candidates[i].x] = type;
+			m_board[candidates[i].y][candidates[i].x].type = type;
 		}
 	};
+
+	// 特殊ノードをランダムに配置する関数
+	std::function placeRandomSpecial = [this](std::vector<Vector2Int> candidates, std::vector<SpecialNode> special)
+		{
+			// 候補の配列をランダムに入れ替える(Fisher-Yatesシャッフル)
+			for (int i = candidates.size() - 1; i > 0; i--)
+			{
+				int j = GetRand(i);
+				std::swap(candidates[i], candidates[j]);
+			}
+			// 特殊ノードを置いていく
+			for (int i = 0; i < special.size(); i++)
+			{
+				m_board[candidates[i].y][candidates[i].x].type = NodeType::Special;
+				m_board[candidates[i].y][candidates[i].x].special = special[i];
+			}
+		};
 
 	// 赤マスは候補(r)の中から選ぶ
 	placeRandom(data.redCandidates, data.redNum, NodeType::Red);
@@ -84,36 +107,82 @@ void Hackable::Init()
 	}
 	// 青マスを配置する
 	placeRandom(blueCandidates, data.blueNum, NodeType::Open);
+
+	// 特殊ノードを置くマスを選ぶ
+	std::vector<Vector2Int> specialCandidates;
+	for (int y = 0; y < data.size.y; y++)
+	{
+		for (int x = 0; x < data.size.x; x++)
+		{
+			// 調べる位置
+			const Vector2Int pos(x, y);
+			// スタート位置なら飛ばす
+			if (pos == data.startPos) continue;
+			if (m_board[y][x].type == NodeType::None)
+			{
+				specialCandidates.push_back(pos);
+			}
+		}
+	}
+	// 配置する
+	// 仮でTriggerのみの配列を用意しておく
+	std::vector<SpecialNode> specialNodes;
+	specialNodes.push_back(SpecialNode::Trigger);
+	placeRandomSpecial(specialCandidates, specialNodes);
 }
 
 void Hackable::Update(float timeScale)
 {
 	m_hackFrame -= timeScale;
 	m_hackFrame = (std::max)(m_hackFrame, 0.0f);
+}
+
+std::optional<Hackable::HackedData> Hackable::UpdateHacking()
+{
+	Move();
 
 	// 赤マスを踏んだら開始位置からやり直し
 	const Vector2Int& nowPos = m_pos.back();
-	if (m_board[nowPos.y][nowPos.x] == NodeType::Red)
+	if (m_board[nowPos.y][nowPos.x].type == NodeType::Red)
 	{
 		m_pos.resize(1);
 		m_pos.back() = m_boardData.startPos;
-		return;
+		return std::nullopt;
 	}
-
+	// ゴール時の処理
 	if (m_pos.back() == m_boardData.goalPos)
 	{
 		HackedData data = {};
-		m_info.func(data);
-		Time::GetInstance().SetTimeScaleSmooth(0.25f, 1.0f, 0.1f, 30);
 
+		// いくつ青マスを通ったか求める
 		int openNum = 0;
+		// 通った特殊ノードを求める
+		std::vector<SpecialNode> specials;
 		for (const auto& pos : m_pos)
 		{
-			if (m_board[pos.y][pos.x] == NodeType::Open)
+			const auto& nodeData = m_board[pos.y][pos.x];
+			if (nodeData.type == NodeType::Open)
 			{
 				openNum++;
 			}
+			else if (nodeData.type == NodeType::Special)
+			{
+				specials.push_back(nodeData.special);
+			}
 		}
+		// ダメージを計算
+		int damage = (kMaxDamage - kMinDamage) / m_boardData.blueNum;
+		damage *= openNum;
+		damage += kMinDamage;
+		data.damage = damage;
+		// 求めた特殊ノードを入れる
+		data.specials = specials;
+
+		// ハッキング発動
+		m_info.func(data);
+		Time::GetInstance().SetTimeScaleSmooth(0.25f, 1.0f, 0.1f, 30);
+
+		// ハッキングが持続する時間を求める
 		if (openNum > 0)
 		{
 			m_hackFrame += kMaxHackingFrame / m_boardData.blueNum * openNum;
@@ -123,13 +192,11 @@ void Hackable::Update(float timeScale)
 			m_hackFrame += kMinHackFrame;
 		}
 		m_hackFrame = std::clamp(m_hackFrame, 0.0f, static_cast<float>(kMaxHackingFrame));
+		// 盤面を初期状態に戻す
 		Init();
+		return data;
 	}
-}
-
-void Hackable::UpdateHacking()
-{
-	Move();
+	return std::nullopt;
 }
 
 void Hackable::Draw()
@@ -147,13 +214,17 @@ void Hackable::Draw()
 			y2 = y1 + kNodeSize;
 
 			unsigned int color = 0x888888;
-			if (m_board[y][x] == NodeType::Open)
+			if (m_board[y][x].type == NodeType::Open)
 			{
 				color = 0x0000ff;
 			}
-			else if (m_board[y][x] == NodeType::Red)
+			else if (m_board[y][x].type == NodeType::Red)
 			{
 				color = 0xff0000;
+			}
+			else if (m_board[y][x].type == NodeType::Special)
+			{
+				color = 0xffff00;
 			}
 			// 通った位置は白くする
 			for (auto& pos : m_pos)
@@ -161,7 +232,7 @@ void Hackable::Draw()
 				if (y == pos.y && x == pos.x)
 				{
 					color = 0xffffff;
-					if (m_board[y][x] == NodeType::Open)
+					if (m_board[y][x].type == NodeType::Open)
 					{
 						color = 0x00ffff;
 					}

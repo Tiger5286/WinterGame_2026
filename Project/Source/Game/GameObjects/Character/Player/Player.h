@@ -91,6 +91,8 @@ public:
 	void SetAngle(float angle);
 	void SetDefaultPos(const Vector3& pos);
 
+	void OnActiveTrigger();
+
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();

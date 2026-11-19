@@ -631,3 +631,8 @@ void Player::SetDefaultPos(const Vector3& pos)
 {
 	m_defaultPos = pos;
 }
+
+void Player::OnActiveTrigger()
+{
+	printfDx(L"Trigger発動\n");
+}

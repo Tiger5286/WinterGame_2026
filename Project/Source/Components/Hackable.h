@@ -5,36 +5,55 @@
 #include "Utility/Vector3.h"
 #include <functional>
 #include <string>
+#include <optional>
 
 class Hackable :
     public Component
 {
 public:
-    struct HackedData
-    {
-        int damage = 0;
-    };
-    struct Info
-    {
-        std::function<void(HackedData)> func;
-        Vector3 hackLocalPos;
-    };
-
     enum class NodeType
     {
         None,   // 何もない
         Open,   // オープンノード(青マス)
         Goal,   // ゴールノード
         Red,    // 赤マス(通ったら最初から)
+        Special,    // 特殊ノード(種類はSpecialNode型で指定)
     };
+
+    enum class SpecialNode
+    {
+        None,
+        Trigger // トリガーノード(銃の連射速度が上がる)
+    };
+
+    struct NodeData
+    {
+        NodeType type = NodeType::None;
+        SpecialNode special = SpecialNode::None;
+    };
+
+    struct HackedData
+    {
+        int damage = 0;
+        std::vector<SpecialNode> specials;
+    };
+
+    struct Info
+    {
+        std::function<void(HackedData)> func;
+        Vector3 hackLocalPos;
+    };
+
 
 public:
     Hackable();
     ~Hackable();
 
     void Init();
+    // 常に更新されるUpdate
     void Update(float timeScale);
-    void UpdateHacking();
+    // ハッキング中のみ更新されるUpdate。ハッキング成功時はHackedDataが返り、そうでないときはstd::nulloptが返る。
+    std::optional<HackedData> UpdateHacking();
     void Draw();
 
     void SetInfo(const Info& info) { m_info = info; }
@@ -68,7 +87,7 @@ private:
 
 private:
     BoardData m_boardData;
-    std::vector<std::vector<NodeType>> m_board;
+    std::vector<std::vector<NodeData>> m_board;
     std::vector<Vector2Int> m_pos;
     float m_hackFrame = 0.0f;
     Info m_info;
