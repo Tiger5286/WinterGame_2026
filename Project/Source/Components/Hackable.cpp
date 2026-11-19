@@ -22,6 +22,10 @@ namespace
 	constexpr int kMaxDamage = 150;
 	// 最低ダメージ
 	constexpr int kMinDamage = 30;
+
+	const std::map<Hackable::SpecialNode, std::wstring> kSpecialNames = {
+		{ Hackable::SpecialNode::Trigger,L"Trigger" }
+	};
 }
 
 Hackable::Hackable()
@@ -231,10 +235,16 @@ void Hackable::Draw()
 			{
 				if (y == pos.y && x == pos.x)
 				{
+					// 通った位置は基本白
 					color = 0xffffff;
+					// 青マスを通れば水色
 					if (m_board[y][x].type == NodeType::Open)
 					{
 						color = 0x00ffff;
+					}			// 特殊マスを通れば黄色
+					else if (m_board[y][x].type == NodeType::Special)
+					{
+						color = 0xffff88;
 					}
 				}
 			}
@@ -243,6 +253,10 @@ void Hackable::Draw()
 				color = 0x00ff00;
 			}
 			DrawBox(x1, y1, x2 - 2, y2 - 2, color, true);
+			if (m_board[y][x].type == NodeType::Special)
+			{
+				DrawString(x1 + 1, y1 + 1, kSpecialNames.at(m_board[y][x].special).c_str(),0x000000);
+			}
 		}
 	}
 	// ハッキング残り時間の描画
