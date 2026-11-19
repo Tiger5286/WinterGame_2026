@@ -159,7 +159,7 @@ void SceneMain::Update()
 		{
 			time.SetTimeScale(0.3f);
 		}
-		else if (timeScale == 0.3f)
+		else if (timeScale < 1.0f)
 		{
 			time.SetTimeScale(1.0f);
 		}
