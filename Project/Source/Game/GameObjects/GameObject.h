@@ -89,4 +89,5 @@ protected:
 	Tag m_tag = Tag::None;
 	bool m_isDead = false;
 	int m_id;
+	float m_timeScale = 1.0f;
 };
