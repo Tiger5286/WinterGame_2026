@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\System\KeyboardInput.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneState.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateIdle.cpp" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Source\System\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\System\KeyboardInput.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneState.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneStateIdle.h" />
