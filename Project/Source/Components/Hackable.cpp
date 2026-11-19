@@ -6,6 +6,7 @@
 #include "Utility/MyLib.h"
 #include <cassert>
 #include <string>
+#include "System/Time.h"
 
 namespace
 {
@@ -103,6 +104,7 @@ void Hackable::Update(float timeScale)
 	{
 		HackedData data = {};
 		m_info.func(data);
+		Time::GetInstance().SetTimeScaleSmooth(0.25f, 1.0f, 0.1f, 30);
 
 		int openNum = 0;
 		for (const auto& pos : m_pos)

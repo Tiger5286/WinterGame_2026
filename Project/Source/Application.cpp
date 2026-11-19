@@ -9,6 +9,7 @@
 #include "System/KeyboardInput.h"
 #include "System/FadeManager.h"
 #include "Resource/ResourceManager.h"
+#include "System/Time.h"
 
 #include <memory>
 #include <string>
@@ -94,8 +95,8 @@ void Application::Run()
 		// 更新
 		auto& padInput = PadInput::GetInstance();
 		padInput.Update();	// 入力の更新
-		auto& keyInput = KeyboardInput::GetInstance();
-		keyInput.Update();
+		KeyboardInput::GetInstance().Update();
+		Time::GetInstance().Update();
 #ifdef _DEBUG
 		// StartとSelectを同時に押したときデバッグシーンに行く
 		if (padInput.IsPressed(XINPUT_BUTTON_START) && padInput.IsTriggerd(XINPUT_BUTTON_BACK) ||
