@@ -96,7 +96,7 @@ void Walker::Update()
 	}
 
 	auto hackable = GetComponent<Hackable>();
-	hackable->Update();
+	hackable->Update(ts);
 	if (!hackable->IsHacked())
 	{
 		// テクスチャを通常に戻す

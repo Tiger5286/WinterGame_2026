@@ -33,7 +33,7 @@ public:
     ~Hackable();
 
     void Init();
-    void Update();
+    void Update(float timeScale);
     void UpdateHacking();
     void Draw();
 
@@ -70,7 +70,7 @@ private:
     BoardData m_boardData;
     std::vector<std::vector<NodeType>> m_board;
     std::vector<Vector2Int> m_pos;
-    int m_hackFrame = 0;
+    float m_hackFrame = 0.0f;
     Info m_info;
     bool m_isEnable = true;
 };

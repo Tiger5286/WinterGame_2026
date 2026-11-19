@@ -25,7 +25,7 @@ void HackPoint::Update()
 	auto hackable = GetComponent<Hackable>();
 	if (hackable)
 	{
-		hackable->Update();
+		hackable->Update(GetTimeScale());
 	}
 
 	if (m_isRemovedHackable)

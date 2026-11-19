@@ -85,12 +85,10 @@ void Hackable::Init()
 	placeRandom(blueCandidates, data.blueNum, NodeType::Open);
 }
 
-void Hackable::Update()
+void Hackable::Update(float timeScale)
 {
-	if (m_hackFrame > 0)
-	{
-		m_hackFrame--;
-	}
+	m_hackFrame -= timeScale;
+	m_hackFrame = (std::max)(m_hackFrame, 0.0f);
 
 	// 赤マスを踏んだら開始位置からやり直し
 	const Vector2Int& nowPos = m_pos.back();
@@ -122,7 +120,7 @@ void Hackable::Update()
 		{
 			m_hackFrame += kMinHackFrame;
 		}
-		m_hackFrame = std::clamp(m_hackFrame, 0, kMaxHackingFrame);
+		m_hackFrame = std::clamp(m_hackFrame, 0.0f, static_cast<float>(kMaxHackingFrame));
 		Init();
 	}
 }
@@ -177,7 +175,7 @@ void Hackable::Draw()
 	// ハッキング残り時間の描画
 	// ゲージの高さは盤面の高さに合わせる
 	const int boardHeight = kNodeSize * m_boardData.size.y;
-	float rate = static_cast<float>(m_hackFrame) / static_cast<float>(kMaxHackingFrame);
+	float rate = m_hackFrame / kMaxHackingFrame;
 	int x1, y1, x2, y2;
 	x1 = leftTop.x - 50;
 	y1 = leftTop.y + boardHeight - 2 - boardHeight * rate;

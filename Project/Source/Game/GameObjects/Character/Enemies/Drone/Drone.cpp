@@ -147,7 +147,7 @@ void Drone::Update()
 	GetComponent<StateMachine<Drone>>()->Update();
 
 	auto hackable = GetComponent<Hackable>();
-	hackable->Update();
+	hackable->Update(GetTimeScale());
 	UpdateHackedLook(hackable->IsHacked());
 
 	ApplyModelTransform();

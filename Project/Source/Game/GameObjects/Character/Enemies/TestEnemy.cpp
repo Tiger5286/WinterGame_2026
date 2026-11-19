@@ -81,7 +81,7 @@ void TestEnemy::Update()
 
 	GetComponent<Animator>()->Update(ts);
 
-	GetComponent<Hackable>()->Update();
+	GetComponent<Hackable>()->Update(ts);
 
 	bool isHacked = GetComponent<Hackable>()->IsHacked();
 	if (isHacked)
