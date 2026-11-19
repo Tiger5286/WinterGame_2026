@@ -139,12 +139,12 @@ void AnimationLayer::Apply(float layerWeight)
 	}
 }
 
-void AnimationLayer::Update()
+void AnimationLayer::Update(float timeScale)
 {
 	// アニメーションの再生時間を更新
 	if (m_currentAnim.pAnimation != nullptr)
 	{
-		m_currentAnim.time += m_currentAnim.pAnimation->GetAnimSpeed();
+		m_currentAnim.time += m_currentAnim.pAnimation->GetAnimSpeed() * timeScale;
 		while(m_currentAnim.pAnimation->IsLoop() && m_currentAnim.pAnimation->GetAnimTotalTime() < m_currentAnim.time)
 		{
 			m_currentAnim.time -= m_currentAnim.pAnimation->GetAnimTotalTime();
@@ -152,7 +152,7 @@ void AnimationLayer::Update()
 	}
 	if (m_nextAnim.pAnimation != nullptr)
 	{
-		m_nextAnim.time += m_nextAnim.pAnimation->GetAnimSpeed();
+		m_nextAnim.time += m_nextAnim.pAnimation->GetAnimSpeed() * timeScale;
 		while(m_nextAnim.pAnimation->IsLoop() && m_nextAnim.pAnimation->GetAnimTotalTime() < m_nextAnim.time)
 		{
 			m_nextAnim.time -= m_nextAnim.pAnimation->GetAnimTotalTime();
@@ -169,8 +169,8 @@ void AnimationLayer::Update()
 	// アニメーションのブレンド処理
 	if (m_blendFrameCount < kAnimationBlendFrame)
 	{
-		m_blendFrameCount++;
-		m_blendWeight = static_cast<float>(m_blendFrameCount) / kAnimationBlendFrame;
+		m_blendFrameCount += timeScale;
+		m_blendWeight = m_blendFrameCount / kAnimationBlendFrame;
 	}
 	else
 	{

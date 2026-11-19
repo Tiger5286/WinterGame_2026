@@ -79,7 +79,7 @@ void TestEnemy::Update()
 
 	GetComponent<Physics>()->Update(ts);
 
-	GetComponent<Animator>()->Update();
+	GetComponent<Animator>()->Update(ts);
 
 	GetComponent<Hackable>()->Update();
 

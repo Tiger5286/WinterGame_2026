@@ -55,12 +55,12 @@ void Animator::AddAnimation(const std::wstring& animName, float animSpeed, bool 
 	m_animations.try_emplace(animName, *m_pModel, animIndex, animSpeed, isLoop);
 }
 
-void Animator::Update()
+void Animator::Update(float timeScale)
 {
 	const float blendPerFrame = 1.0f / kBlendFrame;
 	if (m_targetSplitWeight == 0.0f)
 	{
-		m_splitWeight -= blendPerFrame;
+		m_splitWeight -= blendPerFrame * timeScale;
 		if (m_splitWeight < 0.0f)
 		{
 			m_splitWeight = 0.0f;
@@ -68,7 +68,7 @@ void Animator::Update()
 	}
 	else if (m_targetSplitWeight == 1.0f)
 	{
-		m_splitWeight += blendPerFrame;
+		m_splitWeight += blendPerFrame * timeScale;
 		if (m_splitWeight > 1.0f)
 		{
 			m_splitWeight = 1.0f;
@@ -87,7 +87,7 @@ void Animator::Update()
 			layer.Stop();
 			continue;
 		}
-		layer.Update();
+		layer.Update(timeScale);
 		layer.Apply(weight);
 	}
 

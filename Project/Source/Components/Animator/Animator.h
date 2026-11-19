@@ -28,7 +28,7 @@ public:
 
 	void AddAnimation(const std::wstring& animName, float animSpeed = 0.5f, bool isLoop = true);
 
-	void Update();
+	void Update(float timeScale);
 
 	void Play(const std::wstring& animName, Layer layer = Layer::FullBody);
 	void PlaySynced(const std::wstring& animName, Layer source, Layer destination);

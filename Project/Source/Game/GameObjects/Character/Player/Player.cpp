@@ -486,7 +486,7 @@ void Player::UpdateAnimation()
 		animator->Play(kAnimNames[static_cast<int>(AnimationID::Death)], Animator::Layer::FullBody);
 		break;
 	}
-	animator->Update();
+	animator->Update(GetTimeScale());
 }
 
 void Player::UpdateAim()

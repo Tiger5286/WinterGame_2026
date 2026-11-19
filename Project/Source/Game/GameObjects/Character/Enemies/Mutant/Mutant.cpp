@@ -142,7 +142,7 @@ void Mutant::Update()
 	auto transform = GetComponent<Transform>();
 	m_pModel->SetTransform(*transform);
 
-	GetComponent<Animator>()->Update();
+	GetComponent<Animator>()->Update(ts);
 
 	EnemyHPUI::Info info;
 	info.uiPos = transform->pos + kHPUIOffset;

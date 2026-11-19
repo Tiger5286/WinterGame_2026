@@ -22,7 +22,7 @@ public:
 	void Play(Animation* pAnimation,float startTime = 0.0f);
 	void Stop();
 	void Apply(float layerWeight);
-	void Update();
+	void Update(float timeScale);
 
 	PlayBack GetCurrentAnimation() const { return m_currentAnim; }
 	PlayBack GetNextAnimation() const { return m_nextAnim; }
@@ -42,7 +42,7 @@ private:
 	PlayBack m_currentAnim;	// 現在再生中のアニメーション
 	PlayBack m_nextAnim;		// 次に再生するアニメーション
 
-	int m_blendFrameCount = 0;	// アニメーション切り替え時のブレンドフレーム数
+	float m_blendFrameCount = 0.0f;	// アニメーション切り替え時のブレンドフレーム数
 
 	float m_blendWeight = 0.0f;	// アニメーション切り替え時のブレンドウェイト(0.0 : 現在のアニメーション100% / 1.0 : 次のアニメーション100%)
 

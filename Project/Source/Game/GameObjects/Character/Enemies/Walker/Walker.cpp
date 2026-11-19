@@ -107,7 +107,7 @@ void Walker::Update()
 	auto transform = GetComponent<Transform>();
 	m_pModel->SetTransform(*transform);
 
-	GetComponent<Animator>()->Update();
+	GetComponent<Animator>()->Update(ts);
 
 	EnemyHPUI::Info info;
 	info.uiPos = GetComponent<Transform>()->pos + kHPUIOffset;
