@@ -143,8 +143,11 @@ private:
 	float m_ammoRechargeFrame = 0.0f;
 	float m_ammoRechargeInterval = 0.0f;
 
+	float m_triggerFrame = 0.0f;
+
 	// 初期位置
 	Vector3 m_defaultPos;
+
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する

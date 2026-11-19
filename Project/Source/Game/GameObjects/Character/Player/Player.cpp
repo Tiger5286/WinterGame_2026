@@ -58,6 +58,11 @@ namespace
 	// 何フレームごとに弾が回復するか
 	constexpr int kAmmoRechargeInterval = 30;
 
+	// トリガーノードの効果持続時間
+	constexpr int kTriggerFrame = 60 * 5;
+	// トリガーノード発動時の連射速度の上昇率
+	constexpr float kTriggerRate = 2.0f;
+
 	constexpr int kShotDamage = 50;
 }
 
@@ -167,9 +172,22 @@ void Player::Update()
 		m_pHackingTargetUI->SetIsVisible(false);
 	}
 
+	// トリガーノードの持続時間を減らす
+	m_triggerFrame -= ts;
+	if (m_triggerFrame < 0.0f)
+	{
+		m_triggerFrame = 0.0f;
+	}
+
+	// 射撃の間隔
 	if (m_shotIntervalFrame > 0)
 	{
-		m_shotIntervalFrame -= ts;
+		float rate = 1.0f;
+		if (m_triggerFrame > 0)
+		{
+			rate = kTriggerRate;
+		}
+		m_shotIntervalFrame -= ts * rate;
 		m_shotIntervalFrame = (std::max)(m_shotIntervalFrame, 0.0f);
 	}
 
@@ -326,6 +344,7 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16 * 4, 0xff0000, L"Thruster: %.2f/%.2f", m_thruster, kMaxThruster);
 	DrawFormatString(100, 100 + 16 * 5, 0xff0000, L"Ammo: %d/%d", m_ammo, kMaxAmmo);
 	DrawFormatString(100, 100 + 16 * 6, 0xff0000, L"Player:pos x:%.1f,y:%.1f,z:%.1f", pos.x, pos.y, pos.z);
+	DrawFormatString(100, 100 + 16 * 7, 0xff0000, L"Trigger : %.1f", m_triggerFrame);
 #endif
 }
 
@@ -634,5 +653,5 @@ void Player::SetDefaultPos(const Vector3& pos)
 
 void Player::OnActiveTrigger()
 {
-	printfDx(L"Trigger発動\n");
+	m_triggerFrame = kTriggerFrame;
 }
