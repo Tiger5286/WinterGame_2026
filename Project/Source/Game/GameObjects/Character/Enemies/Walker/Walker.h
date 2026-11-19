@@ -27,6 +27,7 @@ public:
 
 private:
     void OnHacked(Hackable::HackedData data);
+    void OnDamage(int damage);
     void RotToPlayer();
     void SetHitbox();
 
