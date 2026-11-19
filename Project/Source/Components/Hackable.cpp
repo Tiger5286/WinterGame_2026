@@ -58,7 +58,7 @@ void Hackable::Init()
 		// 配置する数分、ランダムにした配列の順番にノードを置いていく
 		for (int i = 0; i < num; i++)
 		{
-			m_board[candidates[i].x][candidates[i].y] = type;
+			m_board[candidates[i].y][candidates[i].x] = type;
 		}
 	};
 
