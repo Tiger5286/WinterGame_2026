@@ -51,11 +51,12 @@ void MutantStateMoveEdge::Enter()
 
 void MutantStateMoveEdge::Update()
 {
-	m_frameCount++;
+	const float ts = m_owner.GetTimeScale();
+	m_frameCount += ts;
 
 	if (m_frameCount <= kMoveEdgeFrame)
 	{
-		m_owner.GetComponent<Transform>()->pos += m_moveVec;
+		m_owner.GetComponent<Transform>()->pos += m_moveVec * ts;
 	}
 
 	if (m_frameCount >= kStateEndFrame)

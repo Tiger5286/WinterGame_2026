@@ -20,7 +20,8 @@ public:
 
 private:
     const int m_chargeCount;
-    int m_frameCount = 0;
+    float m_frameCount = 0.0f;
+    float m_prevFrame = 0.0f;
     Vector3 m_toPlayerVec;
 
     std::shared_ptr<Attack> m_pAtk = nullptr;

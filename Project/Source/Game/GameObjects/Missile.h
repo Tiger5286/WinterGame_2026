@@ -25,7 +25,8 @@ public:
 private:
     const int m_damage;
     // 時間をカウントし、爆発時間、消える時間などを管理する
-    int m_frameCount = 0;
+    float m_frameCount = 0.0f;
+    float m_prevFrame = 0.0f;
     
     std::shared_ptr<Attack> m_pAtk = nullptr;
 };

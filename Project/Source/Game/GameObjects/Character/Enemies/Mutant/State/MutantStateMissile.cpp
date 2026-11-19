@@ -28,14 +28,19 @@ MutantStateMissile::~MutantStateMissile()
 void MutantStateMissile::Enter()
 {
 	m_owner.GetComponent<Animator>()->Play(L"Mutant|Power");
+	m_missileFrame = kMissileShotInterval;
 }
 
 void MutantStateMissile::Update()
 {
-	m_frameCount++;
+	const float ts = m_owner.GetTimeScale();
+	m_missileFrame -= ts;
+	m_missileFrame = (std::max)(m_missileFrame, 0.0f);
 
-	if (m_frameCount % kMissileShotInterval == 0)
+	if (m_missileFrame == 0)
 	{
+		m_missileFrame = kMissileShotInterval;
+		m_missileShotCount++;
 		// GameObjectManagerのnullチェック
 		if (GetGameObjectManager())
 		{
@@ -55,7 +60,7 @@ void MutantStateMissile::Update()
 	}
 
 	// 指定回数ミサイルを発射したらステート遷移
-	if (m_frameCount >= kMissileShotInterval * kMissileShotCount)
+	if (m_missileShotCount >= kMissileShotCount)
 	{
 		m_owner.GetComponent<StateMachine<Mutant>>()->ChangeState(std::make_unique<MutantStateOrbit>(m_owner));
 		return;

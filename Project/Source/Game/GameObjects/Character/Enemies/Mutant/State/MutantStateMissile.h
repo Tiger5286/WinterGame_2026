@@ -16,5 +16,6 @@ public:
     ID GetID() const override { return ID::Missile; }
 
 private:
-    int m_frameCount = 0;
+    float m_missileFrame = 0.0f;
+    int m_missileShotCount = 0;
 };

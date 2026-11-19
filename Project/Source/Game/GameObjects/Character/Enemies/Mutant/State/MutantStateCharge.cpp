@@ -7,6 +7,7 @@
 #include "Components/Animator/Animator.h"
 #include "Game/GameObjects/Attack.h"
 #include "Utility/Matrix4x4.h"
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -38,41 +39,45 @@ void MutantStateCharge::Enter()
 
 void MutantStateCharge::Update()
 {
-	m_frameCount++;
+	const float ts = m_owner.GetTimeScale();
+
+	m_prevFrame = m_frameCount;
+	m_frameCount += ts;
 	auto& thisPos = m_owner.GetComponent<Transform>()->pos;
 
+	// 突進開始の瞬間
+	if (MyLib::CheckFrameTriggered(m_frameCount, m_prevFrame, kWindUpFrame))
+	{
+		// プレイヤーへの方向を求める
+		m_toPlayerVec = (GetPlayer()->GetComponent<Transform>()->pos - thisPos);
+		m_toPlayerVec.y = 0.0f;
+		m_toPlayerVec.Normalize();
+		// 攻撃を生成する
+		m_pAtk = std::make_shared<Attack>();
+		CollisionManager::AttackInfo info = {
+			.damage = kAttackDamage
+		};
+		Attack::Data data = {
+			.info = info,
+			.colRadius = kAttackRadius,
+			.hitObjTag = GameObject::Tag::Player
+		};
+		m_pAtk->SetData(data);
+		m_pAtk->Init();
+		// 攻撃の位置を設定する
+		auto transform = m_owner.GetComponent<Transform>();
+		m_pAtk->GetComponent<Transform>()->pos = kAttackOffset * Matrix4x4::GetRotY(transform->rot.y) + transform->pos;
+	}
+	// 突進するまで
 	if (m_frameCount <= kWindUpFrame)
 	{
 		// プレイヤーの方を向く
 		RotToPlayer();
-		// 突進開始の瞬間
-		if (m_frameCount == kWindUpFrame)
-		{
-			// プレイヤーへの方向を求める
-			m_toPlayerVec = (GetPlayer()->GetComponent<Transform>()->pos - thisPos);
-			m_toPlayerVec.y = 0.0f;
-			m_toPlayerVec.Normalize();
-			// 攻撃を生成する
-			m_pAtk = std::make_shared<Attack>();
-			CollisionManager::AttackInfo info = {
-				.damage = kAttackDamage
-			};
-			Attack::Data data = {
-				.info = info,
-				.colRadius = kAttackRadius,
-				.hitObjTag = GameObject::Tag::Player
-			};
-			m_pAtk->SetData(data);
-			m_pAtk->Init();
-			// 攻撃の位置を設定する
-			auto transform = m_owner.GetComponent<Transform>();
-			m_pAtk->GetComponent<Transform>()->pos = kAttackOffset * Matrix4x4::GetRotY(transform->rot.y) + transform->pos;
-		}
 	}
 	else
 	{
 		// 移動する
-		thisPos += m_toPlayerVec * kRushSpeed;
+		thisPos += m_toPlayerVec * kRushSpeed * ts;
 		// 攻撃の位置を更新
 		if (m_pAtk)
 		{

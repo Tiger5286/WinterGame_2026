@@ -9,6 +9,7 @@
 #include "System/ServiceLocator.h"
 #include "Game/CollisionManager.h"
 #include "Utility/Matrix4x4.h"
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -42,12 +43,13 @@ void MutantStateAttack::Enter()
 
 void MutantStateAttack::Update()
 {
-	m_frame++;
+	m_prevFrame = m_frame;
+	m_frame += m_owner.GetTimeScale();
 	if (m_frame < kEndRotFrame)
 	{
 		RotToPlayer();
 	}
-	if (m_frame == kStartColFrame)
+	if (MyLib::CheckFrameTriggered(m_frame,m_prevFrame,kStartColFrame))
 	{
 		m_pAtk = std::make_shared<Attack>();
 		CollisionManager::AttackInfo info = {
@@ -66,7 +68,7 @@ void MutantStateAttack::Update()
 
 		ServiceLocator::GetInstance().GetCollisionManager().Register(m_pAtk);
 	}
-	if (m_frame == kEndColFrame)
+	if (MyLib::CheckFrameTriggered(m_frame, m_prevFrame, kEndColFrame))
 	{
 		m_pAtk = nullptr;
 	}

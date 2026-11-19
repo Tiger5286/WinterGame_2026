@@ -40,7 +40,7 @@ void MutantStateOrbit::Enter()
 void MutantStateOrbit::Update()
 {
 	RotToPlayer();
-	m_orbitCooltime--;
+	m_orbitCooltime -= m_owner.GetTimeScale();
 
 	const Vector3 toPlayerXZ = GetToPlayerXZ();
 

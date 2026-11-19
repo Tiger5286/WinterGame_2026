@@ -34,7 +34,7 @@ void MutantStateBackStep::Enter()
 
 void MutantStateBackStep::Update()
 {
-	m_frameCount++;
+	m_frameCount += m_owner.GetTimeScale();
 
 	// バックステップが終わったら次のステートに切り替える
 	if (m_frameCount >= kBackStepFrame)

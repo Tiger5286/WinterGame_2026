@@ -29,8 +29,10 @@ void Missile::Init()
 
 void Missile::Update()
 {
-	m_frameCount++;
-	if (m_frameCount == kImpactFrame)
+	m_prevFrame = m_frameCount;
+	m_frameCount += GetTimeScale();
+
+	if (MyLib::CheckFrameTriggered(m_frameCount,m_prevFrame,kImpactFrame))
 	{
 		// 爆発処理
 		m_pAtk = std::make_shared<Attack>();
@@ -46,7 +48,7 @@ void Missile::Update()
 		m_pAtk->Init();
 		m_pAtk->GetComponent<Transform>()->pos = GetComponent<Transform>()->pos;
 	}
-	if (m_frameCount == kImpactEndFrame)
+	if (MyLib::CheckFrameTriggered(m_frameCount,m_prevFrame,kImpactEndFrame))
 	{
 		m_pAtk = nullptr;
 	}

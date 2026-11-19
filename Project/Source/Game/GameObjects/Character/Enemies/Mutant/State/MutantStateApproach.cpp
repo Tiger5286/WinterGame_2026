@@ -32,7 +32,7 @@ void MutantStateApproach::Enter()
 void MutantStateApproach::Update()
 {
 	RotToPlayer();
-	m_approachTime++;
+	m_approachTime += m_owner.GetTimeScale();
 
 	// 制限時間を超えたら別の攻撃行動に移る
 	if (m_approachTime > kMaxApproachTime)

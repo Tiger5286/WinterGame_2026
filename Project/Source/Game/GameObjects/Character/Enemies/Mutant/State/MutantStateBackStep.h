@@ -25,6 +25,6 @@ public:
 
 private:
 	const NextState m_nextState;
-	int m_frameCount = 0;
+	float m_frameCount = 0.0f;
 	Vector3 m_backStepDir = Vector3::Zero();
 };
