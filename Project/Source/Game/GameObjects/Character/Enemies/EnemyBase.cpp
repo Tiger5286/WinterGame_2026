@@ -22,6 +22,9 @@ EnemyBase::~EnemyBase()
 
 void EnemyBase::OnDamage(int damage)
 {
+	// 死亡中はダメージを受けない
+	if (IsDying()) return;
+
 	m_hp -= damage;
 
 	if (m_hp <= 0)
