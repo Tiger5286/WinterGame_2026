@@ -17,17 +17,17 @@ void KeyboardInput::Update()
 	GetHitKeyStateAll(m_nowKeyInput);
 }
 
-bool KeyboardInput::IsPressed(int keyInput)
+bool KeyboardInput::IsPressed(int keyInput) const
 {
 	return m_nowKeyInput[keyInput];
 }
 
-bool KeyboardInput::IsTriggerd(int keyInput)
+bool KeyboardInput::IsTriggerd(int keyInput) const
 {
 	return m_nowKeyInput[keyInput] && !m_prevKeyInput[keyInput];
 }
 
-bool KeyboardInput::IsReleased(int keyInput)
+bool KeyboardInput::IsReleased(int keyInput) const
 {
 	return !m_nowKeyInput[keyInput] && m_prevKeyInput[keyInput];
 }
