@@ -18,7 +18,8 @@ public:
     ID GetID() const override { return ID::Attack; }
 
 private:
-    int m_frame = 0;
+    float m_frame = 0.0f;
+    float m_prevFrame = 0.0f;
 
     std::shared_ptr<Attack> m_pAtk = nullptr;
 };

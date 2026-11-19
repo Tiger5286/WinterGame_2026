@@ -278,3 +278,8 @@ Vector3 MyLib::ReadVector3(const std::vector<std::wstring>& row, int index)
     }
     return { std::stof(row[index]),std::stof(row[index + 1]),std::stof(row[index + 2]) };
 }
+
+bool MyLib::CheckFrameTriggered(float nowFrame, float prevFrame, float checkFrame)
+{
+    return nowFrame >= checkFrame && prevFrame < checkFrame;
+}

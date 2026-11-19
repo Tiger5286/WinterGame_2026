@@ -9,6 +9,7 @@
 #include "Components/Physics.h"
 #include "Components/Transform.h"
 #include "Utility/Matrix4x4.h"
+#include "Utility/MyLib.h"
 
 namespace
 {
@@ -38,8 +39,9 @@ void WalkerStateAttack::Enter()
 
 void WalkerStateAttack::Update()
 {
-	m_frame++;
-	if (m_frame == kStartColFrame)
+	m_prevFrame = m_frame;
+	m_frame += m_owner.GetTimeScale();
+	if (MyLib::CheckFrameTriggered(m_frame,m_prevFrame,kStartColFrame))
 	{
 		m_pAtk = std::make_shared<Attack>();
 		CollisionManager::AttackInfo info = {
@@ -58,7 +60,7 @@ void WalkerStateAttack::Update()
 
 		ServiceLocator::GetInstance().GetCollisionManager().Register(m_pAtk);
 	}
-	if (m_frame == kEndColFrame)
+	if (MyLib::CheckFrameTriggered(m_frame, m_prevFrame, kEndColFrame))
 	{
 		m_pAtk = nullptr;
 	}

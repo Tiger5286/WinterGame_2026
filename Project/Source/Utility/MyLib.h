@@ -70,4 +70,13 @@ namespace MyLib
 	/// <param name="index">読み込みたいベクトル部分の最初の列</param>
 	/// <returns>読み込んだベクトル</returns>
 	Vector3 ReadVector3(const std::vector<std::wstring>& row, int index);
+
+	/// <summary>
+	/// 指定のフレームを越えた瞬間を取得する
+	/// </summary>
+	/// <param name="nowFrame">現在のフレーム</param>
+	/// <param name="prevFrame">前のフレーム</param>
+	/// <param name="checkFrame">越えた瞬間を取得したいフレーム</param>
+	/// <returns>越えたかどうか</returns>
+	bool CheckFrameTriggered(float nowFrame, float prevFrame, float checkFrame);
 }

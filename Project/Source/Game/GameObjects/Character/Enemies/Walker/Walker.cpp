@@ -86,8 +86,8 @@ void Walker::Update()
 	auto& resourceManager = ResourceManager::GetInstance();
 
 	GetComponent<StateMachine<Walker>>()->Update();
-	m_attackCooltime--;
-	if (m_attackCooltime < 0) m_attackCooltime = 0;
+	m_attackCooltime -= ts;
+	if (m_attackCooltime < 0.0f) m_attackCooltime = 0.0f;
 
 	// 死亡中はコライダーが無効で床と押し戻しされないため、物理を止める
 	if (!IsDying())
