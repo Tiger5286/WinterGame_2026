@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Game/GameObjects/Character/Character.h"
 #include "Utility/Vector2.h"
+#include "Components/Hackable.h"
+#include <unordered_map>
 
 class Model;
 class Camera;
@@ -148,6 +150,7 @@ private:
 	// 初期位置
 	Vector3 m_defaultPos;
 
+	std::unordered_map<Hackable::SpecialNode, int> m_specialNodes;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する

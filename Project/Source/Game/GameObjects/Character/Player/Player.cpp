@@ -125,6 +125,9 @@ void Player::Init()
 	m_hp = kMaxHp;
 
 	m_ammoRechargeInterval = kAmmoRechargeInterval;
+
+	m_specialNodes[Hackable::SpecialNode::Trigger] = 2;
+	m_specialNodes[Hackable::SpecialNode::Critical] = 2;
 }
 
 void Player::Update()
