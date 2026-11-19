@@ -128,34 +128,14 @@ void Walker::Draw()
 #endif
 }
 
-void Walker::OnWasShot(const CollisionManager::ShotInfo& info)
-{
-	// 死亡中は撃たれても何もしない(死亡ステートに入り直さない)
-	if (IsDying()) return;
-
-	int damage = 0;
-	if (GetComponent<Hackable>()->IsHacked())
-	{
-		if (info.isWeakPoint)
-		{
-			damage = info.damage * 1.5f;
-		}
-		else
-		{
-			damage = info.damage;
-		}
-	}
-	else
-	{
-		damage = info.damage / 10;
-	}
-
-	OnDamage(damage);
-}
-
 bool Walker::IsDying()
 {
 	return GetComponent<StateMachine<Walker>>()->GetState<WalkerStateDeath>() != nullptr;
+}
+
+void Walker::Death()
+{
+	GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateDeath>(*this));
 }
 
 void Walker::OnHacked(Hackable::HackedData data)
@@ -167,17 +147,6 @@ void Walker::OnHacked(Hackable::HackedData data)
 	MV1SetMaterialEmiColor(m_pModel->GetHandle(), 0, GetColorF(0.5f,0.5f,0.5f,1.0f));
 	// プレイヤーの弾を回復させる
 	m_pPlayer.lock()->SetAmmoMax();
-}
-
-void Walker::OnDamage(int damage)
-{
-	m_hp -= damage;
-
-	if (m_hp <= 0)
-	{
-		m_hp = 0;
-		GetComponent<StateMachine<Walker>>()->ChangeState(std::make_unique<WalkerStateDeath>(*this));
-	}
 }
 
 void Walker::RotToPlayer()

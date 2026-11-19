@@ -20,14 +20,13 @@ public:
     void Update() override;
     void Draw() override;
 
-    void OnWasShot(const CollisionManager::ShotInfo& info) override;
-
     // 死亡ステート中かどうか
-    bool IsDying();
+    bool IsDying() override;
 
 private:
-    void OnHacked(Hackable::HackedData data);
-    void OnDamage(int damage);
+    void Death() override;
+    void OnHacked(Hackable::HackedData data) override;
+
     void RotToPlayer();
     void SetHitbox();
 
@@ -39,4 +38,3 @@ private:
 
     friend class WalkerState;
 };
-

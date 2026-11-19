@@ -11,10 +11,10 @@ namespace
 	{
 		{L"Walker",[](const SpawnContext::Info& info) { return std::make_shared<Walker>(info.pPlayer); }},
 		{L"Mutant",[](const SpawnContext::Info& info) {
-			auto mutant = std::make_shared<Mutant>(info.pPlayer);
+			/*auto mutant = std::make_shared<Mutant>(info.pPlayer);
 			mutant->SetGameObjectManager(info.pGameObjectManager);
-			return mutant; }},
-		{L"Drone",[](const SpawnContext::Info& info) { return std::make_shared<Drone>(info.pPlayer); }},
+			return mutant;*/ return nullptr; }},
+		{L"Drone",[](const SpawnContext::Info& info) { /*return std::make_shared<Drone>(info.pPlayer);*/ return nullptr; }},
 	};
 }
 
