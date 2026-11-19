@@ -40,13 +40,13 @@ void SimpleAnimator::Play(const std::wstring& animName, float animSpeed, bool is
 	m_isPause = false;
 }
 
-void SimpleAnimator::Update()
+void SimpleAnimator::Update(float timeScale)
 {
 	if (m_attachIndex == -1) return;
 
 	if (!m_isPause)
 	{
-		m_time += m_animSpeed;
+		m_time += m_animSpeed * timeScale;
 		if (m_isLoop)
 		{
 			// ループするなら総時間を超えた分だけ最初に戻す

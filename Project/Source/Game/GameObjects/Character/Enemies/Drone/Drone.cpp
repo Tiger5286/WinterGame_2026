@@ -153,7 +153,7 @@ void Drone::Update()
 	ApplyModelTransform();
 	ApplyTurretPitch();
 
-	GetComponent<SimpleAnimator>()->Update();
+	GetComponent<SimpleAnimator>()->Update(GetTimeScale());
 
 	EnemyHPUI::Info info;
 	info.uiPos = GetComponent<Transform>()->pos + kHPUIOffset;

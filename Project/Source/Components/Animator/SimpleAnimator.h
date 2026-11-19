@@ -20,7 +20,7 @@ public:
 	void Play(const std::wstring& animName, float animSpeed = 0.5f, bool isLoop = true);
 
 	// 再生時間を進めてモデルに反映する
-	void Update();
+	void Update(float timeScale);
 
 	// trueで再生時間を止める(アタッチは外さないので、止めた時のポーズのまま固まる)
 	void Pause(bool isPause) { m_isPause = isPause; }
