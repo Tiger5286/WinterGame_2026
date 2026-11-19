@@ -84,6 +84,9 @@ public:
 
 	bool IsHackable();
 
+	float GetTimeScale() const;
+	void SetTimeScale(float timeScale);
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 	Tag m_tag = Tag::None;
