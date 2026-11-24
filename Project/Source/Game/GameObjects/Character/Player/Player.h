@@ -2,7 +2,7 @@
 #include "Game/GameObjects/Character/Character.h"
 #include "Utility/Vector2.h"
 #include "Components/Hackable.h"
-#include <unordered_map>
+#include <deque>
 
 class Model;
 class Camera;
@@ -64,6 +64,11 @@ public:
 		L"Player|Death"
 	};
 
+	// 持てる特殊ノードの種類の上限
+	static constexpr int kCanHaveSpecialNodeTypeMax = 2;
+	// 持てる特殊ノードの種類ごとの上限
+	static constexpr int kCanHaveSpecialNodeNumMax = 2;
+
 public:
     Player();
     ~Player() override;
@@ -96,9 +101,9 @@ public:
 	void OnActiveTrigger();
 
 	// 特殊ノードを追加する
-	void AddSpecialNode(Hackable::SpecialNode type, int count);
+	bool AddSpecialNode(Hackable::SpecialNode type, int count);
 	// 特殊ノードを一回使う
-	void UseSpecialNode(Hackable::SpecialNode type);
+	bool UseSpecialNode(Hackable::SpecialNode type);
 	// 盤面に出す特殊ノードの種類
 	std::vector<Hackable::SpecialNode> GetSpecialNodeTypes() const;
 	// 盤面の更新が必要か判定するための番号
@@ -158,8 +163,17 @@ private:
 	// 初期位置
 	Vector3 m_defaultPos;
 
+	// 特殊ノード関係
+	// 盤面のバージョン
 	int m_specialNodeVersion = 0;	// 盤面に出る種類が変わるたびに+1
-	std::unordered_map<Hackable::SpecialNode, int> m_specialNodes;
+	// 特殊ノードの種類と所持数を意味する構造体
+	struct HaveSpecialNode
+	{
+		Hackable::SpecialNode type = Hackable::SpecialNode::None;
+		int num = 0;
+	};
+	// 所持している特殊ノード
+	std::deque<HaveSpecialNode> m_specialNodes;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する

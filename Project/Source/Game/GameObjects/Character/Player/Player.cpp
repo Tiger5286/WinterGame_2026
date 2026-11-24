@@ -294,9 +294,17 @@ void Player::Update()
 	auto& keyboard = KeyboardInput::GetInstance();
 	if (keyboard.IsTriggerd(KEY_INPUT_1))
 	{
-		UseSpecialNode(Hackable::SpecialNode::Trigger);
+		AddSpecialNode(Hackable::SpecialNode::Trigger,2);
 	}
 	if (keyboard.IsTriggerd(KEY_INPUT_2))
+	{
+		AddSpecialNode(Hackable::SpecialNode::Critical,2);
+	}
+	if (keyboard.IsTriggerd(KEY_INPUT_3))
+	{
+		UseSpecialNode(Hackable::SpecialNode::Trigger);
+	}
+	if (keyboard.IsTriggerd(KEY_INPUT_4))
 	{
 		UseSpecialNode(Hackable::SpecialNode::Critical);
 	}
@@ -361,8 +369,11 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16 * 5, 0xff0000, L"Ammo: %d/%d", m_ammo, kMaxAmmo);
 	DrawFormatString(100, 100 + 16 * 6, 0xff0000, L"Player:pos x:%.1f,y:%.1f,z:%.1f", pos.x, pos.y, pos.z);
 	DrawFormatString(100, 100 + 16 * 7, 0xff0000, L"Trigger : %.1f", m_triggerFrame);
-	DrawFormatString(100, 100 + 16 * 8, 0xff0000, L"SpecialNode:%d,%d",m_specialNodes.at(Hackable::SpecialNode::Trigger), m_specialNodes.at(Hackable::SpecialNode::Critical));
-	DrawFormatString(100, 100 + 16 * 9, 0xff0000, L"SpecialNodeVersion:%d", m_specialNodeVersion);
+	for (int i = 0; i < m_specialNodes.size(); i++)
+	{
+		DrawFormatString(100, 100 + 16 * (8 + i), 0xff0000, L"SpecialNode:%d,%d", m_specialNodes[i].type, m_specialNodes[i].num);
+	}
+	DrawFormatString(100, 100 + 16 * 11, 0xff0000, L"SpecialNodeVersion:%d", m_specialNodeVersion);
 #endif
 }
 
@@ -658,38 +669,79 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 	return nearestHackable;
 }
 
-void Player::AddSpecialNode(Hackable::SpecialNode type, int count)
+bool Player::AddSpecialNode(Hackable::SpecialNode type, int count)
 {
-	if (count <= 0) return;
-
-	if (!m_specialNodes.contains(type))
+	// 落ちてる数が0以下なら拾えない
+	if (count <= 0)
 	{
-		m_specialNodeVersion++;
+		assert(false && "Player::AddSpecialNode() : 拾ったノードの数が0です");
+		return false;
 	}
-	m_specialNodes[type] += count;
+	// 最大所持数を超えた数落ちてたら拾う数を上限までにする
+	count = (std::min)(count, kCanHaveSpecialNodeNumMax);
+
+	// 拾ったノードをすでに持っているかどうか調べる
+	for (auto& specialNode : m_specialNodes)
+	{
+		if (type == specialNode.type)
+		{
+			// 所持数が上限なら拾えない(falseを返す)
+			if (specialNode.num >= kCanHaveSpecialNodeNumMax)
+			{
+				return false;
+			}
+			else
+			{
+				specialNode.num += count;
+				specialNode.num = (std::min)(specialNode.num, kCanHaveSpecialNodeNumMax);
+				return true;
+			}
+		}
+	}
+	// 持っていない場合
+	// 持っている種類の数が上限なら古い種類を捨てる
+	if (m_specialNodes.size() >= kCanHaveSpecialNodeTypeMax)
+	{
+		m_specialNodes.pop_front();
+	}
+	// 新しい種類を一番後ろに足す
+	m_specialNodes.push_back({ type,count });
+	m_specialNodeVersion++;
+	return true;
 }
 
-void Player::UseSpecialNode(Hackable::SpecialNode type)
+bool Player::UseSpecialNode(Hackable::SpecialNode type)
 {
-	if (!m_specialNodes.contains(type)) return;
-
-	m_specialNodes[type]--;
-	if (m_specialNodes[type] <= 0)
+	// 同じ種類を探す
+	int i = 0;
+	for (auto& specialNode : m_specialNodes)
 	{
-		m_specialNodes.erase(type);
-		m_specialNodeVersion++;
+		// 見つけたら個数を一つ減らす
+		if (type == specialNode.type)
+		{
+			specialNode.num--;
+			// 無くなったら種類ごと消してバージョンを更新する
+			if (specialNode.num <= 0)
+			{
+				m_specialNodes.erase(m_specialNodes.begin() + i);
+				m_specialNodeVersion++;
+			}
+			// 消したらすぐreturnするので安全
+			return true;
+		}
+		i++;
 	}
+	// 見つからなければ使えない(falseを返す)
+	return false;
 }
 
 std::vector<Hackable::SpecialNode> Player::GetSpecialNodeTypes() const
 {
 	std::vector<Hackable::SpecialNode> specialNodes;
-
-	for (const auto& node : m_specialNodes)
+	for (const auto& specialNode : m_specialNodes)
 	{
-		specialNodes.push_back(node.first);
+		specialNodes.push_back(specialNode.type);
 	}
-
 	return specialNodes;
 }
 
