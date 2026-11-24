@@ -95,6 +95,15 @@ public:
 
 	void OnActiveTrigger();
 
+	// 特殊ノードを追加する
+	void AddSpecialNode(Hackable::SpecialNode type, int count);
+	// 特殊ノードを一回使う
+	void UseSpecialNode(Hackable::SpecialNode type);
+	// 盤面に出す特殊ノードの種類
+	std::vector<Hackable::SpecialNode> GetSpecialNodeTypes() const;
+	// 盤面の更新が必要か判定するための番号
+	int GetSpecialNodeVersion() const { return m_specialNodeVersion; }
+
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
 	void UpdateAim();
@@ -111,7 +120,6 @@ private:	// プレイヤーだけが使う関数
 	// エイム・射撃・ハッキングができる状態か(被弾中・死亡中はできない)
 	bool CanAction();
 	std::shared_ptr<GameObject> FindNearestVisibleHackable(Vector2& screenPos);
-
 
 private:
     std::unique_ptr<Model> m_pModel;
@@ -150,6 +158,7 @@ private:
 	// 初期位置
 	Vector3 m_defaultPos;
 
+	int m_specialNodeVersion = 0;	// 盤面に出る種類が変わるたびに+1
 	std::unordered_map<Hackable::SpecialNode, int> m_specialNodes;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend

@@ -25,6 +25,7 @@
 #include "Game/UI/HackingTargetUI.h"
 #include "System/UIManager.h"
 #include "Game/UI/PlayerInfoUI.h"
+#include "System/KeyboardInput.h"
 
 namespace
 {
@@ -126,8 +127,8 @@ void Player::Init()
 
 	m_ammoRechargeInterval = kAmmoRechargeInterval;
 
-	m_specialNodes[Hackable::SpecialNode::Trigger] = 2;
-	m_specialNodes[Hackable::SpecialNode::Critical] = 2;
+	AddSpecialNode(Hackable::SpecialNode::Trigger, 2);
+	AddSpecialNode(Hackable::SpecialNode::Critical, 2);
 }
 
 void Player::Update()
@@ -288,6 +289,18 @@ void Player::Update()
 
 	// アニメーションを更新
 	UpdateAnimation();
+
+#ifdef _DEBUG
+	auto& keyboard = KeyboardInput::GetInstance();
+	if (keyboard.IsTriggerd(KEY_INPUT_1))
+	{
+		UseSpecialNode(Hackable::SpecialNode::Trigger);
+	}
+	if (keyboard.IsTriggerd(KEY_INPUT_2))
+	{
+		UseSpecialNode(Hackable::SpecialNode::Critical);
+	}
+#endif
 }
 
 void Player::Draw()
@@ -319,19 +332,19 @@ void Player::Draw()
 
 #ifdef _DEBUG
 		// 銃口から線を描画
-		const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
-		const Vector3& target = m_pCamera.lock()->GetTargetPos();
-		Vector3 vec = target - cameraPos;
-		vec.Normalize();
-		vec *= 2000;
-		Vector3 end = cameraPos + vec;
-		auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, end);
-		if (result.isHit)
-		{
-			const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
-			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
-			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
-		}
+		//const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+		//const Vector3& target = m_pCamera.lock()->GetTargetPos();
+		//Vector3 vec = target - cameraPos;
+		//vec.Normalize();
+		//vec *= 2000;
+		//Vector3 end = cameraPos + vec;
+		//auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, end);
+		//if (result.isHit)
+		//{
+		//	const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
+		//	const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
+		//	DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
+		//}
 #endif
 	}
 
@@ -348,6 +361,8 @@ void Player::Draw()
 	DrawFormatString(100, 100 + 16 * 5, 0xff0000, L"Ammo: %d/%d", m_ammo, kMaxAmmo);
 	DrawFormatString(100, 100 + 16 * 6, 0xff0000, L"Player:pos x:%.1f,y:%.1f,z:%.1f", pos.x, pos.y, pos.z);
 	DrawFormatString(100, 100 + 16 * 7, 0xff0000, L"Trigger : %.1f", m_triggerFrame);
+	DrawFormatString(100, 100 + 16 * 8, 0xff0000, L"SpecialNode:%d,%d",m_specialNodes.at(Hackable::SpecialNode::Trigger), m_specialNodes.at(Hackable::SpecialNode::Critical));
+	DrawFormatString(100, 100 + 16 * 9, 0xff0000, L"SpecialNodeVersion:%d", m_specialNodeVersion);
 #endif
 }
 
@@ -641,6 +656,41 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 	}
 
 	return nearestHackable;
+}
+
+void Player::AddSpecialNode(Hackable::SpecialNode type, int count)
+{
+	if (count <= 0) return;
+
+	if (!m_specialNodes.contains(type))
+	{
+		m_specialNodeVersion++;
+	}
+	m_specialNodes[type] += count;
+}
+
+void Player::UseSpecialNode(Hackable::SpecialNode type)
+{
+	if (!m_specialNodes.contains(type)) return;
+
+	m_specialNodes[type]--;
+	if (m_specialNodes[type] <= 0)
+	{
+		m_specialNodes.erase(type);
+		m_specialNodeVersion++;
+	}
+}
+
+std::vector<Hackable::SpecialNode> Player::GetSpecialNodeTypes() const
+{
+	std::vector<Hackable::SpecialNode> specialNodes;
+
+	for (const auto& node : m_specialNodes)
+	{
+		specialNodes.push_back(node.first);
+	}
+
+	return specialNodes;
 }
 
 void Player::SetAngle(float angle)
