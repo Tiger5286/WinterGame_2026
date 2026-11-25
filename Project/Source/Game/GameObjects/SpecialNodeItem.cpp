@@ -72,7 +72,7 @@ void SpecialNodeItem::Update()
 void SpecialNodeItem::Draw()
 {
 	Vector3 pos = GetComponent<Transform>()->pos;
-	const int handle = ResourceManager::GetInstance().GetGraph(L"TestSpecialNode")->GetHandle();
+	const int handle = ResourceManager::GetInstance().GetGraph(SpecialNodes::kInfos.at(m_type))->GetHandle();
 	DrawBillboard3D(pos + Vector3::Up() * 50.0f, 0.5f, 0.5f, 100.0f, 0.0f, handle, true);
 #ifdef _DEBUG
 	unsigned int color = 0xffff00;

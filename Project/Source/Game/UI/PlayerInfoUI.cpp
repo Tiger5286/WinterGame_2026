@@ -3,6 +3,8 @@
 #include "Utility/Vector2Int.h"
 #include "Game/GameObjects/Character/Player/Player.h"
 #include "Game.h"
+#include "Resource/ResourceManager.h"
+#include "Resource/Graph.h"
 
 namespace
 {
@@ -85,12 +87,14 @@ void PlayerInfoUI::Draw()
 	auto& specialNodes = player->GetHaveSpecialNodes();
 	for (int i = 0; i < specialNodes.size(); i++)
 	{
+		const int handle = ResourceManager::GetInstance().GetGraph(SpecialNodes::kInfos.at(specialNodes[i].type))->GetHandle();
+
 		x1 = kSpecialNodePos.x + i * (kSpecialNodeWH.x + 5);
 		y1 = kSpecialNodePos.y;
 		x2 = x1 + kSpecialNodeWH.x;
 		y2 = y1 + kSpecialNodeWH.y;
 
-		DrawBox(x1, y1, x2, y2, 0xffff00, true);
+		DrawExtendGraph(x1, y1, x2, y2, handle, true);
 		DrawFormatString(x1, y1, 0x000000, L"%d", specialNodes[i].type);
 		DrawFormatString(x1+16, y1+16, 0x000000, L"%d", specialNodes[i].num);
 	}
