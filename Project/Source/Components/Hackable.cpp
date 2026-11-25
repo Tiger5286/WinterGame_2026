@@ -77,6 +77,11 @@ void Hackable::Init()
 	// 特殊ノードをランダムに配置する関数
 	std::function placeRandomSpecial = [this](std::vector<Vector2Int> candidates, std::vector<SpecialNode> special)
 		{
+			if (candidates.size() < special.size())
+			{
+				assert(false && "Hackable::Init() : 盤面の空きマスの数以上の数の特殊ノードを配置しようとしています");
+				return;
+			}
 			// 候補の配列をランダムに入れ替える(Fisher-Yatesシャッフル)
 			for (int i = candidates.size() - 1; i > 0; i--)
 			{
@@ -130,11 +135,7 @@ void Hackable::Init()
 		}
 	}
 	// 配置する
-	// 仮でTriggerのみの配列を用意しておく
-	std::vector<SpecialNode> specialNodes;
-	specialNodes.push_back(SpecialNode::Trigger);
-	specialNodes.push_back(SpecialNode::Critical);
-	placeRandomSpecial(specialCandidates, specialNodes);
+	placeRandomSpecial(specialCandidates, m_specialNodes);
 }
 
 void Hackable::Update(float timeScale)
@@ -331,6 +332,16 @@ bool Hackable::LoadData(const std::wstring& filePath)
 	m_boardData.size.y = y;
 
 	return true;
+}
+
+void Hackable::SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int version)
+{
+	// バージョンが同じなら何もしない
+	if (m_version == version) return;
+	// バージョンが違ったら特殊ノードの一覧を更新して初期化
+	m_specialNodes = specialNodes;
+	m_version = version;
+	Init();
 }
 
 void Hackable::Move()

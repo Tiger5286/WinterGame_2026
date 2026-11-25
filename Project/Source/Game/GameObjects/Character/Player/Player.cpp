@@ -678,7 +678,7 @@ bool Player::AddSpecialNode(Hackable::SpecialNode type, int count)
 		return false;
 	}
 	// 最大所持数を超えた数落ちてたら拾う数を上限までにする
-	count = (std::min)(count, kCanHaveSpecialNodeNumMax);
+	count = (std::min)(count, kMaxSpecialNodeCount);
 
 	// 拾ったノードをすでに持っているかどうか調べる
 	for (auto& specialNode : m_specialNodes)
@@ -686,21 +686,21 @@ bool Player::AddSpecialNode(Hackable::SpecialNode type, int count)
 		if (type == specialNode.type)
 		{
 			// 所持数が上限なら拾えない(falseを返す)
-			if (specialNode.num >= kCanHaveSpecialNodeNumMax)
+			if (specialNode.num >= kMaxSpecialNodeCount)
 			{
 				return false;
 			}
 			else
 			{
 				specialNode.num += count;
-				specialNode.num = (std::min)(specialNode.num, kCanHaveSpecialNodeNumMax);
+				specialNode.num = (std::min)(specialNode.num, kMaxSpecialNodeCount);
 				return true;
 			}
 		}
 	}
 	// 持っていない場合
 	// 持っている種類の数が上限なら古い種類を捨てる
-	if (m_specialNodes.size() >= kCanHaveSpecialNodeTypeMax)
+	if (m_specialNodes.size() >= kMaxSpecialNodeTypes)
 	{
 		m_specialNodes.pop_front();
 	}

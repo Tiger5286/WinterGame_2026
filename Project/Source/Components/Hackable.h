@@ -70,6 +70,9 @@ public:
     // CSVから盤面データを読み込む。読み込めたらtrue
     bool LoadData(const std::wstring& filePath);
 
+    // 特殊ノードの種類と盤面のバージョンを受け取る　バージョンが違う時だけ盤面を作り直す
+    void SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int version);
+
 private:
     // CSVから読み込んだ盤面の設定(Initのたびにここから盤面を作り直す)
     // LoadDataを呼ばなかった場合は初期値の4x4の盤面になる
@@ -93,5 +96,9 @@ private:
     float m_hackFrame = 0.0f;
     Info m_info;
     bool m_isEnable = true;
+    // 盤面に出す特殊ノードの種類
+    std::vector<SpecialNode> m_specialNodes;
+    // 最後に受け取った特殊ノードの種類のバージョン
+    int m_version = -1; // 最初に必ず初期化するため-1にしておく
 };
 

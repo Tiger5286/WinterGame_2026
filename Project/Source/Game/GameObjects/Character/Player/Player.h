@@ -65,9 +65,9 @@ public:
 	};
 
 	// 持てる特殊ノードの種類の上限
-	static constexpr int kCanHaveSpecialNodeTypeMax = 2;
+	static constexpr int kMaxSpecialNodeTypes = 2;
 	// 持てる特殊ノードの種類ごとの上限
-	static constexpr int kCanHaveSpecialNodeNumMax = 2;
+	static constexpr int kMaxSpecialNodeCount = 2;
 
 public:
     Player();

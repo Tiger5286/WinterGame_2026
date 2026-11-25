@@ -31,13 +31,17 @@ void HackingManager::Update()
 	if (!m_pHackingObject.lock()) return;
 	auto hackable = m_pHackingObject.lock()->GetComponent<Hackable>();
 	if (!hackable || !hackable->IsEnable()) return;
+	auto player = m_pPlayer.lock();
+	if (!player) return;
+
+	hackable->SetSpecialNodes(player->GetSpecialNodeTypes(), player->GetSpecialNodeVersion());
+
 	auto hackedData = hackable->UpdateHacking();
 	if (hackedData)
 	{
 		// 各特殊効果を発動
 		for (const auto& special : hackedData->specials)
 		{
-			auto player = m_pPlayer.lock();
 			if (!player) break;
 			kSpecialEffects.at(special)(player);
 		}
