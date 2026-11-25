@@ -3,6 +3,8 @@
 #include "Character/Player/Player.h"
 #include "Components/Collider/CapsuleCollider.h"
 #include "System/PadInput.h"
+#include "Resource/ResourceManager.h"
+#include "Resource/Graph.h"
 
 namespace
 {
@@ -69,13 +71,16 @@ void SpecialNodeItem::Update()
 
 void SpecialNodeItem::Draw()
 {
+	Vector3 pos = GetComponent<Transform>()->pos;
+	const int handle = ResourceManager::GetInstance().GetGraph(L"TestSpecialNode")->GetHandle();
+	DrawBillboard3D(pos + Vector3::Up() * 50.0f, 0.5f, 0.5f, 100.0f, 0.0f, handle, true);
 #ifdef _DEBUG
 	unsigned int color = 0xffff00;
 	if (m_isCanPickupDist)
 	{
 		color = 0x0000ff;
 	}
-	DrawSphere3D(GetComponent<Transform>()->pos, kRadius, 16, color, 0xffffff, true);
+	DrawSphere3D(pos, kRadius, 16, color, 0xffffff, false);
 #endif
 }
 

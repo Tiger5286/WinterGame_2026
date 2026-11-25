@@ -13,7 +13,7 @@ namespace
 	constexpr float kCriticalNodeRate = 3.0f;
 
 	// 死んだとき特殊ノードを落とす確率(%)
-	constexpr int kDropSpecialNodeProbability = 100;
+	constexpr int kDropSpecialNodeProbability = 25;
 }
 
 EnemyBase::EnemyBase(const SpawnContext::Info& info) :
@@ -82,9 +82,9 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 
 void EnemyBase::DropSpecialNode()
 {
-	if (GetRand(100) <= kDropSpecialNodeProbability)
+	if (GetRand(99) < kDropSpecialNodeProbability)
 	{
 		Vector3 pos = GetComponent<Transform>()->pos;
-		m_pGameObjectManager.lock()->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::SpecialNode::Trigger, m_pPlayer.lock()));
+		m_pGameObjectManager.lock()->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::GetSpecialNodeTypeRandom(), m_pPlayer.lock()));
 	}
 }

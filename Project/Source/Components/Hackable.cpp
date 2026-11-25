@@ -344,6 +344,15 @@ void Hackable::SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int
 	Init();
 }
 
+Hackable::SpecialNode Hackable::GetSpecialNodeTypeRandom()
+{
+	constexpr int minVal = 1;
+	constexpr int maxVal = static_cast<int>(SpecialNode::Num) - 1;
+	SpecialNode type = static_cast<SpecialNode>(minVal + GetRand(maxVal - minVal));
+
+	return type;
+}
+
 void Hackable::Move()
 {
 	auto& input = PadInput::GetInstance();

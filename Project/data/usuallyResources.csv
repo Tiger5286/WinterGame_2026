@@ -5,3 +5,4 @@ font,MainFont30,源ノ角ゴシック JP Medium,30
 graph,Menu,data/graphs/MenuUI.png,
 graph,MenuSelect,data/graphs/MenuUI_Select.png,
 effect,Explosion,data/effects/explosion.efkefc,50
+graph,TestSpecialNode,data/graphs/SpecialNode.png,

@@ -25,6 +25,8 @@ public:
         None,
         Trigger,    // トリガーノード(銃の連射速度が上がる)
         Critical,   // クリティカルノード(ハッキング成功時のダメージが上がる)
+
+        Num
     };
 
     struct NodeData
@@ -72,6 +74,8 @@ public:
 
     // 特殊ノードの種類と盤面のバージョンを受け取る　バージョンが違う時だけ盤面を作り直す
     void SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int version);
+
+    static Hackable::SpecialNode GetSpecialNodeTypeRandom();
 
 private:
     // CSVから読み込んだ盤面の設定(Initのたびにここから盤面を作り直す)
