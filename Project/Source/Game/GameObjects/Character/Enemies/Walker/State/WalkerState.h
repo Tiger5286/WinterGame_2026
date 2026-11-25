@@ -37,5 +37,6 @@ protected:
     void SetAttackCooltime(int coolTime);
     void Die();
     void RotToPlayer();
+    void DropSpecialNode();
 };
 

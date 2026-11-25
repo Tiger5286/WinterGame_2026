@@ -46,4 +46,6 @@ protected:
     Vector3 GetLaserEnd(const Vector3& start, const Vector3& dir) const;
     // startからdir方向に撃ち、プレイヤーに当たっていたらダメージを与える
     void Fire(const Vector3& start, const Vector3& dir);
+
+    void DropSpecialNode();
 };

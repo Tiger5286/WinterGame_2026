@@ -55,3 +55,8 @@ void DroneState::Fire(const Vector3& start, const Vector3& dir)
 {
 	m_owner.Fire(start, dir);
 }
+
+void DroneState::DropSpecialNode()
+{
+	m_owner.DropSpecialNode();
+}

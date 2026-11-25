@@ -74,6 +74,7 @@ void DroneStateFall::Exit()
 
 void DroneStateFall::Explode()
 {
+	DropSpecialNode();
 	const Vector3 center = m_owner.GetComponent<Transform>()->pos + Vector3::Up() * Drone::kBodyCenterHeight;
 	EffectManager::GetInstance().PlayEffect(L"Explosion", center);
 	Die();

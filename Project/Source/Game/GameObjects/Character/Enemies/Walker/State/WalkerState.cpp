@@ -34,3 +34,8 @@ void WalkerState::RotToPlayer()
 {
 	m_owner.RotToPlayer();
 }
+
+void WalkerState::DropSpecialNode()
+{
+	m_owner.DropSpecialNode();
+}
