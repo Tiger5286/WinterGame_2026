@@ -88,6 +88,6 @@ void EnemyBase::DropSpecialNode()
 	if (GetRand(99) < kDropSpecialNodeProbability)
 	{
 		Vector3 pos = GetComponent<Transform>()->pos;
-		goManager->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::GetSpecialNodeTypeRandom(), m_pPlayer.lock()));
+		goManager->Add(std::make_shared<SpecialNodeItem>(pos, SpecialNodes::GetSpecialNodeTypeRandom(), m_pPlayer.lock()));
 	}
 }

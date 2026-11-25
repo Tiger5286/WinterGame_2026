@@ -22,11 +22,6 @@ namespace
 	constexpr int kMaxDamage = 100;
 	// 最低ダメージ
 	constexpr int kMinDamage = 20;
-
-	const std::map<SpecialNodes::Type, std::wstring> kSpecialNames = {
-		{ SpecialNodes::Type::Trigger, L"Trigger" },
-		{ SpecialNodes::Type::Critical, L"Critical"}
-	};
 }
 
 Hackable::Hackable()
@@ -258,7 +253,7 @@ void Hackable::Draw()
 			DrawBox(x1, y1, x2 - 2, y2 - 2, color, true);
 			if (m_board[y][x].type == NodeType::Special)
 			{
-				DrawString(x1 + 1, y1 + 1, kSpecialNames.at(m_board[y][x].special).c_str(),0x000000);
+				DrawString(x1 + 1, y1 + 1, SpecialNodes::kInfos.at(m_board[y][x].special).c_str(),0x000000);
 			}
 		}
 	}
@@ -342,15 +337,6 @@ void Hackable::SetSpecialNodes(const std::vector<SpecialNodes::Type>& specialNod
 	m_specialNodes = specialNodes;
 	m_version = version;
 	Init();
-}
-
-SpecialNodes::Type Hackable::GetSpecialNodeTypeRandom()
-{
-	constexpr int minVal = 1;
-	constexpr int maxVal = static_cast<int>(SpecialNodes::Type::Num) - 1;
-	SpecialNodes::Type type = static_cast<SpecialNodes::Type>(minVal + GetRand(maxVal - minVal));
-
-	return type;
 }
 
 void Hackable::Move()

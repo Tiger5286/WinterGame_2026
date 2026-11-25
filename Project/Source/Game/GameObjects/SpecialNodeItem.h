@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Utility/Vector3.h"
-#include "Components/Hackable.h"
+#include "Game/SpecialNodes.h"
 #include <memory>
 
 class Player;

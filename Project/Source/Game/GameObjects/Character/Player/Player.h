@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Game/GameObjects/Character/Character.h"
 #include "Utility/Vector2.h"
-#include "Components/Hackable.h"
+#include "Game/SpecialNodes.h"
 #include <deque>
 
 class Model;

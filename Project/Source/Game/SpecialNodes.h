@@ -13,8 +13,17 @@ namespace SpecialNodes
 		Num
 	};
 
-	const std::unordered_map<Type, std::wstring> kInfos = {
+	inline const std::unordered_map<Type, std::wstring> kInfos = {
 		{ Type::Trigger, L"Trigger"},
 		{ Type::Critical, L"Critical"}
 	};
+
+	inline Type GetSpecialNodeTypeRandom()
+	{
+		constexpr int minVal = 1;
+		constexpr int maxVal = static_cast<int>(SpecialNodes::Type::Num) - 1;
+		SpecialNodes::Type type = static_cast<SpecialNodes::Type>(minVal + GetRand(maxVal - minVal));
+
+		return type;
+	}
 }

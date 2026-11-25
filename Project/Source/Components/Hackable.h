@@ -18,7 +18,7 @@ public:
         Open,   // オープンノード(青マス)
         Goal,   // ゴールノード
         Red,    // 赤マス(通ったら最初から)
-        Special,    // 特殊ノード(種類はSpecialNode型で指定)
+        Special,    // 特殊ノード(種類はSpecialNodes::Typeで指定)
     };
 
     struct NodeData
@@ -66,8 +66,6 @@ public:
 
     // 特殊ノードの種類と盤面のバージョンを受け取る　バージョンが違う時だけ盤面を作り直す
     void SetSpecialNodes(const std::vector<SpecialNodes::Type>& specialNodes, int version);
-
-    static SpecialNodes::Type GetSpecialNodeTypeRandom();
 
 private:
     // CSVから読み込んだ盤面の設定(Initのたびにここから盤面を作り直す)
