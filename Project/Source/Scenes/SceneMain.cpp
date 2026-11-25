@@ -30,6 +30,7 @@
 #include "System/EffectManager.h"
 #include "System/KeyboardInput.h"
 #include "System/Time.h"
+#include "Game/GameObjects/SpecialNodeItem.h"
 
 namespace
 {
@@ -163,6 +164,11 @@ void SceneMain::Update()
 		{
 			time.SetTimeScale(1.0f);
 		}
+	}
+	// Rキーで特殊ノードを置く
+	if (KeyboardInput::GetInstance().IsTriggerd(KEY_INPUT_R))
+	{
+		m_pGameObjectManager->Add(std::make_shared<SpecialNodeItem>(Vector3(0,100,0), Hackable::SpecialNode::Trigger, m_pPlayer));
 	}
 #endif
 }

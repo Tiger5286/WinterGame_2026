@@ -16,7 +16,9 @@ public:
 	float GetHeight() const { return m_height; }
 	void SetHeight(float height);
 
+	// カプセルの線分の端点を取得する
 	Vector3 GetBottom() const;
+	// カプセルの線分の端点を取得する
 	Vector3 GetTop() const;
 
 	void Draw(const unsigned int color = 0x00ff00) override;

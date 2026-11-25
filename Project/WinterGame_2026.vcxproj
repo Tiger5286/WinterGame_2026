@@ -114,6 +114,7 @@
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateAttack.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.cpp" />
     <ClCompile Include="Source\System\Time.cpp" />
+    <ClCompile Include="Source\Game\GameObjects\SpecialNodeItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\System\KeyboardInput.h" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateAttack.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Walker\State\WalkerStateDeath.h" />
     <ClInclude Include="Source\System\Time.h" />
+    <ClInclude Include="Source\Game\GameObjects\SpecialNodeItem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
