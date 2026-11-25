@@ -18,7 +18,7 @@ namespace
 	const Vector3 kAimPosOffset = Vector3(0.0f, 0.0f, 0.0f);
 
 	constexpr float kSensitivity = DX_PI_F / 60;
-	constexpr float kAimSensitivity = DX_PI_F / 120;
+	constexpr float kAimSensitivity = DX_PI_F / 180;
 
 	constexpr float kRotXLimit = DX_PI_F / 2 - 0.01f;
 	constexpr float kRotXLimitAim = DX_PI_F / 4;
