@@ -26,8 +26,8 @@ namespace
 	// 地形に当たったとき、壁からどれだけ手前にカメラを置くか
 	constexpr float kWallMargin = 30.0f;
 
-	constexpr float kNear = 5.0f;
-	constexpr float kFar = 20000.0f;
+	constexpr float kNear = 20.0f;
+	constexpr float kFar = 5000.0f;
 }
 
 void Camera::Init()
