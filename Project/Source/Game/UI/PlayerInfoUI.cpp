@@ -17,6 +17,9 @@ namespace
 	constexpr float kThrusterFrameThickness = 3;
 
 	const Vector2Int kAmmoUILT = { Game::kScreenWidth - 100,Game::kScreenHeight - 100 };
+
+	const Vector2Int kSpecialNodePos = { Game::kScreenWidth / 2 + 200 + 20,Game::kScreenHeight - 55 };
+	const Vector2Int kSpecialNodeWH = { 30,30 };
 }
 
 PlayerInfoUI::PlayerInfoUI(const std::shared_ptr<Player>& pPlayer) :
@@ -77,4 +80,18 @@ void PlayerInfoUI::Draw()
 	DrawBox(x1, y1, x2, y2, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawFormatString(kAmmoUILT.x, kAmmoUILT.y, 0xffffff, ammoStr, player->GetAmmo(), player->GetMaxAmmo());
+
+	// 特殊ノード描画
+	auto& specialNodes = player->GetHaveSpecialNodes();
+	for (int i = 0; i < specialNodes.size(); i++)
+	{
+		x1 = kSpecialNodePos.x + i * (kSpecialNodeWH.x + 5);
+		y1 = kSpecialNodePos.y;
+		x2 = x1 + kSpecialNodeWH.x;
+		y2 = y1 + kSpecialNodeWH.y;
+
+		DrawBox(x1, y1, x2, y2, 0xffff00, true);
+		DrawFormatString(x1, y1, 0x000000, L"%d", specialNodes[i].type);
+		DrawFormatString(x1+16, y1+16, 0x000000, L"%d", specialNodes[i].num);
+	}
 }

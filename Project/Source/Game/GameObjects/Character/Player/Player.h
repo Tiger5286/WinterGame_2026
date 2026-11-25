@@ -64,6 +64,13 @@ public:
 		L"Player|Death"
 	};
 
+	// 特殊ノードの種類と所持数を意味する構造体
+	struct HaveSpecialNode
+	{
+		Hackable::SpecialNode type = Hackable::SpecialNode::None;
+		int num = 0;
+	};
+
 	// 持てる特殊ノードの種類の上限
 	static constexpr int kMaxSpecialNodeTypes = 2;
 	// 持てる特殊ノードの種類ごとの上限
@@ -108,6 +115,8 @@ public:
 	std::vector<Hackable::SpecialNode> GetSpecialNodeTypes() const;
 	// 盤面の更新が必要か判定するための番号
 	int GetSpecialNodeVersion() const { return m_specialNodeVersion; }
+	// 特殊ノードの種類と数を返す
+	const std::deque<HaveSpecialNode>& GetHaveSpecialNodes() const { return m_specialNodes; }
 
 private:	// プレイヤーだけが使う関数
 	void UpdateAnimation();
@@ -166,12 +175,6 @@ private:
 	// 特殊ノード関係
 	// 盤面のバージョン
 	int m_specialNodeVersion = 0;	// 盤面に出る種類が変わるたびに+1
-	// 特殊ノードの種類と所持数を意味する構造体
-	struct HaveSpecialNode
-	{
-		Hackable::SpecialNode type = Hackable::SpecialNode::None;
-		int num = 0;
-	};
 	// 所持している特殊ノード
 	std::deque<HaveSpecialNode> m_specialNodes;
 
