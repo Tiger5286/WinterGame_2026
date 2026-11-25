@@ -1,4 +1,7 @@
 ﻿#include "EnemyBase.h"
+#include "Game/GameObjectManager.h"
+#include "Game/GameObjects/SpecialNodeItem.h"
+#include "Components/Transform.h"
 
 namespace
 {
@@ -8,6 +11,9 @@ namespace
 	constexpr float kNotHackedDamageRate = 0.1f;
 	// クリティカルノード発動時のダメージ倍率
 	constexpr float kCriticalNodeRate = 3.0f;
+
+	// 死んだとき特殊ノードを落とす確率(%)
+	constexpr int kDropSpecialNodeProbability = 100;
 }
 
 EnemyBase::EnemyBase(const SpawnContext::Info& info) :
@@ -76,5 +82,9 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 
 void EnemyBase::DropSpecialNode()
 {
-	// TODO:特殊ノードを落とす
+	if (GetRand(100) <= kDropSpecialNodeProbability)
+	{
+		Vector3 pos = GetComponent<Transform>()->pos;
+		m_pGameObjectManager.lock()->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::SpecialNode::Trigger, m_pPlayer.lock()));
+	}
 }
