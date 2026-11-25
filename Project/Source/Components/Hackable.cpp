@@ -253,7 +253,7 @@ void Hackable::Draw()
 			DrawBox(x1, y1, x2 - 2, y2 - 2, color, true);
 			if (m_board[y][x].type == NodeType::Special)
 			{
-				DrawString(x1 + 1, y1 + 1, SpecialNodes::kInfos.at(m_board[y][x].special).c_str(),0x000000);
+				DrawString(x1 + 1, y1 + 1, SpecialNodes::kInfos.at(m_board[y][x].special).name.c_str(), 0x000000);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <unordered_map>
 #include <string>
+#include "DxLib.h"
 
 namespace SpecialNodes
 {
@@ -13,9 +14,15 @@ namespace SpecialNodes
 		Num
 	};
 
-	inline const std::unordered_map<Type, std::wstring> kInfos = {
-		{ Type::Trigger, L"Trigger"},
-		{ Type::Critical, L"Critical"}
+	struct Info
+	{
+		std::wstring name;
+		std::wstring graphKey;
+	};
+
+	inline const std::unordered_map<Type, Info> kInfos = {
+		{ Type::Trigger,	{ L"トリガー",		L"TriggerIcon"	}},
+		{ Type::Critical,	{ L"クリティカル",	L"CriticalIcon"	}}
 	};
 
 	inline Type GetSpecialNodeTypeRandom()

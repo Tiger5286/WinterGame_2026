@@ -87,15 +87,18 @@ void PlayerInfoUI::Draw()
 	auto& specialNodes = player->GetHaveSpecialNodes();
 	for (int i = 0; i < specialNodes.size(); i++)
 	{
-		const int handle = ResourceManager::GetInstance().GetGraph(SpecialNodes::kInfos.at(specialNodes[i].type))->GetHandle();
+		const int handle = ResourceManager::GetInstance().GetGraph(SpecialNodes::kInfos.at(specialNodes[i].type).graphKey)->GetHandle();
 
-		x1 = kSpecialNodePos.x + i * (kSpecialNodeWH.x + 5);
+		x1 = kSpecialNodePos.x + i * (kSpecialNodeWH.x + 15);
 		y1 = kSpecialNodePos.y;
 		x2 = x1 + kSpecialNodeWH.x;
 		y2 = y1 + kSpecialNodeWH.y;
 
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawBox(x1 - 2, y1 - 2, x2 + 2 + 15, y2 + 2, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 		DrawExtendGraph(x1, y1, x2, y2, handle, true);
-		DrawFormatString(x1, y1, 0x000000, L"%d", specialNodes[i].type);
-		DrawFormatString(x1+16, y1+16, 0x000000, L"%d", specialNodes[i].num);
+		DrawFormatString(x1+32, y1+8, 0xffffff, L"%d", specialNodes[i].num);
 	}
 }
