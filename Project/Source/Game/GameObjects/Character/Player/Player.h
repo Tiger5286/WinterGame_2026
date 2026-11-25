@@ -67,7 +67,7 @@ public:
 	// 特殊ノードの種類と所持数を意味する構造体
 	struct HaveSpecialNode
 	{
-		Hackable::SpecialNode type = Hackable::SpecialNode::None;
+		SpecialNodes::Type type = SpecialNodes::Type::None;
 		int num = 0;
 	};
 
@@ -108,11 +108,11 @@ public:
 	void OnActiveTrigger();
 
 	// 特殊ノードを追加する
-	bool AddSpecialNode(Hackable::SpecialNode type, int count);
+	bool AddSpecialNode(SpecialNodes::Type type, int count);
 	// 特殊ノードを一回使う
-	bool UseSpecialNode(Hackable::SpecialNode type);
+	bool UseSpecialNode(SpecialNodes::Type type);
 	// 盤面に出す特殊ノードの種類
-	std::vector<Hackable::SpecialNode> GetSpecialNodeTypes() const;
+	std::vector<SpecialNodes::Type> GetSpecialNodeTypes() const;
 	// 盤面の更新が必要か判定するための番号
 	int GetSpecialNodeVersion() const { return m_specialNodeVersion; }
 	// 特殊ノードの種類と数を返す

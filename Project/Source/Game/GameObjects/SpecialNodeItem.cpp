@@ -15,7 +15,7 @@ namespace
 	constexpr int kCount = 1;
 }
 
-SpecialNodeItem::SpecialNodeItem(const Vector3& pos, Hackable::SpecialNode type, const std::shared_ptr<Player>& pPlayer) :
+SpecialNodeItem::SpecialNodeItem(const Vector3& pos, SpecialNodes::Type type, const std::shared_ptr<Player>& pPlayer) :
 	m_type(type),
 	m_pPlayer(pPlayer),
 	m_count(kCount)

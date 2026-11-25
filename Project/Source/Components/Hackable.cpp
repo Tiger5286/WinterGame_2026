@@ -23,9 +23,9 @@ namespace
 	// 最低ダメージ
 	constexpr int kMinDamage = 20;
 
-	const std::map<Hackable::SpecialNode, std::wstring> kSpecialNames = {
-		{ Hackable::SpecialNode::Trigger, L"Trigger" },
-		{ Hackable::SpecialNode::Critical, L"Critical"}
+	const std::map<SpecialNodes::Type, std::wstring> kSpecialNames = {
+		{ SpecialNodes::Type::Trigger, L"Trigger" },
+		{ SpecialNodes::Type::Critical, L"Critical"}
 	};
 }
 
@@ -75,7 +75,7 @@ void Hackable::Init()
 	};
 
 	// 特殊ノードをランダムに配置する関数
-	std::function placeRandomSpecial = [this](std::vector<Vector2Int> candidates, std::vector<SpecialNode> special)
+	std::function placeRandomSpecial = [this](std::vector<Vector2Int> candidates, std::vector<SpecialNodes::Type> special)
 		{
 			if (candidates.size() < special.size())
 			{
@@ -164,7 +164,7 @@ std::optional<Hackable::HackedData> Hackable::UpdateHacking()
 		// いくつ青マスを通ったか求める
 		int openNum = 0;
 		// 通った特殊ノードを求める
-		std::vector<SpecialNode> specials;
+		std::vector<SpecialNodes::Type> specials;
 		for (const auto& pos : m_pos)
 		{
 			const auto& nodeData = m_board[pos.y][pos.x];
@@ -334,7 +334,7 @@ bool Hackable::LoadData(const std::wstring& filePath)
 	return true;
 }
 
-void Hackable::SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int version)
+void Hackable::SetSpecialNodes(const std::vector<SpecialNodes::Type>& specialNodes, int version)
 {
 	// バージョンが同じなら何もしない
 	if (m_version == version) return;
@@ -344,11 +344,11 @@ void Hackable::SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int
 	Init();
 }
 
-Hackable::SpecialNode Hackable::GetSpecialNodeTypeRandom()
+SpecialNodes::Type Hackable::GetSpecialNodeTypeRandom()
 {
 	constexpr int minVal = 1;
-	constexpr int maxVal = static_cast<int>(SpecialNode::Num) - 1;
-	SpecialNode type = static_cast<SpecialNode>(minVal + GetRand(maxVal - minVal));
+	constexpr int maxVal = static_cast<int>(SpecialNodes::Type::Num) - 1;
+	SpecialNodes::Type type = static_cast<SpecialNodes::Type>(minVal + GetRand(maxVal - minVal));
 
 	return type;
 }

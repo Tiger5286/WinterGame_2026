@@ -6,6 +6,7 @@
 #include <functional>
 #include <string>
 #include <optional>
+#include "Game/SpecialNodes.h"
 
 class Hackable :
     public Component
@@ -20,25 +21,16 @@ public:
         Special,    // 特殊ノード(種類はSpecialNode型で指定)
     };
 
-    enum class SpecialNode
-    {
-        None,
-        Trigger,    // トリガーノード(銃の連射速度が上がる)
-        Critical,   // クリティカルノード(ハッキング成功時のダメージが上がる)
-
-        Num
-    };
-
     struct NodeData
     {
         NodeType type = NodeType::None;
-        SpecialNode special = SpecialNode::None;
+        SpecialNodes::Type special = SpecialNodes::Type::None;
     };
 
     struct HackedData
     {
         int damage = 0;
-        std::vector<SpecialNode> specials;
+        std::vector<SpecialNodes::Type> specials;
     };
 
     struct Info
@@ -73,9 +65,9 @@ public:
     bool LoadData(const std::wstring& filePath);
 
     // 特殊ノードの種類と盤面のバージョンを受け取る　バージョンが違う時だけ盤面を作り直す
-    void SetSpecialNodes(const std::vector<SpecialNode>& specialNodes, int version);
+    void SetSpecialNodes(const std::vector<SpecialNodes::Type>& specialNodes, int version);
 
-    static Hackable::SpecialNode GetSpecialNodeTypeRandom();
+    static SpecialNodes::Type GetSpecialNodeTypeRandom();
 
 private:
     // CSVから読み込んだ盤面の設定(Initのたびにここから盤面を作り直す)
@@ -101,7 +93,7 @@ private:
     Info m_info;
     bool m_isEnable = true;
     // 盤面に出す特殊ノードの種類
-    std::vector<SpecialNode> m_specialNodes;
+    std::vector<SpecialNodes::Type> m_specialNodes;
     // 最後に受け取った特殊ノードの種類のバージョン
     int m_version = -1; // 最初に必ず初期化するため-1にしておく
 };

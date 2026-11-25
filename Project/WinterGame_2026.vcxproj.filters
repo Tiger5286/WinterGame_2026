@@ -626,5 +626,8 @@
     <ClInclude Include="Source\Game\GameObjects\SpecialNodeItem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\SpecialNodes.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

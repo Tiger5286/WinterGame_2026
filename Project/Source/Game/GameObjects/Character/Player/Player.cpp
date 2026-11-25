@@ -127,8 +127,8 @@ void Player::Init()
 
 	m_ammoRechargeInterval = kAmmoRechargeInterval;
 
-	AddSpecialNode(Hackable::SpecialNode::Trigger, 2);
-	AddSpecialNode(Hackable::SpecialNode::Critical, 2);
+	AddSpecialNode(SpecialNodes::Type::Trigger, 2);
+	AddSpecialNode(SpecialNodes::Type::Critical, 2);
 }
 
 void Player::Update()
@@ -294,19 +294,19 @@ void Player::Update()
 	auto& keyboard = KeyboardInput::GetInstance();
 	if (keyboard.IsTriggerd(KEY_INPUT_1))
 	{
-		AddSpecialNode(Hackable::SpecialNode::Trigger,2);
+		AddSpecialNode(SpecialNodes::Type::Trigger,2);
 	}
 	if (keyboard.IsTriggerd(KEY_INPUT_2))
 	{
-		AddSpecialNode(Hackable::SpecialNode::Critical,2);
+		AddSpecialNode(SpecialNodes::Type::Critical,2);
 	}
 	if (keyboard.IsTriggerd(KEY_INPUT_3))
 	{
-		UseSpecialNode(Hackable::SpecialNode::Trigger);
+		UseSpecialNode(SpecialNodes::Type::Trigger);
 	}
 	if (keyboard.IsTriggerd(KEY_INPUT_4))
 	{
-		UseSpecialNode(Hackable::SpecialNode::Critical);
+		UseSpecialNode(SpecialNodes::Type::Critical);
 	}
 #endif
 }
@@ -669,7 +669,7 @@ std::shared_ptr<GameObject> Player::FindNearestVisibleHackable(Vector2& screenPo
 	return nearestHackable;
 }
 
-bool Player::AddSpecialNode(Hackable::SpecialNode type, int count)
+bool Player::AddSpecialNode(SpecialNodes::Type type, int count)
 {
 	// 落ちてる数が0以下なら拾えない
 	if (count <= 0)
@@ -710,7 +710,7 @@ bool Player::AddSpecialNode(Hackable::SpecialNode type, int count)
 	return true;
 }
 
-bool Player::UseSpecialNode(Hackable::SpecialNode type)
+bool Player::UseSpecialNode(SpecialNodes::Type type)
 {
 	// 同じ種類を探す
 	int i = 0;
@@ -735,9 +735,9 @@ bool Player::UseSpecialNode(Hackable::SpecialNode type)
 	return false;
 }
 
-std::vector<Hackable::SpecialNode> Player::GetSpecialNodeTypes() const
+std::vector<SpecialNodes::Type> Player::GetSpecialNodeTypes() const
 {
-	std::vector<Hackable::SpecialNode> specialNodes;
+	std::vector<SpecialNodes::Type> specialNodes;
 	for (const auto& specialNode : m_specialNodes)
 	{
 		specialNodes.push_back(specialNode.type);

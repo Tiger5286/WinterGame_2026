@@ -168,7 +168,7 @@ void SceneMain::Update()
 	// Rキーで特殊ノードを置く
 	if (KeyboardInput::GetInstance().IsTriggerd(KEY_INPUT_R))
 	{
-		m_pGameObjectManager->Add(std::make_shared<SpecialNodeItem>(Vector3(0,100,0), Hackable::SpecialNode::Trigger, m_pPlayer));
+		m_pGameObjectManager->Add(std::make_shared<SpecialNodeItem>(Vector3(0,100,0), SpecialNodes::Type::Trigger, m_pPlayer));
 	}
 #endif
 }

@@ -46,7 +46,7 @@ void EnemyBase::OnHacked(Hackable::HackedData data)
 	int damage = data.damage;
 	for (const auto& special : data.specials)
 	{
-		if (special == Hackable::SpecialNode::Critical)
+		if (special == SpecialNodes::Type::Critical)
 		{
 			damage *= kCriticalNodeRate;
 			break;

@@ -117,6 +117,7 @@
     <ClCompile Include="Source\Game\GameObjects\SpecialNodeItem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\SpecialNodes.h" />
     <ClInclude Include="Source\System\KeyboardInput.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.h" />
     <ClInclude Include="Source\Game\GameObjects\Character\Enemies\Drone\State\DroneState.h" />
