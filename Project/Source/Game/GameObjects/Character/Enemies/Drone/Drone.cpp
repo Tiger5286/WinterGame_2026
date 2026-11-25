@@ -75,8 +75,8 @@ namespace
 	}
 }
 
-Drone::Drone(std::shared_ptr<Player> pPlayer) :
-	EnemyBase(pPlayer)
+Drone::Drone(const SpawnContext::Info& info) :
+	EnemyBase(info)
 {
 	// 出現位置から動かないのでPhysicsは付けない
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);

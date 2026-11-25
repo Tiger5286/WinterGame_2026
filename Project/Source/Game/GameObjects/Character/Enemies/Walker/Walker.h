@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../EnemyBase.h"
 #include "Components/Hackable.h"
+#include "Game/SpawnContext.h"
 
 class Model;
 class Graph;
@@ -13,7 +14,7 @@ public:
     static constexpr int kMaxHp = 500;
 
 public:
-    Walker(std::shared_ptr<Player> pPlayer);
+    Walker(const SpawnContext::Info& info);
     ~Walker();
 
     void Init() override;

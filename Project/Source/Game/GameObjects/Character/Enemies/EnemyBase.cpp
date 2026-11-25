@@ -10,8 +10,9 @@ namespace
 	constexpr float kCriticalNodeRate = 3.0f;
 }
 
-EnemyBase::EnemyBase(std::shared_ptr<Player> pPlayer) :
-	m_pPlayer(pPlayer)
+EnemyBase::EnemyBase(const SpawnContext::Info& info) :
+	m_pPlayer(info.pPlayer),
+	m_pGameObjectManager(info.pGameObjectManager)
 {
 	m_tag = GameObject::Tag::Enemy;
 }
@@ -71,4 +72,9 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 	}
 
 	OnDamage(damage);
+}
+
+void EnemyBase::DropSpecialNode()
+{
+	// TODO:特殊ノードを落とす
 }

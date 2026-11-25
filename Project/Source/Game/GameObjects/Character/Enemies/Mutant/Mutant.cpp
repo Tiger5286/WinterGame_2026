@@ -54,8 +54,8 @@ namespace
 	constexpr float kStageRadius = 1000.0f;
 }
 
-Mutant::Mutant(std::shared_ptr<Player> pPlayer) :
-	EnemyBase(pPlayer)
+Mutant::Mutant(const SpawnContext::Info& info) :
+	EnemyBase(info)
 {
 	AddComponent<Physics>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);

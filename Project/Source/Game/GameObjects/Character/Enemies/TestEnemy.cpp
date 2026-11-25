@@ -24,8 +24,8 @@ namespace
 	const Vector3 kHPUIOffset = Vector3(0.0f, 200.0f, 0.0f);
 }
 
-TestEnemy::TestEnemy(std::shared_ptr<Player> pPlayer) :
-	EnemyBase(pPlayer)
+TestEnemy::TestEnemy(const SpawnContext::Info& info) :
+	EnemyBase(info)
 {
 	m_hp = kMaxHP;
 

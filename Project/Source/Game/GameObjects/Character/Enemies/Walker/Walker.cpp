@@ -31,8 +31,8 @@ namespace
 	const Vector3 kHPUIOffset = { 0.0f,200.0f,0.0f };
 }
 
-Walker::Walker(std::shared_ptr<Player> pPlayer) :
-	EnemyBase(pPlayer)
+Walker::Walker(const SpawnContext::Info& info) :
+	EnemyBase(info)
 {
 	AddComponent<Physics>();
 	AddComponent<CapsuleCollider>(*GetComponent<Transform>(), kColliderRadius, kColliderHeight);

@@ -9,12 +9,9 @@ namespace
 {
 	const std::unordered_map<std::wstring, std::function<std::shared_ptr<EnemyBase>(const SpawnContext::Info&)>> kEnemyNameMap =
 	{
-		{L"Walker",[](const SpawnContext::Info& info) { return std::make_shared<Walker>(info.pPlayer); }},
-		{L"Mutant",[](const SpawnContext::Info& info) {
-			auto mutant = std::make_shared<Mutant>(info.pPlayer);
-			mutant->SetGameObjectManager(info.pGameObjectManager);
-			return mutant;}},
-		{L"Drone",[](const SpawnContext::Info& info) { return std::make_shared<Drone>(info.pPlayer);}},
+		{L"Walker",[](const SpawnContext::Info& info) { return std::make_shared<Walker>(info); }},
+		{L"Mutant",[](const SpawnContext::Info& info) { return std::make_shared<Mutant>(info); }},
+		{L"Drone",[](const SpawnContext::Info& info) { return std::make_shared<Drone>(info); }},
 	};
 }
 

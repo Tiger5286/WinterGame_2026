@@ -11,7 +11,7 @@ class TestEnemy : public EnemyBase
 public:
 	static constexpr int kMaxHP = 500;
 public:
-	TestEnemy(std::shared_ptr<Player> pPlayer);
+	TestEnemy(const SpawnContext::Info& info);
 	~TestEnemy() override;
 
 	void Init() override;

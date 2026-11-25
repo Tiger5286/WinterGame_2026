@@ -14,7 +14,7 @@ public:
     static constexpr float kBodyCenterHeight = 35.0f;
 
 public:
-    Drone(std::shared_ptr<Player> pPlayer);
+    Drone(const SpawnContext::Info& info);
     ~Drone();
 
     void Init() override;

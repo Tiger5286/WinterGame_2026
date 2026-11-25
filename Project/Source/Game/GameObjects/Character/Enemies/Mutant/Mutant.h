@@ -23,7 +23,7 @@ public:
     };
 
 public:
-    Mutant(std::shared_ptr<Player> pPlayer);
+    Mutant(const SpawnContext::Info& info);
     ~Mutant();
 
     void Init() override;
@@ -58,9 +58,6 @@ private:
     // 最後の攻撃行動を記憶しておく
     // これを使って同じ攻撃行動が連続しないようにする
     AttackType m_lastAttack = AttackType::None;
-
-	// ミサイルを生成するためにGameObjectManagerのポインタを保持しておく
-	std::weak_ptr<GameObjectManager> m_pGameObjectManager;
 
     friend class MutantState;
 };
