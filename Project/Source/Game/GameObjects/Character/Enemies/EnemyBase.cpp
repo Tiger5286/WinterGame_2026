@@ -82,9 +82,12 @@ void EnemyBase::OnWasShot(const CollisionManager::ShotInfo& info)
 
 void EnemyBase::DropSpecialNode()
 {
+	auto goManager = m_pGameObjectManager.lock();
+	if (!goManager) return;
+
 	if (GetRand(99) < kDropSpecialNodeProbability)
 	{
 		Vector3 pos = GetComponent<Transform>()->pos;
-		m_pGameObjectManager.lock()->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::GetSpecialNodeTypeRandom(), m_pPlayer.lock()));
+		goManager->Add(std::make_shared<SpecialNodeItem>(pos, Hackable::GetSpecialNodeTypeRandom(), m_pPlayer.lock()));
 	}
 }
