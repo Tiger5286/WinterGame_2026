@@ -40,11 +40,19 @@ void HackingManager::Update()
 	if (hackedData)
 	{
 		// 各特殊効果を発動
+		// 一部の効果はすでに発動済。盤面には所持している種類しか出ないので、ここでは必ず消費できる前提にしている。
 		for (const auto& special : hackedData->specials)
 		{
-			if (!player) break;
+			bool result = player->UseSpecialNode(special);
+			if (!result)
+			{
+				assert(false && "HackingManager::Update() : 所持していない種類の特殊ノードを発動しようとしています");
+				continue;
+			}
 			kSpecialEffects.at(special)(player);
 		}
+		// 使い切った種類を次のフレームで描画しないためバージョンを更新する
+		hackable->SetSpecialNodes(player->GetSpecialNodeTypes(), player->GetSpecialNodeVersion());
 	}
 }
 
