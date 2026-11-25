@@ -40,7 +40,7 @@ void HackingManager::Update()
 	if (hackedData)
 	{
 		// 各特殊効果を発動
-		// 一部の効果はすでに発動済。盤面には所持している種類しか出ないので、ここでは必ず消費できる前提にしている。
+		// Critical などの敵側の効果は UpdateHacking() の中で発動済。盤面には所持している種類しか出ないので、ここでは必ず消費できる前提にしている。
 		for (const auto& special : hackedData->specials)
 		{
 			bool result = player->UseSpecialNode(special);
@@ -51,7 +51,7 @@ void HackingManager::Update()
 			}
 			kSpecialEffects.at(special)(player);
 		}
-		// 使い切った種類を次のフレームで描画しないためバージョンを更新する
+		// 使い切った種類をこのフレームで描画しないためバージョンを更新する
 		hackable->SetSpecialNodes(player->GetSpecialNodeTypes(), player->GetSpecialNodeVersion());
 	}
 }
