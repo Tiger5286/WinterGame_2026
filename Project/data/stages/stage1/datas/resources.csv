@@ -1,6 +1,6 @@
 ﻿#resourceType,key,filePath
 model,StaticStageModel,data/stages/stage1/models/Stage1StaticCol.mv1
-model,StaticVisualStageModel,data/stages/stage1/models/Stage1Visual.mv1
+model,StaticVisualStageModel,data/stages/stage1/models/Stage1VisualDetail.mv1
 model,Barrier1,data/stages/stage1/models/Barrier1.mv1
 model,Barrier2,data/stages/stage1/models/Barrier2.mv1
 model,Barrier3,data/stages/stage1/models/Barrier3.mv1
