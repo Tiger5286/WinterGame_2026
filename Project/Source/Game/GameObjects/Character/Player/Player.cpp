@@ -26,6 +26,7 @@
 #include "System/UIManager.h"
 #include "Game/UI/PlayerInfoUI.h"
 #include "System/KeyboardInput.h"
+#include "Game/GameObjects/MiniDrone.h"
 
 namespace
 {
@@ -126,6 +127,9 @@ void Player::Init()
 	m_hp = kMaxHp;
 
 	m_ammoRechargeInterval = kAmmoRechargeInterval;
+
+	m_pDrone = std::make_shared<MiniDrone>(std::static_pointer_cast<Player>(shared_from_this()), m_pHackingManager.lock());
+	m_pGameObjectManager.lock()->Add(m_pDrone);
 }
 
 void Player::Update()

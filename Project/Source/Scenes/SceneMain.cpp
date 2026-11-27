@@ -87,6 +87,7 @@ void SceneMain::Init()
 
 	// プレイヤーを生成
 	m_pPlayer = std::make_shared<Player>();
+	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 	m_pGameObjectManager->Add(m_pPlayer);
 	// カメラを生成(プレイヤーの移動後に追従させるため、プレイヤーより後に追加する)
 	m_pCamera = std::make_shared<Camera>();
@@ -99,7 +100,6 @@ void SceneMain::Init()
 	m_pCamera->SetPlayer(m_pPlayer);
 	// プレイヤーに必要なマネージャーを渡す
 	m_pPlayer->SetHackingManager(m_pHackingManager);
-	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
 
 	// ステージ共通のデータを初期化
 	InitGeneral();

@@ -10,6 +10,7 @@ class HackingManager;
 class GameObjectManager;
 class HackingTargetUI;
 class PlayerInfoUI;
+class MiniDrone;
 
 class Player :
     public Character
@@ -177,6 +178,8 @@ private:
 	int m_specialNodeVersion = 0;	// 盤面に出る種類が変わるたびに+1
 	// 所持している特殊ノード
 	std::deque<HaveSpecialNode> m_specialNodes;
+
+	std::shared_ptr<MiniDrone> m_pDrone = nullptr;
 
 	// プレイヤーのステートがプレイヤーの状態を変更したいときもあるためfriend
 	// PlayerStateがPlayerのどのメンバを使っていいか判定する
