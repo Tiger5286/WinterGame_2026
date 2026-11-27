@@ -96,4 +96,5 @@ protected:
 	bool m_isDead = false;
 	int m_id;
 	float m_timeScale = 1.0f;
+	Transform* m_transform = nullptr;
 };
