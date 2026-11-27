@@ -28,9 +28,12 @@ public:
 	virtual void Draw() abstract;
 
 	template<class T, class... Args>
-	void AddComponent(Args&&... args)
+	T* AddComponent(Args&&... args)
 	{
-		m_components.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+		auto unique = std::make_unique<T>(std::forward<Args>(args)...);
+		T* ptr = unique.get();
+		m_components.push_back(std::move(unique));
+		return ptr;
 	}
 
 	template<class T>
