@@ -21,11 +21,11 @@ public:
 	virtual ~GameObject();
 
 	// 初期化処理
-	virtual void Init() abstract;
+	virtual void Init() = 0;
 	// 更新処理
-	virtual void Update() abstract;
+	virtual void Update() = 0;
 	// 描画処理
-	virtual void Draw() abstract;
+	virtual void Draw() = 0;
 
 	template<class T, class... Args>
 	T* AddComponent(Args&&... args)

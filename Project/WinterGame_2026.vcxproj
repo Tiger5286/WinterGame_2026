@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\System\Laser.cpp" />
     <ClCompile Include="Source\Game\GameObjects\MiniDrone.cpp" />
     <ClCompile Include="Source\System\KeyboardInput.cpp" />
     <ClCompile Include="Source\Game\GameObjects\Character\Enemies\Drone\Drone.cpp" />
@@ -118,6 +119,7 @@
     <ClCompile Include="Source\Game\GameObjects\SpecialNodeItem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\System\Laser.h" />
     <ClInclude Include="Source\Game\GameObjects\MiniDrone.h" />
     <ClInclude Include="Source\Game\SpecialNodes.h" />
     <ClInclude Include="Source\System\KeyboardInput.h" />

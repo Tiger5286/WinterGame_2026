@@ -15,6 +15,7 @@ public:
 	void Draw();
 
 	void SetTarget(std::shared_ptr<GameObject> pTarget) { m_pHackingObject = pTarget; }
+	std::shared_ptr<GameObject> GetTarget() const { return m_pHackingObject.lock(); }
 
 private:
 	std::weak_ptr<Player> m_pPlayer;

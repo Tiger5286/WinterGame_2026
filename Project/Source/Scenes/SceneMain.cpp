@@ -86,20 +86,18 @@ void SceneMain::Init()
 	m_pGameObjectManager->Add(std::make_shared<StaticStage>());
 
 	// プレイヤーを生成
-	m_pPlayer = std::make_shared<Player>();
-	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);
-	m_pGameObjectManager->Add(m_pPlayer);
+	m_pPlayer = std::make_shared<Player>(); //生成
+	m_pPlayer->SetGameObjectManager(m_pGameObjectManager);	// Initの前にgoManagerを渡す
+	m_pHackingManager = std::make_shared<HackingManager>();	// hackingManagerを生成
+	m_pHackingManager->Init(m_pPlayer);	// プレイヤーを渡して初期化
+	m_pPlayer->SetHackingManager(m_pHackingManager);	// プレイヤーにもHackingManagerをセット
+	m_pGameObjectManager->Add(m_pPlayer);	// ここでプレイヤーのInitを呼ぶ
 	// カメラを生成(プレイヤーの移動後に追従させるため、プレイヤーより後に追加する)
 	m_pCamera = std::make_shared<Camera>();
 	m_pGameObjectManager->Add(m_pCamera);
-	// ハッキングマネージャーを生成
-	m_pHackingManager = std::make_shared<HackingManager>();
-	m_pHackingManager->Init(m_pPlayer);
 	// カメラとプレイヤーにお互いの弱参照を渡す
 	m_pPlayer->SetCamera(m_pCamera);
 	m_pCamera->SetPlayer(m_pPlayer);
-	// プレイヤーに必要なマネージャーを渡す
-	m_pPlayer->SetHackingManager(m_pHackingManager);
 
 	// ステージ共通のデータを初期化
 	InitGeneral();

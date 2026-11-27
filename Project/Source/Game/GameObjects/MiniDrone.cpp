@@ -1,10 +1,13 @@
 ﻿#include "MiniDrone.h"
 #include "Resource/ResourceManager.h"
 #include "Resource/Model.h"
+#include "Resource/Graph.h"
 #include "Character/Player/Player.h"
 #include "Game/HackingManager.h"
 #include "Components/Transform.h"
 #include "Components/Animator/SimpleAnimator.h"
+#include "System/Laser.h"
+#include "Components/Hackable.h"
 
 namespace
 {
@@ -79,4 +82,22 @@ void MiniDrone::Draw()
 {
 	// モデルを描画
 	m_pModel->Draw();
+
+	auto hm = m_pHackingManager.lock();
+	if (!hm)
+	{
+		assert(false && "MiniDrone::Draw() : HackingManagerがnullptrです");
+		return;
+	}
+	
+	auto target = hm->GetTarget();
+	if (!target) return;
+
+	Vector3 targetPos = target->GetComponent<Transform>()->pos;
+	Vector3 hackLocalPos = target->GetComponent<Hackable>()->GetHackLocalPos();
+	targetPos += hackLocalPos;
+	const int handle = ResourceManager::GetInstance().GetGraph(L"LaserTex")->GetHandle();
+	auto color = GetColorU8(0, 255, 255, 255);
+
+	Laser::Draw(m_transform->pos, targetPos, 15, handle, color);
 }

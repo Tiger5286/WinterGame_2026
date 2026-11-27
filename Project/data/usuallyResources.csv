@@ -5,6 +5,7 @@ model,MiniDrone,data/models/player/miniDrone.mv1,
 font,MainFont30,源ノ角ゴシック JP Medium,30
 graph,Menu,data/graphs/MenuUI.png,
 graph,MenuSelect,data/graphs/MenuUI_Select.png,
+graph,LaserTex,data/graphs/laser_beam.png,
 effect,Explosion,data/effects/explosion.efkefc,50
 graph,TriggerIcon,data/graphs/TriggerNode.png,
 graph,CriticalIcon,data/graphs/CriticalNode.png,
