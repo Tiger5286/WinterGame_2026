@@ -27,6 +27,7 @@
 #include "Game/UI/PlayerInfoUI.h"
 #include "System/KeyboardInput.h"
 #include "Game/GameObjects/MiniDrone.h"
+#include "System/EffectManager.h"
 
 namespace
 {
@@ -66,6 +67,9 @@ namespace
 	constexpr float kTriggerRate = 2.0f;
 
 	constexpr int kShotDamage = 50;
+
+	// 銃口のローカル位置
+	const Vector3 kGunMuzzleLocal = { 0.0f,35.0f,-224.0f };
 }
 
 Player::Player() :
@@ -233,6 +237,23 @@ void Player::Update()
 
 			m_shotIntervalFrame = kShotInterval;
 			m_ammo--;
+
+			// エフェクト
+			MATRIX handWorld = MV1GetFrameLocalWorldMatrix(m_pModel->GetHandle(), m_haveGunFrameIndex);
+			const MATRIX gunScale = MGetScale(VGet(kGunScale, kGunScale, kGunScale));
+			const MATRIX gunRotX = MGetRotX(DX_PI_F / 2);
+			const MATRIX gunRotY = MGetRotY(DX_PI_F / 2);
+			const MATRIX gunRotZ = MGetRotZ(DX_PI_F / 180 * 10);
+			const MATRIX gunTrans = MGetTranslate(Vector3(0, 10, 0));
+			MATRIX gunLocal = gunScale;
+			gunLocal = MMult(gunLocal, gunRotX);
+			gunLocal = MMult(gunLocal, gunRotY);
+			gunLocal = MMult(gunLocal, gunRotZ);
+			gunLocal = MMult(gunLocal, gunTrans);
+			const MATRIX gunWorld = MMult(gunLocal, handWorld);
+			const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
+			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
+			EffectManager::GetInstance().PlayEffect(L"ShotEffect", muzzleWorld);
 		}
 		m_isShooting = true;
 		m_ammoRechargeFrame = 0;
@@ -339,24 +360,23 @@ void Player::Draw()
 		MV1SetMatrix(m_pGunModel->GetHandle(), gunWorld);
 		m_pGunModel->Draw();
 
-		const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
-		const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
+		
 
 #ifdef _DEBUG
-		// 銃口から線を描画
-		const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
-		const Vector3& target = m_pCamera.lock()->GetTargetPos();
-		Vector3 vec = target - cameraPos;
-		vec.Normalize();
-		vec *= 2000;
-		Vector3 end = cameraPos + vec;
-		auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, end);
-		if (result.isHit)
-		{
-			const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
-			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
-			DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
-		}
+		//// 銃口から線を描画
+		//const Vector3 cameraPos = m_pCamera.lock()->GetComponent<Transform>()->pos;
+		//const Vector3& target = m_pCamera.lock()->GetTargetPos();
+		//Vector3 vec = target - cameraPos;
+		//vec.Normalize();
+		//vec *= 2000;
+		//Vector3 end = cameraPos + vec;
+		//auto result = ServiceLocator::GetInstance().GetCollisionManager().RayCast(cameraPos, end);
+		//if (result.isHit)
+		//{
+		//	const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
+		//	const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
+		//	DrawLine3D(muzzleWorld, result.hitPos, 0xff0000);
+		//}
 #endif
 	}
 
