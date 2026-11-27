@@ -9,6 +9,9 @@
 namespace
 {
 	const Vector3 kScale = Vector3::One() * 0.5f;
+
+	const Vector3 kLocalPos = { 50,150,0 };
+	const Vector3 kAimLocalpos = { 0,200,0 };
 }
 
 MiniDrone::MiniDrone(const std::shared_ptr<Player>& pPlayer, const std::shared_ptr<HackingManager>& pHackingManager) :
@@ -52,12 +55,19 @@ void MiniDrone::Update()
 	auto player = m_pPlayer.lock();
 	if (!player) return;
 
-	Vector3 localPos = { 50,150,0 };
+	Vector3 localPos = kLocalPos;
+	if (player->IsAim())
+	{
+		localPos = kAimLocalpos;
+	}
 	Matrix4x4 rot = Matrix4x4::GetRotY(m_playerTrans->rot.y);
 	localPos *= rot;
 
-	m_transform->pos = m_playerTrans->pos;
-	m_transform->pos += localPos;
+	m_pos = m_playerTrans->pos;
+	m_pos += localPos;
+
+	m_transform->pos.Lerp(m_pos, 0.2f);
+
 	m_transform->rot.y = m_playerTrans->rot.y;
 	m_pModel->SetTransform(*m_transform);
 
