@@ -253,7 +253,11 @@ void Player::Update()
 			const MATRIX gunWorld = MMult(gunLocal, handWorld);
 			const Vector3 muzzleLocal(0.0f, 35.0f, -224.0f);
 			const Vector3 muzzleWorld = Vector3::FromDxLib(VTransform(muzzleLocal, gunWorld));
-			EffectManager::GetInstance().PlayEffect(L"ShotEffect", muzzleWorld);
+			Vector3 dir = Vector3::FromDxLib(VTransformSR(Vector3::Back(), gunWorld)).Normalized();
+			const float rotZ = asinf(dir.y);
+			const float rotY = atan2f(-dir.z, dir.x);
+			int handle = EffectManager::GetInstance().PlayEffect(L"ShotEffect", muzzleWorld);
+			SetRotationPlayingEffekseer3DEffect(handle, 0.0f, rotY, rotZ);
 		}
 		m_isShooting = true;
 		m_ammoRechargeFrame = 0;
