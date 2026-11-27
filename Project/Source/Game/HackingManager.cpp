@@ -3,6 +3,8 @@
 #include "Components/Hackable.h"
 #include <map>
 #include "GameObjects/Character/Player/Player.h"
+#include "Components/Transform.h"
+#include "System/EffectManager.h"
 
 namespace
 {
@@ -28,7 +30,8 @@ void HackingManager::Init(const std::shared_ptr<Player>& pPlayer)
 
 void HackingManager::Update()
 {
-	if (!m_pHackingObject.lock()) return;
+	auto obj = m_pHackingObject.lock();
+	if (!obj) return;
 	auto hackable = m_pHackingObject.lock()->GetComponent<Hackable>();
 	if (!hackable || !hackable->IsEnable()) return;
 	auto player = m_pPlayer.lock();
@@ -39,6 +42,9 @@ void HackingManager::Update()
 	auto hackedData = hackable->UpdateHacking();
 	if (hackedData)
 	{
+		// エフェクトを出す
+		EffectManager::GetInstance().PlayEffect(L"HackEffect", obj->GetTransform().pos);
+
 		// 各特殊効果を発動
 		// Critical などの敵側の効果は UpdateHacking() の中で発動済。盤面には所持している種類しか出ないので、ここでは必ず消費できる前提にしている。
 		for (const auto& special : hackedData->specials)

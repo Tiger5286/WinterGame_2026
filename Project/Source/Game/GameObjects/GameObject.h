@@ -90,6 +90,8 @@ public:
 	float GetTimeScale() const;
 	void SetTimeScale(float timeScale);
 
+	Transform& GetTransform();
+
 protected:
 	std::vector<std::unique_ptr<Component>> m_components;
 	Tag m_tag = Tag::None;

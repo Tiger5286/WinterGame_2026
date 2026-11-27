@@ -32,3 +32,8 @@ void GameObject::SetTimeScale(float timeScale)
 	}
 	m_timeScale = timeScale;
 }
+
+Transform& GameObject::GetTransform()
+{
+	return *m_transform;
+}
